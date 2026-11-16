@@ -36,26 +36,10 @@
   /* Zadanie 3: hasło rodzinne */
   .fam{font-size:clamp(19px,3.6vw,24px);font-weight:800;color:var(--navy);margin:0 0 12px;text-align:center}
 
-  /* Misja domowa i ściąga */
-  .mission{background:var(--teal-l);border-radius:12px;padding:16px 18px;margin-top:12px}
-  .sciaga{border:3px solid var(--navy);border-radius:14px;padding:22px;margin-top:18px}
-  .sciaga h3{margin:0 0 4px;color:var(--navy);font-size:24px;line-height:1.3}
-  .sciaga ol{margin:12px 0 0;padding-left:26px;font-size:20px;display:grid;gap:12px}
-  .sciaga .foot{margin-top:16px;font-size:17px;border-top:2px solid var(--line);padding-top:12px}
-
   @media (max-width:560px){.cb{max-width:92%}}
-
-  /* Drukowanie: tylko ściąga dla domowników */
-  @media print{
-    body{background:#fff}
-    body *{visibility:hidden}
-    #sciaga, #sciaga *{visibility:visible}
-    #sciaga{position:absolute;left:0;top:0;width:100%;border-width:2px}
-    #sciaga .noprint{display:none}
-  }
 </style>
 </head>
-<body>
+<body class="druk-sciagi">
 
 <header>
   <a class="back" href="index.html">← Wszystkie lekcje</a><br>
@@ -171,7 +155,7 @@
 
 <section id="misja">
   <h2><span class="num">🕵️</span> Misja domowa cyberagenta</h2>
-  <div class="mission">
+  <div class="misja-box">
     <strong>Twoja misja (10–15 minut):</strong> ustalcie w domu <strong>hasło rodzinne</strong> do sprawdzania podejrzanych próśb o pieniądze. Najważniejsze są tu babcia i dziadek – to do nich najczęściej dzwonią oszuści „na wnuczka”. Pokaż im ściągę poniżej.
   </div>
   <p class="note">🤫 Na następnej lekcji opowiesz, jak poszło. Ale samego hasła nie zdradzaj nikomu – nawet nauczycielowi! Nie zapisuj go też w telefonie ani na kartce przy telefonie.</p>

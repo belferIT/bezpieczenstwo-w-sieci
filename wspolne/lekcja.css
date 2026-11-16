@@ -80,6 +80,23 @@ ul.status li::before{content:"○ ";color:var(--muted)}
 ul.status li.on::before{content:"● ";color:var(--teal)}
 .card-result{border:3px dashed var(--navy);border-radius:14px;padding:18px;margin:18px auto 0;max-width:420px;display:none;text-align:center}
 
+/* ---------- Misja domowa i ściąga dla domowników ---------- */
+.misja-box{background:var(--teal-l);border-radius:12px;padding:16px 18px;margin-top:12px}
+.misja-box ol{margin:8px 0 0;padding-left:22px;display:grid;gap:6px}
+.sciaga{border:3px solid var(--navy);border-radius:14px;padding:22px;margin-top:18px}
+.sciaga h3{margin:0 0 4px;color:var(--navy);font-size:24px;line-height:1.3}
+.sciaga ol{margin:12px 0 0;padding-left:26px;font-size:20px;display:grid;gap:12px}
+.sciaga .foot{margin-top:16px;font-size:17px;border-top:2px solid var(--line);padding-top:12px}
+
+/* Drukowanie: tylko ściąga. Działa na stronach z <body class="druk-sciagi">. */
+@media print{
+  body.druk-sciagi{background:#fff}
+  body.druk-sciagi *{visibility:hidden}
+  body.druk-sciagi .sciaga, body.druk-sciagi .sciaga *{visibility:visible}
+  body.druk-sciagi .sciaga{position:absolute;left:0;top:0;width:100%;border-width:2px}
+  body.druk-sciagi .noprint{display:none}
+}
+
 @media (max-width:560px){
   section{padding:22px 18px}
   .opts.two{grid-template-columns:1fr}
