@@ -4,64 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lekcja 1: Dlaczego silne hasło jest tak ważne?</title>
+<link rel="stylesheet" href="wspolne/baza.css">
+<link rel="stylesheet" href="wspolne/lekcja.css">
 <style>
-  :root{
-    --navy:#1d2b4f; --ink:#24324f; --muted:#5b6785; --bg:#f4f6fb; --card:#ffffff;
-    --teal:#0e7468; --teal-l:#e2f4f1; --red:#c8374b; --red-l:#fbe6e9;
-    --yellow:#ffc94a; --line:#dde2ee; --radius:16px;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-       color:var(--ink);background:var(--bg);line-height:1.6;font-size:18px}
-  header{background:var(--navy);color:#fff;padding:48px 20px 64px;text-align:center}
-  header .tag{display:inline-block;background:var(--yellow);color:var(--navy);font-weight:700;
-       padding:4px 14px;border-radius:999px;font-size:14px;letter-spacing:.5px}
-  header h1{font-size:clamp(28px,5vw,44px);margin:16px auto 8px;max-width:800px;line-height:1.2}
-  header p{opacity:.85;margin:0 auto;max-width:620px}
-  main{max-width:880px;margin:-36px auto 0;padding:0 16px 60px}
-  section{background:var(--card);border-radius:var(--radius);padding:28px 28px;margin-bottom:24px;
-       box-shadow:0 2px 10px rgba(29,43,79,.06)}
-  h2{margin:0 0 12px;font-size:26px;color:var(--navy);display:flex;align-items:center;gap:10px}
-  h2 .num{background:var(--navy);color:#fff;width:36px;height:36px;border-radius:50%;
-       display:inline-grid;place-items:center;font-size:18px;flex:none}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
-  .tile{background:var(--bg);border-radius:12px;padding:18px}
-  .tile .ico{font-size:32px}
-  .tile h3{margin:6px 0 4px;font-size:19px}
-  .tile p{margin:0;color:var(--muted);font-size:16px}
-  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:17px}
-  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
-  th{color:var(--muted);font-weight:600;font-size:15px}
-  code{font-family:ui-monospace,Consolas,monospace;background:var(--bg);padding:2px 8px;border-radius:6px;word-break:break-all}
-  .t-bad{color:var(--red);font-weight:700}.t-ok{color:var(--teal);font-weight:700}
-  .note{font-size:14px;color:var(--muted);margin-top:8px}
-  ul.rules{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}
-  ul.rules li{background:var(--teal-l);border-radius:10px;padding:12px 16px 12px 48px;position:relative}
-  ul.rules li::before{content:"✔";position:absolute;left:18px;top:12px;color:var(--teal);font-weight:900}
-  .tip{background:#fff7df;border-left:5px solid var(--yellow);padding:14px 18px;border-radius:8px;margin-top:16px}
-
   /* Zadanie 1 */
-  .progress{height:10px;background:var(--line);border-radius:999px;overflow:hidden;margin:8px 0 20px}
-  .progress div{height:100%;background:var(--teal);width:0;transition:width .3s}
-  .q{border:2px solid var(--line);border-radius:14px;padding:22px;text-align:center}
   .q .pw{font-family:ui-monospace,Consolas,monospace;font-size:clamp(20px,4vw,30px);font-weight:700;
        word-break:break-all;margin:6px 0 18px;color:var(--navy)}
-  .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-  button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:14px 28px;cursor:pointer;
-       transition:transform .1s, opacity .2s}
-  button:active{transform:scale(.97)}
-  button:disabled{opacity:.45;cursor:default}
-  .b-weak{background:var(--red);color:#fff}.b-strong{background:var(--teal);color:#fff}
-  .b-next{background:var(--navy);color:#fff}.b-ghost{background:var(--bg);color:var(--navy)}
-  .fb{margin-top:18px;padding:14px 18px;border-radius:10px;text-align:left;display:none}
-  .fb.good{background:var(--teal-l);display:block}.fb.bad{background:var(--red-l);display:block}
-  .result{text-align:center;display:none}
-  .result .big{font-size:56px;font-weight:800;color:var(--navy);margin:4px 0}
-  .card-result{border:3px dashed var(--navy);border-radius:14px;padding:18px;margin:18px auto 0;max-width:420px;display:none}
-  input[type=text]{font:inherit;width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:12px}
-  input[type=text]:focus{outline:none;border-color:var(--teal)}
-  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-  .row input{flex:1;min-width:200px}
 
   /* Zadanie 2 */
   .warn{background:var(--red-l);color:#8a1f2e;padding:12px 16px;border-radius:10px;font-weight:600;margin:12px 0}
@@ -83,22 +31,13 @@
   .locked{margin:auto;text-align:center;font-size:15px;opacity:.9}
   .locked .ico{font-size:44px}
   @keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
-  .scen{border:2px solid var(--line);border-radius:14px;padding:18px;margin-top:14px}
-  .scen p{margin:0 0 10px;font-weight:600}
-  .opts{display:grid;gap:8px}
-  .opt{background:var(--bg);color:var(--ink);font-weight:600;text-align:left;padding:12px 16px}
-  .opt.right{background:var(--teal-l);outline:2px solid var(--teal)}
-  .opt.wrong{background:var(--red-l);outline:2px solid var(--red)}
   @media (max-width:640px){.sim{grid-template-columns:1fr}}
-  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-  footer{text-align:center;color:var(--muted);font-size:14px;padding:20px}
-  @media (max-width:560px){section{padding:22px 18px}body{font-size:17px}}
 </style>
 </head>
 <body>
 
 <header>
-  <a href="index.html" style="color:#fff;opacity:.8;display:inline-block;margin-bottom:16px;text-decoration:none">← Wszystkie lekcje</a><br>
+  <a class="back" href="index.html">← Wszystkie lekcje</a><br>
   <span class="tag">BEZPIECZEŃSTWO W SIECI · LEKCJA 1</span>
   <h1>Dlaczego silne hasło jest tak ważne?</h1>
   <p>Przeczytaj krótkie wprowadzenie (ok. 5 minut), a potem wykonaj trzy zadania.</p>
@@ -257,6 +196,7 @@
 </main>
 <footer><a href="index.html">← Wróć do listy lekcji</a></footer>
 
+<script src="wspolne/lekcja.js"></script>
 <script>
 /* ---------- Zadanie 1 ---------- */
 const QUESTIONS = [
@@ -270,7 +210,6 @@ const QUESTIONS = [
   {pw:"księżyc_tańczy_z_pingwinem", strong:true, why:"Zabawna, długa fraza. Nikt jej nie zgadnie, a ty łatwo ją zapamiętasz."}
 ];
 let i = 0, points = 0;
-const $ = id => document.getElementById(id);
 
 function showQ(){
   const q = QUESTIONS[i];
@@ -305,22 +244,14 @@ function next(){
     : "Przeczytaj jeszcze raz wprowadzenie i spróbuj ponownie – dasz radę!";
 }
 function showCard(){
-  const name = $("name").value.trim();
-  if (!name) { $("name").focus(); $("name").style.borderColor = "var(--red)"; return; }
-  const d = new Date().toLocaleString("pl-PL", {dateStyle:"short", timeStyle:"short"});
-  const c = $("card");
-  c.innerHTML = `<div class="note">KARTA WYNIKU · Lekcja 1: Silne hasła</div>
-    <div style="font-size:22px;font-weight:800;margin:6px 0"></div>
-    <div style="font-size:40px;font-weight:800;color:var(--teal)">${points} / ${QUESTIONS.length}</div>
-    <div class="note">${d}</div><div class="note">Pokaż tę kartę nauczycielowi.</div>`;
-  c.children[1].textContent = name; // bez wstawiania HTML z pola tekstowego
-  c.style.display = "block";
+  const name = readName($("name"));
+  if (name) renderCard($("card"), "Lekcja 1: Silne hasła", name, `${points} / ${QUESTIONS.length}`);
 }
 $("bWeak").onclick = () => answer(false);
 $("bStrong").onclick = () => answer(true);
 $("bNext").onclick = next;
 $("bCard").onclick = showCard;
-$("name").addEventListener("keydown", e => { if (e.key === "Enter") showCard(); $("name").style.borderColor = ""; });
+bindNameInput($("name"), showCard);
 $("bAgain").onclick = () => {
   i = 0; points = 0;
   $("result").style.display = "none"; $("card").style.display = "none";
@@ -388,34 +319,10 @@ const SCEN = [
    a:["Używam kodów zapasowych, które zapisałem przy włączaniu.", "Nie da się – bez telefonu konto przepadło na zawsze.", "Zakładam nowe konto, a weryfikację na nim wyłączę."], ok:0,
    why:"Właśnie do tego służą kody zapasowe. Dlatego przy włączaniu weryfikacji trzeba je zapisać i schować w bezpiecznym miejscu."}
 ];
-function shuffle(arr){
-  const a = arr.slice();
-  for (let k = a.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; }
-  return a;
-}
 let scenPts = 0, scenDone = 0;
-SCEN.forEach((s, n) => {
-  const box = document.createElement("div"); box.className = "scen";
-  const p = document.createElement("p"); p.textContent = s.q; box.appendChild(p);
-  const opts = document.createElement("div"); opts.className = "opts";
-  const fb = document.createElement("div"); fb.className = "fb"; fb.setAttribute("aria-live", "polite");
-  const btns = s.a.map((txt, k) => {
-    const b = document.createElement("button"); b.className = "opt"; b.textContent = txt;
-    b.onclick = () => {
-      opts.querySelectorAll("button").forEach(x => x.disabled = true);
-      btns[s.ok].classList.add("right");
-      const good = k === s.ok;
-      if (!good) b.classList.add("wrong"); else scenPts++;
-      scenDone++;
-      fb.className = "fb " + (good ? "good" : "bad");
-      fb.innerHTML = `<strong>${good ? "✅ Dobrze!" : "❌ Nie tym razem."}</strong> ${s.why}`;
-      if (scenDone === SCEN.length) $("scenScore").textContent = `Wynik: ${scenPts} / ${SCEN.length}`;
-    };
-    return b;
-  });
-  shuffle(btns).forEach(b => opts.appendChild(b));   // losowa kolejność odpowiedzi
-  box.appendChild(opts); box.appendChild(fb);
-  $("scenarios").appendChild(box);
+makeScen($("scenarios"), SCEN, good => {
+  if (good) scenPts++;
+  if (++scenDone === SCEN.length) $("scenScore").textContent = `Wynik: ${scenPts} / ${SCEN.length}`;
 });
 
 /* ---------- Zadanie 2 ---------- */

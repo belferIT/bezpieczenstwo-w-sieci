@@ -4,15 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bezpieczeństwo w sieci</title>
+<link rel="stylesheet" href="wspolne/baza.css">
 <style>
-  :root{--navy:#1d2b4f;--ink:#24324f;--muted:#5b6785;--bg:#f4f6fb;--teal:#13897a;--teal-l:#e2f4f1;--yellow:#ffc94a;--line:#dde2ee}
-  *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;font-size:18px}
-  header{background:var(--navy);color:#fff;padding:56px 20px 72px;text-align:center}
-  header .tag{display:inline-block;background:var(--yellow);color:var(--navy);font-weight:700;padding:4px 14px;border-radius:999px;font-size:14px;letter-spacing:.5px}
-  header h1{font-size:clamp(30px,5vw,48px);margin:16px auto 8px;line-height:1.2}
-  header p{opacity:.85;margin:0 auto;max-width:600px}
-  main{max-width:880px;margin:-40px auto 0;padding:0 16px 60px}
+  /* Strona główna: nieco większy nagłówek niż w lekcjach (reszta w wspolne/baza.css) */
+  header{padding:56px 20px 72px}
+  header h1{font-size:clamp(30px,5vw,48px);max-width:none}
+  main{margin-top:-40px}
 
   /* Spis treści */
   .toc{background:#fff;border-radius:16px;padding:22px 26px;box-shadow:0 2px 10px rgba(29,43,79,.06);margin-bottom:28px}
@@ -51,12 +48,10 @@
   .lesson.soon .num{color:var(--muted)}
   .lesson.soon .go{background:#fff7df;color:#8a6500;border-radius:999px;padding:4px 12px;font-size:14px;font-weight:700}
 
-  footer{text-align:center;color:var(--muted);font-size:14px;padding:20px}
   @media (max-width:560px){
     .lesson{flex-wrap:wrap;padding:18px}
     .lesson .go{margin-left:0}
     .lesson .ico{width:52px;height:52px;font-size:32px}
-    body{font-size:17px}
   }
 </style>
 </head>

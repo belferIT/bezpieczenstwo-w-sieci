@@ -1,0 +1,33 @@
+/* =====================================================================
+   Bezpieczeństwo w sieci – style bazowe
+   Używane przez stronę główną (index.html) i wszystkie lekcje.
+   Kolory zmieniaj tylko tutaj – zmiana obejmie cały kurs.
+   ===================================================================== */
+:root{
+  --navy:#1d2b4f; --ink:#24324f; --muted:#5b6785; --bg:#f4f6fb; --card:#ffffff;
+  --teal:#0e7468;   /* ciemniejszy odcień: kontrast z białym tekstem ≥ 4,5:1 (WCAG AA) */
+  --teal-l:#e2f4f1; --red:#c8374b; --red-l:#fbe6e9;
+  --yellow:#ffc94a; --orange:#e0703a; --line:#dde2ee; --link:#1a5fd0; --radius:16px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+     color:var(--ink);background:var(--bg);line-height:1.6;font-size:18px}
+
+/* Nagłówek strony */
+header{background:var(--navy);color:#fff;padding:48px 20px 64px;text-align:center}
+header .tag{display:inline-block;background:var(--yellow);color:var(--navy);font-weight:700;
+     padding:4px 14px;border-radius:999px;font-size:14px;letter-spacing:.5px}
+header h1{font-size:clamp(28px,5vw,44px);margin:16px auto 8px;max-width:800px;line-height:1.2}
+header p{opacity:.85;margin:0 auto;max-width:620px}
+header .back{color:#fff;opacity:.8;display:inline-block;margin-bottom:16px;text-decoration:none}
+header .back:hover{opacity:1;text-decoration:underline}
+
+main{max-width:880px;margin:-36px auto 0;padding:0 16px 60px}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:20px}
+
+@media (max-width:560px){ body{font-size:17px} }
+
+/* Użytkownicy, którzy wyłączyli animacje w systemie */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}

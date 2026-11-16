@@ -4,67 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lekcja 2: Jak zapamiętać wiele haseł i odzyskać konto?</title>
+<link rel="stylesheet" href="wspolne/baza.css">
+<link rel="stylesheet" href="wspolne/lekcja.css">
 <style>
-  :root{
-    --navy:#1d2b4f; --ink:#24324f; --muted:#5b6785; --bg:#f4f6fb; --card:#ffffff;
-    --teal:#0e7468; --teal-l:#e2f4f1; --red:#c8374b; --red-l:#fbe6e9;
-    --yellow:#ffc94a; --line:#dde2ee; --radius:16px;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-       color:var(--ink);background:var(--bg);line-height:1.6;font-size:18px}
-  header{background:var(--navy);color:#fff;padding:48px 20px 64px;text-align:center}
-  header .tag{display:inline-block;background:var(--yellow);color:var(--navy);font-weight:700;
-       padding:4px 14px;border-radius:999px;font-size:14px;letter-spacing:.5px}
-  header h1{font-size:clamp(28px,5vw,44px);margin:16px auto 8px;max-width:800px;line-height:1.2}
-  header p{opacity:.85;margin:0 auto;max-width:620px}
-  main{max-width:880px;margin:-36px auto 0;padding:0 16px 60px}
-  section{background:var(--card);border-radius:var(--radius);padding:28px 28px;margin-bottom:24px;
-       box-shadow:0 2px 10px rgba(29,43,79,.06)}
-  h2{margin:0 0 12px;font-size:26px;color:var(--navy);display:flex;align-items:center;gap:10px}
-  h2 .num{background:var(--navy);color:#fff;width:36px;height:36px;border-radius:50%;
-       display:inline-grid;place-items:center;font-size:18px;flex:none}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
-  .tile{background:var(--bg);border-radius:12px;padding:18px}
-  .tile .ico{font-size:32px}
-  .tile h3{margin:6px 0 4px;font-size:19px}
-  .tile p{margin:0;color:var(--muted);font-size:16px}
-  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:17px}
-  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
-  th{color:var(--muted);font-weight:600;font-size:15px}
-  code{font-family:ui-monospace,Consolas,monospace;background:var(--bg);padding:2px 8px;border-radius:6px;word-break:break-all}
-  .t-bad{color:var(--red);font-weight:700}.t-ok{color:var(--teal);font-weight:700}
-  .note{font-size:14px;color:var(--muted);margin-top:8px}
-  ul.rules{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}
-  ul.rules li{background:var(--teal-l);border-radius:10px;padding:12px 16px 12px 48px;position:relative}
-  ul.rules li::before{content:"✔";position:absolute;left:18px;top:12px;color:var(--teal);font-weight:900}
-  .tip{background:#fff7df;border-left:5px solid var(--yellow);padding:14px 18px;border-radius:8px;margin-top:16px}
-  .tip ol{margin:6px 0 0;padding-left:22px}
-
-  /* Wspólne elementy zadań (jak w lekcji 1) */
-  .progress{height:10px;background:var(--line);border-radius:999px;overflow:hidden;margin:8px 0 20px}
-  .progress div{height:100%;background:var(--teal);width:0;transition:width .3s}
-  .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-  button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:14px 28px;cursor:pointer;
-       transition:transform .1s, opacity .2s}
-  button:active{transform:scale(.97)}
-  button:disabled{opacity:.45;cursor:default}
-  .b-weak{background:var(--red);color:#fff}.b-strong{background:var(--teal);color:#fff}
-  .b-next{background:var(--navy);color:#fff}.b-ghost{background:var(--bg);color:var(--navy)}
-  .fb{margin-top:18px;padding:14px 18px;border-radius:10px;text-align:left;display:none}
-  .fb.good{background:var(--teal-l);display:block}.fb.bad{background:var(--red-l);display:block}
-  .card-result{border:3px dashed var(--navy);border-radius:14px;padding:18px;margin:18px auto 0;max-width:420px;display:none;text-align:center}
-  input[type=text]{font:inherit;width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:12px}
-  input[type=text]:focus{outline:none;border-color:var(--teal)}
-  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-  .row input{flex:1;min-width:200px}
-  .scen{border:2px solid var(--line);border-radius:14px;padding:18px;margin-top:14px}
-  .scen p{margin:0 0 10px;font-weight:600}
-  .opts{display:grid;gap:8px}
-  .opt{background:var(--bg);color:var(--ink);font-weight:600;text-align:left;padding:12px 16px}
-  .opt.right{background:var(--teal-l);outline:2px solid var(--teal)}
-  .opt.wrong{background:var(--red-l);outline:2px solid var(--red)}
-
   /* Sejf – menedżer haseł */
   .vault{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin-top:16px;
        background:var(--bg);border-radius:12px;padding:16px;font-size:16px}
@@ -101,11 +43,6 @@
   .acc.mail.lost{background:var(--red);border-color:var(--red)}
   #demo{display:none;margin-top:18px}
 
-  /* Karta wyniku */
-  ul.status{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:6px;font-size:16px}
-  ul.status li::before{content:"○ ";color:var(--muted)}
-  ul.status li.on::before{content:"● ";color:var(--teal)}
-
   /* Misja domowa i ściąga */
   .mission{background:var(--navy);color:#fff}
   .mission h2{color:#fff}
@@ -118,11 +55,8 @@
   .cheat ol{margin:10px 0 0;padding-left:26px;display:grid;gap:12px}
   .cheat .note{color:var(--muted)}
 
-  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-  footer{text-align:center;color:var(--muted);font-size:14px;padding:20px}
   @media (max-width:640px){.cols{grid-template-columns:1fr}}
-  @media (max-width:560px){section{padding:22px 18px}body{font-size:17px}
-       .map{grid-template-columns:repeat(2,1fr)}.acc.mail{grid-column:1 / -1;grid-row:1}}
+  @media (max-width:560px){.map{grid-template-columns:repeat(2,1fr)}.acc.mail{grid-column:1 / -1;grid-row:1}}
 
   /* Wydruk: tylko ściąga dla domowników */
   @media print{
@@ -137,7 +71,7 @@
 <body>
 
 <header>
-  <a href="index.html" style="color:#fff;opacity:.8;display:inline-block;margin-bottom:16px;text-decoration:none">← Wszystkie lekcje</a><br>
+  <a class="back" href="index.html">← Wszystkie lekcje</a><br>
   <span class="tag">BEZPIECZEŃSTWO W SIECI · LEKCJA 2</span>
   <h1>Jak zapamiętać wiele haseł i odzyskać konto?</h1>
   <p>Przeczytaj krótkie wprowadzenie (ok. 6 minut), a potem wykonaj trzy zadania.</p>
@@ -301,8 +235,8 @@
 </main>
 <footer><a href="index.html">← Wróć do listy lekcji</a><br>Informatyka · klasy 7–8 · Bezpieczeństwo w sieci</footer>
 
+<script src="wspolne/lekcja.js"></script>
 <script>
-const $ = id => document.getElementById(id);
 
 /* ---------- Dane: Zadanie 1 ----------
    STEPS – kroki w dobrej kolejności. hint – podpowiedź, gdy uczeń wybierze krok za wcześnie.
@@ -382,17 +316,6 @@ const pts  = {z1:0, z2:0, z3:0};
 const done = {z1:false, z2:false, z3:false};
 const max  = {z1: STEPS.length, z2: Z2_FIRST.length + Z2_REST.length, z3: SCEN.length};
 
-function shuffle(arr){
-  const a = arr.slice();
-  for (let k = a.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; }
-  return a;
-}
-function setFb(el, good, title, text){
-  el.className = "fb " + (good ? "good" : "bad");
-  el.innerHTML = "";
-  const s = document.createElement("strong"); s.textContent = title + " ";
-  el.appendChild(s); el.appendChild(document.createTextNode(text));
-}
 
 /* ---------- Zadanie 1 ---------- */
 let pos = 0, missHere = false;
@@ -447,37 +370,20 @@ $("z1again").onclick = startZ1;
 
 /* ---------- Pytania z wyborem (zadania 2 i 3) ---------- */
 const answered = {z2:0, z3:0};
-function makeScen(container, list, key, onEach){
-  list.forEach(s => {
-    const card = document.createElement("div"); card.className = "scen";
-    const p = document.createElement("p"); p.textContent = s.q; card.appendChild(p);
-    const opts = document.createElement("div"); opts.className = "opts";
-    const fb = document.createElement("div"); fb.className = "fb"; fb.setAttribute("aria-live", "polite");
-    const btns = s.a.map((txt, k) => {
-      const b = document.createElement("button"); b.className = "opt"; b.textContent = txt;
-      b.onclick = () => {
-        opts.querySelectorAll("button").forEach(x => x.disabled = true);
-        btns[s.ok].classList.add("right");
-        const good = k === s.ok;
-        if (!good) b.classList.add("wrong"); else pts[key]++;
-        setFb(fb, good, good ? "✅ Dobrze!" : "❌ Nie tym razem.", s.why);
-        answered[key]++;
-        if (onEach) onEach();
-        if (answered[key] === max[key]) {
-          $(key + "score").textContent = `Wynik: ${pts[key]} / ${max[key]}`;
-          done[key] = true; updateStatus();
-        }
-      };
-      return b;
-    });
-    shuffle(btns).forEach(b => opts.appendChild(b));   // losowa kolejność odpowiedzi
-    card.appendChild(opts); card.appendChild(fb);
-    container.appendChild(card);
+function addScen(container, list, key, onEach){
+  makeScen(container, list, good => {
+    if (good) pts[key]++;
+    answered[key]++;
+    if (onEach) onEach();
+    if (answered[key] === max[key]) {
+      $(key + "score").textContent = `Wynik: ${pts[key]} / ${max[key]}`;
+      done[key] = true; updateStatus();
+    }
   });
 }
 
 /* ---------- Zadanie 2 ---------- */
-makeScen($("z2first"), Z2_FIRST, "z2", () => { $("demo").style.display = "block"; });
+addScen($("z2first"), Z2_FIRST, "z2", () => { $("demo").style.display = "block"; });
 $("bDemo").onclick = () => {
   $("bDemo").disabled = true;
   $("mailAcc").classList.add("lost");
@@ -489,52 +395,20 @@ $("bDemo").onclick = () => {
     if (n === accs.length - 1) {
       setFb($("demoFb"), false, `😱 Jedno hasło – ${accs.length + 1} przejętych kont.`,
         "Włamywacz na każdym koncie kliknął „Nie pamiętam hasła”. Linki do zmiany hasła przyszły do poczty, którą już miał. Dlatego poczta potrzebuje najlepszej ochrony.");
-      makeScen($("z2rest"), Z2_REST, "z2");
+      addScen($("z2rest"), Z2_REST, "z2");
     }
   }, 350 * (n + 1)));
 };
 
 /* ---------- Zadanie 3 ---------- */
-makeScen($("scenarios"), SCEN, "z3");
+addScen($("scenarios"), SCEN, "z3");
 
 /* ---------- Karta wyniku ---------- */
-const TASKS = [["z1", "Zadanie 1: Konto przejęte – co po kolei?"], ["z2", "Zadanie 2: Które konto jest najważniejsze?"], ["z3", "Zadanie 3: Co zrobisz?"]];
-function updateStatus(){
-  const ul = $("status"); ul.innerHTML = "";
-  TASKS.forEach(([k, label]) => {
-    const li = document.createElement("li");
-    li.className = done[k] ? "on" : "";
-    li.textContent = label + " – " + (done[k] ? `${pts[k]} / ${max[k]} pkt` : "jeszcze nieukończone");
-    ul.appendChild(li);
-  });
-  $("card").style.display = "none";
-}
-function showCard(){
-  const name = $("name").value.trim();
-  const msg = $("cardMsg");
-  if (!name) { $("name").focus(); $("name").style.borderColor = "var(--red)"; return; }
-  const missing = TASKS.filter(([k]) => !done[k]).map(([, l]) => l.split(":")[0]);
-  if (missing.length) {
-    msg.className = "fb bad";
-    msg.textContent = "Najpierw dokończ: " + missing.join(", ") + ".";
-    return;
-  }
-  msg.className = "fb"; msg.textContent = "";
-  const total = pts.z1 + pts.z2 + pts.z3;
-  const totalMax = max.z1 + max.z2 + max.z3;
-  const d = new Date().toLocaleString("pl-PL", {dateStyle:"short", timeStyle:"short"});
-  const c = $("card"); c.innerHTML = "";
-  const add = (txt, css) => { const el = document.createElement("div"); el.textContent = txt; if (css) el.style.cssText = css; else el.className = "note"; c.appendChild(el); };
-  add("KARTA WYNIKU · Lekcja 2: Hasła i odzyskiwanie konta");
-  add(name, "font-size:22px;font-weight:800;margin:6px 0");   // tekst ucznia tylko jako textContent
-  add(`${total} / ${totalMax}`, "font-size:40px;font-weight:800;color:var(--teal)");
-  add(`Zadanie 1: ${pts.z1}/${max.z1} · Zadanie 2: ${pts.z2}/${max.z2} · Zadanie 3: ${pts.z3}/${max.z3}`);
-  add(d);
-  add("Pokaż tę kartę nauczycielowi.");
-  c.style.display = "block";
-}
-$("bCard").onclick = showCard;
-$("name").addEventListener("keydown", e => { if (e.key === "Enter") showCard(); $("name").style.borderColor = ""; });
+const updateStatus = initScoreCard({
+  title: "Lekcja 2: Hasła i odzyskiwanie konta",
+  tasks: [["z1", "Zadanie 1: Konto przejęte – co po kolei?"], ["z2", "Zadanie 2: Które konto jest najważniejsze?"], ["z3", "Zadanie 3: Co zrobisz?"]],
+  pts, done, max
+});
 
 /* ---------- Ściąga ---------- */
 $("bPrint").onclick = () => window.print();
