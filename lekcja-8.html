@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lekcja 8: Co zostawiasz po sobie w sieci?</title>
+<link rel="stylesheet" href="wspolne/baza.css">
+<link rel="stylesheet" href="wspolne/lekcja.css">
+<style>
+  /* Zadanie 1: informacja */
+  .info{background:var(--bg);border-radius:12px;padding:12px 14px;margin-bottom:12px;font-weight:600;font-size:17px}
+  /* Zadanie 2: post do zbadania */
+  .post{max-width:460px;margin:0 auto;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+  .post-top{display:flex;align-items:center;gap:10px;padding:10px 14px;font-weight:700;color:var(--navy)}
+  .post-top .av{width:34px;height:34px;border-radius:50%;background:#ffd9a8;display:grid;place-items:center}
+  .photo{background:linear-gradient(#cfe8ff,#eef6ff);padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .post-text{padding:12px 14px;font-size:16px;line-height:1.9}
+  .clue{font:inherit;font-weight:600;border:0;border-radius:8px;padding:4px 8px;background:#fff;color:var(--ink);
+       text-align:left;cursor:pointer;outline:1px dashed #9aa6c4}
+  .photo .clue{padding:8px 10px;font-size:15px}
+  .post-text .clue{background:transparent;padding:0 3px}
+  .clue:hover{background:#fff4cc}
+  .clue:focus-visible{outline:3px solid var(--navy)}
+  .clue[aria-pressed="true"]{background:#ffe08a;outline:2px solid #d9a21a}
+  .clue.found{background:var(--teal-l);outline:2px solid var(--teal)}
+  .clue.missed{background:#fff1d6;outline:2px dashed var(--orange)}
+  .clue.wrongpick{background:var(--red-l);outline:2px solid var(--red);text-decoration:line-through}
+  .clue:disabled{cursor:default;opacity:1}
+  ul.flags{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:8px;font-size:16px}
+  ul.flags li{background:#fff;border-radius:8px;padding:8px 12px;border-left:5px solid var(--teal)}
+  ul.flags li.missed{border-left-color:var(--orange)}
+  /* Ślad aktywny i pasywny */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  .two-col > div{background:var(--bg);border-radius:12px;padding:14px 16px}
+  .two-col h3{margin:0 0 6px;font-size:18px;color:var(--navy)}
+  .two-col ul{margin:0;padding-left:20px;font-size:16px}
+  @media (max-width:560px){.two-col{grid-template-columns:1fr}.photo{grid-template-columns:1fr}}
+</style>
+</head>
+<body class="druk-sciagi">
+
+<header>
+  <a class="back" href="index.html">← Wszystkie lekcje</a><br>
+  <span class="tag">BEZPIECZEŃSTWO W SIECI · LEKCJA 8</span>
+  <h1>Co zostawiasz po sobie w sieci?</h1>
+  <p>Przeczytaj krótkie wprowadzenie (ok. 6 minut), wykonaj trzy zadania, a na koniec misję domową.</p>
+</header>
+
+<main>
+
+<section>
+  <h2><span class="num">1</span> Cyfrowy ślad – jak odciski butów na śniegu</h2>
+  <p>Wszystko, co robisz w internecie, zostawia ślad – jak buty na świeżym śniegu. Ten ślad to twój <strong>cyfrowy ślad</strong>. Część zostawiasz świadomie, część powstaje bez twojej wiedzy.</p>
+  <div class="two-col">
+    <div><h3>👣 Ślad, który zostawiasz sam</h3>
+      <ul><li>zdjęcia, filmiki, relacje</li><li>komentarze i polubienia</li><li>opis profilu, nick, oznaczenia</li></ul></div>
+    <div><h3>🔍 Ślad, który zbierają o tobie</h3>
+      <ul><li>lokalizacja telefonu</li><li>historia wyszukiwania i oglądania</li><li>co i jak długo oglądasz – na tej podstawie aplikacje dobierają reklamy i filmy</li></ul></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">2</span> Internet nie zapomina</h2>
+  <div class="grid">
+    <div class="tile"><div class="ico">📸</div><h3>Zrzut ekranu</h3><p>„Znikająca” wiadomość czy relacja na 24 godziny? Ktoś może ją zapisać w sekundę.</p></div>
+    <div class="tile"><div class="ico">🔁</div><h3>Udostępnienia</h3><p>Gdy coś trafi do innych, nie da się już tego „cofnąć” z ich telefonów.</p></div>
+    <div class="tile"><div class="ico">🗓️</div><h3>Za kilka lat</h3><p>Szkoła średnia, pierwsza praca, nowi znajomi – ktoś może wpisać twoje imię w wyszukiwarkę.</p></div>
+  </div>
+  <div class="tip">💡 Zanim coś opublikujesz, zadaj sobie <strong>test babci</strong>: czy pokazał(a)bym to babci, nauczycielowi i obcej osobie w autobusie? Jeśli nie – nie publikuj.</div>
+</section>
+
+<section>
+  <h2><span class="num">3</span> Co zdradza zwykłe zdjęcie?</h2>
+  <p>Jedno zdjęcie mówi niewiele. Ale kilka zdjęć i podpisów razem może zdradzić, <strong>gdzie mieszkasz, do jakiej szkoły chodzisz i kiedy jesteś sam lub sama</strong>.</p>
+  <div class="grid">
+    <div class="tile"><div class="ico">🏫</div><h3>Logo szkoły</h3><p>Na bluzie, plecaku albo w tle zdjęcia z boiska.</p></div>
+    <div class="tile"><div class="ico">🚏</div><h3>Nazwy miejsc</h3><p>Tabliczka z ulicą, przystanek, numer domu, widok z okna.</p></div>
+    <div class="tile"><div class="ico">⏰</div><h3>Stałe pory</h3><p>„Jak co wtorek o 18:00 trening” – to plan dnia dla obcej osoby.</p></div>
+    <div class="tile"><div class="ico">📍</div><h3>Lokalizacja</h3><p>Oznaczenie miejsca, mapa znajomych, relacja „na żywo” – pokazują, gdzie jesteś <strong>teraz</strong>.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">4</span> Ustawienia prywatności – twoja furtka</h2>
+  <ul class="rules">
+    <li><strong>Konto prywatne.</strong> Twoje posty widzą tylko osoby, które zaakceptujesz.</li>
+    <li><strong>Lokalizacja wyłączona.</strong> Na mapach znajomych włącz tryb, w którym nikt nie widzi, gdzie jesteś. Zdjęć nie oznaczaj miejscem na bieżąco – najwyżej po powrocie.</li>
+    <li><strong>Kto może do ciebie pisać i cię oznaczać?</strong> Najlepiej tylko znajomi.</li>
+    <li><strong>Raz na jakiś czas wyszukaj siebie</strong> w wyszukiwarce – zobaczysz, co widzą inni.</li>
+    <li><strong>Cudze zdjęcia – za zgodą.</strong> Zanim oznaczysz albo wrzucisz zdjęcie znajomych, zapytaj ich (więcej w lekcji 9).</li>
+  </ul>
+</section>
+
+<section id="zadanie1">
+  <h2><span class="num">✎</span> Zadanie 1: Publikować czy zachować dla siebie?</h2>
+  <p>Czy tę informację można bezpiecznie opublikować na profilu, który widzi wiele osób?</p>
+  <div id="infos"></div>
+  <p class="note" id="z1score" aria-live="polite"></p>
+</section>
+
+<section id="zadanie2">
+  <h2><span class="num">✎</span> Zadanie 2: Detektyw zdjęć</h2>
+  <p>Oto publiczny post Zosi. Wciel się w detektywa: <strong>kliknij wszystkie elementy</strong>, które zdradzają, gdzie Zosia mieszka, do jakiej szkoły chodzi albo kiedy bywa sama. Kliknij jeszcze raz, żeby odznaczyć. Możesz też używać klawisza Tab i Enter.</p>
+  <p class="note" style="margin-top:-6px">Punkty: +1 za każdą znalezioną wskazówkę, −1 za element zaznaczony bez powodu (nie mniej niż 0).</p>
+  <div id="post"></div>
+  <div class="btns" style="margin-top:14px"><button class="b-next" id="bCheck">Sprawdź</button></div>
+  <div id="detFb" class="fb" aria-live="polite"></div>
+  <p class="note" id="z2score" aria-live="polite"></p>
+</section>
+
+<section id="zadanie3">
+  <h2><span class="num">✎</span> Zadanie 3: Co zrobisz?</h2>
+  <p>Przeczytaj sytuacje i wybierz najlepszą reakcję.</p>
+  <div id="scenarios"></div>
+  <p class="note" id="z3score" aria-live="polite"></p>
+</section>
+
+<section id="karta">
+  <h2><span class="num">★</span> Twoja karta wyniku</h2>
+  <p>Gdy skończysz wszystkie trzy zadania, wpisz imię i klasę, a potem pokaż kartę nauczycielowi.</p>
+  <ul class="status" id="status"></ul>
+  <div class="row" style="max-width:560px">
+    <input type="text" id="name" placeholder="Wpisz swoje imię i klasę, np. Ola 7b" maxlength="40">
+    <button class="b-next" id="bCard">Pokaż kartę wyniku</button>
+  </div>
+  <div id="cardMsg" class="fb"></div>
+  <div class="card-result" id="card"></div>
+</section>
+
+<section id="misja">
+  <h2><span class="num">🕵️</span> Misja domowa cyberagenta: wyszukaj siebie</h2>
+  <div class="misja-box">
+    <strong>Twoja misja (10–15 minut):</strong> razem z rodzicem lub innym bliskim dorosłym sprawdźcie, co internet wie o was.
+    <ol>
+      <li>Wpiszcie w wyszukiwarkę swoje imię i nazwisko (a potem nick z gier lub mediów społecznościowych). Przejrzyjcie wyniki i obrazy.</li>
+      <li>Otwórzcie ustawienia prywatności jednego twojego konta: czy jest prywatne? Czy lokalizacja jest wyłączona? Kto może cię oznaczać?</li>
+      <li>Porozmawiajcie: czy domownicy publikują twoje zdjęcia? Ustalcie, że przed publikacją pytacie się nawzajem o zgodę.</li>
+    </ol>
+  </div>
+  <p class="note">🤫 Na następnej lekcji powiesz tylko, czy znaleźliście coś, co trzeba było ukryć albo usunąć – bez szczegółów.</p>
+
+  <div class="sciaga" id="sciaga">
+    <h3>Ściąga dla domowników: cyfrowy ślad</h3>
+    <ol>
+      <li><strong>Internet nie zapomina.</strong> Zrzut ekranu trwa sekundę, a udostępnionego zdjęcia nie da się cofnąć z cudzych telefonów.</li>
+      <li><strong>Zdjęcia dziecka – za jego zgodą.</strong> Zanim wrzucisz zdjęcie dziecka (także na rodzinny czat), zapytaj je. Unikaj zdjęć w kąpieli, w mundurku z logo szkoły i z widoczną nazwą ulicy.</li>
+      <li><strong>Lokalizacja na żywo zdradza, że nie ma was w domu.</strong> Zdjęcia z wakacji publikuj po powrocie.</li>
+      <li><strong>Ustawienia prywatności:</strong> konto prywatne, wyłączona lokalizacja, oznaczanie tylko przez znajomych.</li>
+    </ol>
+    <div class="foot">🔍 Raz na kilka miesięcy wpisz w wyszukiwarkę swoje imię i nazwisko – zobaczysz, co widzą inni.</div>
+    <div class="btns noprint" style="margin-top:16px;justify-content:flex-start"><button class="b-next" id="bPrint">🖨️ Wydrukuj ściągę</button></div>
+  </div>
+</section>
+
+</main>
+<footer><a href="index.html">← Wróć do listy lekcji</a><br>Informatyka · Bezpieczeństwo w sieci</footer>
+
+<script src="wspolne/lekcja.js"></script>
+<script>
+/* ---------- Dane: Zadanie 1 ---------- */
+const INFOS = [
+  {t:"🎨 Zdjęcie twojego rysunku smoka", ok:true, why:"Twoja twórczość, bez danych osobowych – śmiało, jeśli chcesz się nią pochwalić."},
+  {t:"🏠 Zdjęcie przed domem z widocznym numerem i nazwą ulicy", ok:false, why:"Numer domu i ulica to twój adres. Obca osoba wie wtedy, gdzie cię szukać."},
+  {t:"✈️ „Lecimy na 2 tygodnie do Hiszpanii! Dom pusty 😎”", ok:false, why:"Taki post to informacja dla złodziei, że mieszkanie stoi puste. Zdjęcia z wakacji wrzucaj po powrocie."},
+  {t:"⚽ „Ale mecz! Wygraliśmy 3:1 🎉” – bez nazwy klubu i godzin treningów", ok:true, why:"Radość z wygranej, bez szczegółów, gdzie i kiedy trenujesz. W porządku."},
+  {t:"📱 Twój numer telefonu w opisie profilu, „żeby łatwiej było się skontaktować”", ok:false, why:"Numer w publicznym profilu mogą wykorzystać oszuści i obcy. Daj go tylko osobom, które znasz."},
+  {t:"🪪 Zdjęcie legitymacji szkolnej, bo „wyszło ładne zdjęcie”", ok:false, why:"Legitymacja zawiera imię, nazwisko, datę urodzenia i szkołę – komplet danych do podszywania się pod ciebie."},
+  {t:"📚 Recenzja książki, którą właśnie przeczytałeś lub przeczytałaś", ok:true, why:"Opinia o książce nie zdradza danych osobowych. Dobry pomysł na wartościowy ślad w sieci."}
+];
+
+/* ---------- Dane: Zadanie 2 ----------
+   [tekst, id wskazówki lub "", gdzie: "photo" / "text"]. Wskazówki z tym samym id liczą się raz. */
+const CLUES = [
+  ["🧥 Bluza z napisem „SP 12 Kraków”", "school", "photo"],
+  ["🌳 Drzewo i trawa", "", "photo"],
+  ["🚏 Przystanek „Lipowa” w tle", "street", "photo"],
+  ["🐶 Pies Fafik na smyczy", "", "photo"],
+  ["Spacer z Fafikiem przed treningiem 🐶", "", "text"],
+  [" Jak co wtorek: o 17:30 wychodzę sama,", "routine", "text"],
+  [" a rodzice wracają dopiero o 20 😅", "alone", "text"],
+  [" #słońce #pies", "", "text"],
+  [" 📍 Kraków, ul. Lipowa", "street", "text"]
+];
+const FLAGS = {
+  school:{l:"Szkoła", w:"Napis na bluzie zdradza, do której szkoły chodzi Zosia – czyli gdzie można ją spotkać w dni powszednie."},
+  street:{l:"Miejsce zamieszkania", w:"Przystanek w tle i oznaczona ulica pokazują okolicę, w której mieszka."},
+  routine:{l:"Stały plan dnia", w:"„Jak co wtorek o 17:30” mówi obcej osobie, gdzie i kiedy szukać Zosi."},
+  alone:{l:"Bez opieki", w:"Informacja, że dorosłych nie ma do 20:00, to coś, czego obcy nie powinien wiedzieć."}
+};
+
+/* ---------- Dane: Zadanie 3 ---------- */
+const SCEN = [
+  {q:"📸 Wysyłasz przyjaciółce śmieszne, ale wstydliwe zdjęcie w „znikającej” wiadomości. Czy ono naprawdę zniknie?",
+   a:["Tak – aplikacja gwarantuje, że zniknie na zawsze.", "Nie musi – odbiorca może zrobić zrzut ekranu albo sfotografować ekran innym telefonem.", "Tak, jeśli wyślę je w nocy."], ok:1,
+   why:"Każdą wiadomość można zapisać. Wysyłaj tylko to, co nie zaszkodzi ci, gdy zobaczą to inni."},
+  {q:"🗺️ Aplikacja pyta: „Udostępnić twoją lokalizację znajomym na mapie?”. Masz tam 300 „znajomych”, części nie znasz osobiście.",
+   a:["Udostępniam – wszyscy tak robią.", "Udostępniam tylko w dzień, a w nocy wyłączam.", "Nie udostępniam albo włączam tryb, w którym nikt mnie nie widzi."], ok:2,
+   why:"Lokalizacja na żywo pokazuje, gdzie jesteś teraz – także osobom, których nie znasz. Najbezpieczniej ją wyłączyć."},
+  {q:"🔍 Wpisujesz swoje imię i nazwisko w wyszukiwarkę i znajdujesz swoje zdjęcie z wycieczki na publicznym profilu kolegi.",
+   a:["Proszę kolegę, żeby usunął zdjęcie, a jeśli odmówi – mówię dorosłemu.", "Nic nie robię – to tylko zdjęcie.", "Publikuję w odwecie jego wstydliwe zdjęcie."], ok:0,
+   why:"Masz prawo decydować o swoim wizerunku. Najpierw poproś, a jeśli to nie pomoże – poproś dorosłego o pomoc i zgłoś zdjęcie w aplikacji."}
+];
+
+/* ---------- Punkty ---------- */
+const pts  = {z1:0, z2:0, z3:0};
+const done = {z1:false, z2:false, z3:false};
+const max  = {z1:INFOS.length, z2:Object.keys(FLAGS).length, z3:SCEN.length};
+const answered = {z1:0, z3:0};
+function counter(key){
+  return good => {
+    if (good) pts[key]++;
+    if (++answered[key] === max[key]) {
+      $(key + "score").textContent = `Wynik: ${pts[key]} / ${max[key]}`;
+      done[key] = true; updateStatus();
+    }
+  };
+}
+
+/* ---------- Zadanie 1 ---------- */
+makeVerdict($("infos"), INFOS, {
+  labels: ["👍 Można opublikować", "🙊 Lepiej zachować dla siebie"],
+  isYes: x => x.ok,
+  head: x => el("div", "info", x.t),
+  onAnswer: counter("z1")
+});
+
+/* ---------- Zadanie 2: detektyw ---------- */
+const post = el("div", "post");
+const postTop = el("div", "post-top"); postTop.appendChild(el("div", "av", "👧")); postTop.appendChild(el("span", "", "zosia.biega · publiczne"));
+const photo = el("div", "photo"); photo.setAttribute("aria-label", "Zdjęcie – elementy do kliknięcia");
+const text = el("div", "post-text");
+const clueBtns = CLUES.map(([t, f, where]) => {
+  const b = el("button", "clue", t);
+  b.dataset.f = f; b.setAttribute("aria-pressed", "false");
+  b.onclick = () => b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true");
+  (where === "photo" ? photo : text).appendChild(b);
+  return b;
+});
+post.appendChild(postTop); post.appendChild(photo); post.appendChild(text);
+$("post").appendChild(post);
+
+$("bCheck").onclick = () => {
+  const found = new Set(); let wrong = 0;
+  clueBtns.forEach(b => {
+    const picked = b.getAttribute("aria-pressed") === "true";
+    if (picked && b.dataset.f) found.add(b.dataset.f);
+    if (picked && !b.dataset.f) { wrong++; b.classList.add("wrongpick"); }
+  });
+  clueBtns.forEach(b => {
+    if (b.dataset.f) b.classList.add(found.has(b.dataset.f) ? "found" : "missed");
+    b.disabled = true;
+  });
+  pts.z2 = Math.max(0, found.size - wrong);
+  const fb = $("detFb");
+  setFb(fb, found.size >= 3, `Znaleziono ${found.size} z ${max.z2} wskazówek${wrong ? `, ${wrong} bez powodu` : ""} (+${pts.z2} pkt).`, "");
+  const ul = el("ul", "flags");
+  Object.entries(FLAGS).forEach(([id, f]) => {
+    const li = el("li", found.has(id) ? "" : "missed");
+    li.appendChild(el("strong", "", (found.has(id) ? "✅ " : "👀 ") + f.l + ": "));
+    li.appendChild(document.createTextNode(f.w));
+    ul.appendChild(li);
+  });
+  fb.appendChild(ul);
+  fb.appendChild(el("p", "", "💡 Drzewo, pies czy hasztagi same niczego nie zdradzają. Groźne jest połączenie szkoły, miejsca i pory, gdy Zosia jest sama. Lepsza wersja posta: zdjęcie z psem, bez napisów i bez planu dnia."));
+  $("bCheck").disabled = true;
+  $("z2score").textContent = `Wynik: ${pts.z2} / ${max.z2}`;
+  done.z2 = true; updateStatus();
+};
+
+/* ---------- Zadanie 3 ---------- */
+makeScen($("scenarios"), SCEN, counter("z3"));
+
+/* ---------- Karta wyniku ---------- */
+const updateStatus = initScoreCard({
+  title: "Lekcja 8: Cyfrowy ślad",
+  tasks: [["z1", "Zadanie 1: Publikować czy zachować dla siebie?"], ["z2", "Zadanie 2: Detektyw zdjęć"], ["z3", "Zadanie 3: Co zrobisz?"]],
+  pts, done, max
+});
+
+$("bPrint").onclick = () => window.print();
+</script>
+</body>
+</html>

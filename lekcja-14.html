@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lekcja 14: Czy uciekniesz z cyber-escape roomu?</title>
+<link rel="stylesheet" href="wspolne/baza.css">
+<link rel="stylesheet" href="wspolne/lekcja.css">
+<style>
+  /* Kod do drzwi */
+  .code{display:flex;justify-content:center;gap:8px;margin:14px 0 4px}
+  .code span{width:44px;height:56px;border-radius:10px;background:var(--navy);color:var(--yellow);display:grid;place-items:center;
+       font:800 30px ui-monospace,Consolas,monospace}
+  .code span.empty{background:var(--line);color:var(--muted)}
+  /* Pokoje */
+  .room{border:2px solid var(--line);border-radius:16px;padding:18px;margin-top:16px}
+  .room.locked{border-style:dashed;background:rgba(255,255,255,.6);color:var(--muted);text-align:center}
+  .room.solved{border-color:var(--teal)}
+  .room h3{margin:0;color:var(--navy);font-size:21px}
+  .room .sub{color:var(--muted);font-size:15px;margin:0 0 6px}
+  .room .scen{margin-top:12px}
+  .room .done-msg{background:var(--teal-l);border-radius:12px;padding:12px 16px;margin-top:14px;font-weight:700;text-align:center}
+  .room .done-msg b{font:800 26px ui-monospace,Consolas,monospace;color:var(--teal)}
+  /* Drzwi */
+  .door{text-align:center}
+  .door .big{font-size:64px;line-height:1}
+  .door .row{justify-content:center}
+  .door input{max-width:220px;text-align:center;font:700 26px ui-monospace,Consolas,monospace;letter-spacing:6px}
+  .timer{font-weight:700;color:var(--navy);text-align:center}
+  .plan-list{list-style:none;padding:0}
+  @media (max-width:420px){.code span{width:38px;height:50px;font-size:26px}}
+</style>
+</head>
+<body class="druk-sciagi">
+
+<header>
+  <a class="back" href="index.html">← Wszystkie lekcje</a><br>
+  <span class="tag">BEZPIECZEŃSTWO W SIECI · LEKCJA 14 · FINAŁ</span>
+  <h1>Czy uciekniesz z cyber-escape roomu?</h1>
+  <p>Przejdź przez pięć pokoi, zbierz cyfry kodu i otwórz drzwi. Na koniec czeka misja domowa.</p>
+</header>
+
+<main>
+
+<section>
+  <h2><span class="num">🧩</span> Twoja misja</h2>
+  <p>Cyberzłodziej zamknął drzwi szkolnej serwerowni i zostawił pięć pokoi z zagadkami. W każdym pokoju odpowiedz na pytania z naszego kursu. Za każdy rozwiązany pokój dostaniesz <strong>jedną cyfrę kodu</strong>. Ostatnią cyfrę musisz odgadnąć sam lub sama.</p>
+  <ul class="rules">
+    <li><strong>Możesz się mylić.</strong> Zła odpowiedź nie blokuje drogi – spróbuj jeszcze raz.</li>
+    <li><strong>Punkt dostajesz</strong> za każdą odpowiedź trafioną za pierwszym razem.</li>
+    <li><strong>Pokoje otwierają się po kolei.</strong> Utknąłeś lub utknęłaś? Wróć do lekcji podanych przy pokoju.</li>
+  </ul>
+  <div class="code" id="code" aria-label="Zebrane cyfry kodu"></div>
+  <p class="timer" id="timer" aria-hidden="true">⏱️ 0:00</p>
+</section>
+
+<section id="pokoje">
+  <h2><span class="num">🚪</span> Pokoje</h2>
+  <div id="rooms"></div>
+</section>
+
+<section id="drzwi" class="door">
+  <h2 style="justify-content:center"><span class="num">🔒</span> Drzwi wyjściowe</h2>
+  <div class="big" id="doorIco">🚪</div>
+  <p id="doorText">Najpierw rozwiąż wszystkie pokoje.</p>
+  <p class="note" id="doorHint" style="display:none">💡 Ostatnią cyfrę podpowie ci numer, pod który możesz bezpłatnie zadzwonić albo napisać, gdy w sieci dzieje się coś złego (lekcja 10).</p>
+  <div class="row" id="doorRow" style="display:none">
+    <input type="text" id="doorCode" inputmode="numeric" maxlength="6" placeholder="••••••" aria-label="Kod do drzwi">
+    <button class="b-next" id="doorGo">Otwórz</button>
+  </div>
+  <div id="doorFb" class="fb" aria-live="polite"></div>
+</section>
+
+<section id="karta">
+  <h2><span class="num">★</span> Twoja karta wyniku</h2>
+  <p>Gdy otworzysz drzwi, wpisz imię i klasę, a potem pokaż kartę nauczycielowi.</p>
+  <ul class="status" id="status"></ul>
+  <div class="row" style="max-width:560px">
+    <input type="text" id="name" placeholder="Wpisz swoje imię i klasę, np. Ola 7b" maxlength="40">
+    <button class="b-next" id="bCard">Pokaż kartę wyniku</button>
+  </div>
+  <div id="cardMsg" class="fb"></div>
+  <div class="card-result" id="card"></div>
+</section>
+
+<section id="misja">
+  <h2><span class="num">🕵️</span> Misja domowa cyberagenta: domowy plan bezpieczeństwa</h2>
+  <div class="misja-box">
+    <strong>Twoja ostatnia misja (15–20 minut):</strong> zostałeś lub zostałaś domowym ekspertem od bezpieczeństwa w sieci. Wydrukuj plan poniżej i przejdź go z domownikami.
+    <ol>
+      <li>Usiądźcie razem i przeczytajcie plan punkt po punkcie.</li>
+      <li>Przy każdym punkcie zaznaczcie: ✔ zrobione albo ✎ do zrobienia.</li>
+      <li>Powieście plan w widocznym miejscu, np. na lodówce – <strong>bez wpisywania haseł, kodów i numerów kart</strong>.</li>
+    </ol>
+  </div>
+  <p class="note">🤫 Na następnej lekcji powiesz tylko, ile punktów planu macie już zrobionych.</p>
+
+  <div class="sciaga" id="sciaga">
+    <h3>Domowy plan bezpieczeństwa w sieci</h3>
+    <ol>
+      <li><strong>Konta:</strong> ☐ każde ważne konto ma inne, długie hasło (fraza z kilku słów) ☐ poczta i komunikatory mają weryfikację dwuetapową ☐ kody zapasowe są schowane w bezpiecznym miejscu.</li>
+      <li><strong>Oszustwa:</strong> ☐ mamy hasło rodzinne ☐ prośba o pieniądze lub kod = rozłączam się i oddzwaniam na znany numer ☐ kodów BLIK i kodów z SMS-a nie podajemy nikomu.</li>
+      <li><strong>Urządzenia:</strong> ☐ telefony i komputery mają włączone automatyczne aktualizacje ☐ aplikacje instalujemy tylko z oficjalnych sklepów ☐ router ma zmienione fabryczne hasła ☐ zdjęcia mają kopię zapasową.</li>
+      <li><strong>Ja w sieci:</strong> ☐ zdjęcia innych publikujemy tylko za ich zgodą ☐ konta dzieci są prywatne, lokalizacja wyłączona ☐ gdy coś niepokoi – mówimy sobie, bez krzyku i zakazów.</li>
+      <li><strong>Informacja i AI:</strong> ☐ zanim prześlemy dalej – sprawdzamy źródło ☐ pamiętamy, że głos i twarz można podrobić.</li>
+    </ol>
+    <div class="foot">📞 <strong>116 111</strong> – Telefon Zaufania dla Dzieci i Młodzieży · <strong>800 100 100</strong> – dla rodziców i nauczycieli · <strong>8080</strong> – podejrzane SMS-y (CERT Polska) · <strong>112</strong> – numer alarmowy</div>
+    <div class="btns noprint" style="margin-top:16px;justify-content:flex-start"><button class="b-next" id="bPrint">🖨️ Wydrukuj plan</button></div>
+  </div>
+</section>
+
+</main>
+<footer><a href="index.html">← Wróć do listy lekcji</a><br>Informatyka · Bezpieczeństwo w sieci</footer>
+
+<script src="wspolne/lekcja.js"></script>
+<script>
+/* ---------- Dane: pokoje ----------
+   Każdy pokój: nazwa, lekcje, cyfra kodu i pytania {q, a, ok, why}.
+   Kod do drzwi: 116111 – numer Telefonu Zaufania dla Dzieci i Młodzieży (ostatnia cyfra do odgadnięcia). */
+const CODE = "116111";
+const ROOMS = [
+  {ico:"🔐", name:"Moje konta", lessons:"lekcje 1–2", digit:"1", qs:[
+    {q:"Które hasło jest najsilniejsze?", a:["Kasia2012!", "P@ssw0rd123", "pomidor-rakieta-cichy-lis"], ok:2,
+     why:"Długa fraza z przypadkowych słów – bez imion, dat i znanych sztuczek z zamianą liter."},
+    {q:"Ktoś przejął twoje konto w grze. Które konto zabezpieczasz najpierw?", a:["Pocztę e-mail – przez nią odzyskuje się inne konta", "Profil w grze – zmieniam nick", "Żadne – czekam, aż samo się naprawi"], ok:0,
+     why:"Poczta to klucz do wszystkich kont. Kto ją ma, ten zresetuje każde hasło."},
+    {q:"Dostajesz SMS z kodem logowania, choć się nie logujesz. Co to znaczy?", a:["Ktoś zna twoje hasło – zmieniam je", "Bank testuje nowy system", "To tylko pomyłka operatora"], ok:0,
+     why:"Weryfikacja dwuetapowa zatrzymała włamywacza, ale on zna hasło. Zmień je od razu."}
+  ]},
+  {ico:"🎣", name:"Rozpoznaj oszustwo", lessons:"lekcje 3–5", digit:"1", qs:[
+    {q:"Który adres naprawdę należy do Robloxa?", a:["roblox.com.free-robux.xyz/login", "www.roblox.com/login", "rob1ox.com/login"], ok:1,
+     why:"Liczy się nazwa przed pierwszym „/”. W pierwszym adresie to free-robux.xyz, a w trzecim zamiast „l” stoi „1”."},
+    {q:"„Babciu, to ja! Miałem wypadek, pilnie potrzebuję pieniędzy!” Co powinna zrobić babcia?", a:["Szybko przelać pieniądze, zanim będzie za późno", "Zapytać o hasło rodzinne albo oddzwonić na znany numer wnuczka", "Podać numer karty, żeby było szybciej"], ok:1,
+     why:"Pośpiech i emocje to sztuczki oszustów. Hasło rodzinne i inny kanał rozwiązują sprawę."},
+    {q:"Sprzedajesz bluzę. Kupujący przysyła link: „Kliknij, żeby odebrać pieniądze”. Co robisz?", a:["Wpisuję dane karty, żeby dostać pieniądze", "Wysyłam mu kod BLIK", "Nie klikam – do odebrania pieniędzy nie trzeba podawać danych karty"], ok:2,
+     why:"To oszustwo „na kupującego”. Strona z linku wyłudza dane karty."}
+  ]},
+  {ico:"📱", name:"Moje urządzenia", lessons:"lekcje 6–7", digit:"6", qs:[
+    {q:"Kalkulator prosi o dostęp do twoich SMS-ów. Co robisz?", a:["Odmawiam – kalkulator tego nie potrzebuje", "Zgadzam się, bo inaczej nie zadziała", "Zgadzam się, ale tylko na tydzień"], ok:0,
+     why:"Dostęp do SMS-ów pozwala czytać kody logowania. Kalkulatorowi nie jest do niczego potrzebny."},
+    {q:"Jak najbezpieczniej zalogować się do banku poza domem?", a:["Przez darmowe Wi-Fi w galerii", "Przez dane komórkowe", "Przez sieć „Free_WiFi_Fast”"], ok:1,
+     why:"W publicznym Wi-Fi nie wiesz, kto je ustawił. Do ważnych spraw używaj danych komórkowych."},
+    {q:"Co oznacza zasada kopii zapasowej 3-2-1?", a:["3 hasła, 2 telefony, 1 komputer", "3 kopie danych, 2 różne miejsca, 1 kopia poza domem", "3 aktualizacje co 2 tygodnie w 1 aplikacji"], ok:1,
+     why:"Trzy kopie, dwa różne miejsca, jedna poza domem – np. w chmurze."}
+  ]},
+  {ico:"👣", name:"Ja w sieci", lessons:"lekcje 8–11", digit:"1", qs:[
+    {q:"Kiedy najlepiej publikować zdjęcia z wakacji?", a:["Na żywo, z oznaczeniem miejsca", "Po powrocie do domu", "Przed wyjazdem, z datami"], ok:1,
+     why:"Relacja na żywo mówi wszystkim, że dom stoi pusty i gdzie teraz jesteś."},
+    {q:"Zdjęcie ma licencję CC BY-NC. Na co pozwala?", a:["Na sprzedaż koszulek z tym zdjęciem", "Na użycie w szkolnej prezentacji z podaniem autora", "Na podpisanie się jako autor"], ok:1,
+     why:"BY – podaj autora, NC – nie zarabiaj na tym. Prezentacja na lekcję spełnia oba warunki."},
+    {q:"Na grupie klasowej ktoś wyśmiewa kolegę memem. Co robi dobry świadek?", a:["Dodaje 😂, żeby nie odstawać", "Nie dokłada się, wspiera kolegę i mówi dorosłemu", "Udostępnia mem dalej"], ok:1,
+     why:"Świadek ma moc: nie dokładać się, wesprzeć i poprosić o pomoc."},
+    {q:"Znajomy z gry prosi o zdjęcie i pisze: „Nie mów rodzicom”. To…", a:["zielona flaga – przecież się znacie", "czerwona flaga – nie wysyłam, mówię dorosłemu", "dowód, że jest prawdziwym przyjacielem"], ok:1,
+     why:"Prośba o zdjęcie i o tajemnicę to dwa poważne sygnały ostrzegawcze."}
+  ]},
+  {ico:"🤖", name:"Informacja i AI", lessons:"lekcje 12–13", digit:"1", qs:[
+    {q:"Anonimowe konto pisze: „Udostępnij, zanim usuną!!!” i nie podaje źródeł. Co robisz?", a:["Udostępniam szybko, zanim zniknie", "Sprawdzam w innych źródłach, zanim cokolwiek zrobię", "Komentuję, że to na pewno prawda"], ok:1,
+     why:"Presja i brak źródeł to sygnały manipulacji. Najpierw sprawdź."},
+    {q:"Głos w telefonie brzmi jak tata i prosi o kod BLIK. Co jest dowodem, że to on?", a:["Sam głos – przecież go znam", "Hasło rodzinne albo telefon na jego znany numer", "To, że zna moje imię"], ok:1,
+     why:"Głos można podrobić za pomocą AI. Hasła rodzinnego i telefonu na znany numer – nie."},
+    {q:"Czatbot podał cytat do twojej prezentacji. Co dalej?", a:["Sprawdzam, czy cytat istnieje w rzetelnym źródle", "Wklejam – czatboty się nie mylą", "Dopisuję jeszcze dwa podobne"], ok:0,
+     why:"Czatboty potrafią zmyślać cytaty i źródła. Sprawdzaj, zanim użyjesz."}
+  ]}
+];
+
+/* ---------- Punkty ---------- */
+const keys = ROOMS.map((_, n) => "r" + (n + 1));
+const pts = {}, done = {}, max = {};
+keys.forEach((k, n) => { pts[k] = 0; done[k] = false; max[k] = ROOMS[n].qs.length; });
+pts.door = 0; done.door = false; max.door = 1;
+
+/* ---------- Kod i stoper ---------- */
+function drawCode(){
+  const c = $("code"); c.innerHTML = "";
+  [...CODE].forEach((d, n) => {
+    const known = n < ROOMS.length && done[keys[n]];
+    c.appendChild(el("span", known ? "" : "empty", known ? d : "?"));
+  });
+}
+const t0 = Date.now(); let stopped = false;
+const fmt = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+const tick = setInterval(() => { if (!stopped) $("timer").textContent = "⏱️ " + fmt(Math.round((Date.now() - t0) / 1000)); }, 1000);
+
+/* ---------- Pokoje ---------- */
+function lockedRoom(n){
+  const lock = el("div", "room locked"); lock.id = "room" + (n + 1);
+  lock.appendChild(el("h3", "", `🔒 Pokój ${n + 1}`));
+  lock.appendChild(el("p", "sub", "Otworzy się po rozwiązaniu poprzedniego pokoju."));
+  return lock;
+}
+function openRoom(n){
+  const r = ROOMS[n], k = keys[n];
+  const room = el("div", "room"); room.id = "room" + (n + 1);
+  room.appendChild(el("h3", "", `${r.ico} Pokój ${n + 1}: ${r.name}`));
+  room.appendChild(el("p", "sub", "Powtórka: " + r.lessons));
+  let left = r.qs.length;
+  r.qs.forEach(q => room.appendChild(askUntilRight(q, first => {
+    if (first) pts[k]++;
+    if (--left === 0) solveRoom(n);
+  })));
+  return room;
+}
+function drawRooms(){
+  const box = $("rooms"); box.innerHTML = "";
+  ROOMS.forEach((r, n) => box.appendChild(n === 0 ? openRoom(0) : lockedRoom(n)));
+}
+
+/* Pytanie, na które można odpowiadać do skutku. onRight(trafioneZaPierwszymRazem). */
+function askUntilRight(s, onRight){
+  const card = el("div", "scen");
+  card.appendChild(el("p", "", s.q));
+  const opts = el("div", "opts"); const fb = makeFb();
+  let first = true;
+  const btns = s.a.map((txt, k) => {
+    const b = el("button", "opt", txt);
+    b.onclick = () => {
+      if (k !== s.ok) {
+        first = false; b.disabled = true; b.classList.add("wrong");
+        setFb(fb, false, "❌ Nie tym razem.", "Spróbuj jeszcze raz.");
+        return;
+      }
+      btns.forEach(x => x.disabled = true);
+      b.classList.add("right");
+      setFb(fb, true, first ? "✅ Dobrze! (+1 pkt)" : "✅ Tak jest!", s.why);
+      onRight(first);
+    };
+    return b;
+  });
+  shuffle(btns).forEach(b => opts.appendChild(b));
+  card.appendChild(opts); card.appendChild(fb);
+  return card;
+}
+
+function solveRoom(n){
+  const k = keys[n], room = $("room" + (n + 1));
+  done[k] = true;
+  room.classList.add("solved");
+  const msg = el("div", "done-msg", `✅ Pokój rozwiązany (${pts[k]} / ${max[k]} pkt). Cyfra kodu: `);
+  msg.appendChild(el("b", "", ROOMS[n].digit));
+  room.appendChild(msg);
+  updateStatus(); drawCode();
+  if (n + 1 < ROOMS.length) {
+    const next = openRoom(n + 1);
+    $("room" + (n + 2)).replaceWith(next);
+    const go = el("button", "b-next", `Dalej: pokój ${n + 2} →`); go.style.marginTop = "12px";
+    go.onclick = () => { go.remove(); scrollToEl(next); };
+    msg.appendChild(document.createElement("br")); msg.appendChild(go);
+  } else openDoorPanel();
+}
+
+/* ---------- Drzwi ---------- */
+let doorTries = 0;
+function openDoorPanel(){
+  $("doorText").textContent = "Masz pięć cyfr. Wpisz cały, sześciocyfrowy kod.";
+  $("doorHint").style.display = "block";
+  $("doorRow").style.display = "flex";
+  scrollToEl($("drzwi"));
+}
+function tryDoor(){
+  const v = $("doorCode").value.replace(/\D/g, "");
+  if (v.length !== 6) { $("doorCode").focus(); return; }
+  doorTries++;
+  if (v !== CODE) {
+    setFb($("doorFb"), false, "🔒 Drzwi ani drgną.", "Pięć cyfr masz z pokoi. Szósta to ostatnia cyfra numeru Telefonu Zaufania dla Dzieci i Młodzieży.");
+    return;
+  }
+  stopped = true; clearInterval(tick);
+  const time = fmt(Math.round((Date.now() - t0) / 1000));
+  pts.door = doorTries === 1 ? 1 : 0; done.door = true;
+  $("doorIco").textContent = "🎉";
+  $("doorCode").disabled = $("doorGo").disabled = true;
+  setFb($("doorFb"), true, `Drzwi otwarte! Czas: ${time}.`,
+    "116 111 to Telefon Zaufania dla Dzieci i Młodzieży – bezpłatny. Zapamiętaj go. Gratulacje – przeszedłeś lub przeszłaś cały kurs!");
+  updateStatus();
+}
+$("doorGo").onclick = tryDoor;
+$("doorCode").addEventListener("keydown", e => { if (e.key === "Enter") tryDoor(); });
+
+/* ---------- Karta wyniku ---------- */
+const updateStatus = initScoreCard({
+  title: "Lekcja 14: Cyber-escape room",
+  tasks: ROOMS.map((r, n) => [keys[n], `Pokój ${n + 1}: ${r.name}`]).concat([["door", "Drzwi: kod za pierwszym razem"]]),
+  pts, done, max
+});
+
+$("bPrint").onclick = () => window.print();
+drawCode(); drawRooms();
+</script>
+</body>
+</html>

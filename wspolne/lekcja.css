@@ -74,6 +74,22 @@ input[type=text]:focus{outline:none;border-color:var(--teal)}
 .bubble{background:#fff;border-radius:4px 16px 16px 16px;padding:12px 14px;font-size:17px;
      box-shadow:0 1px 2px rgba(0,0,0,.06)}
 
+/* ---------- Rozmowa na czacie (makeChat) ---------- */
+.chat{max-width:560px;margin:0 auto;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.chat-top{background:var(--navy);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:15px}
+.chat-top .av{width:34px;height:34px;border-radius:50%;background:#f7b6c8;display:grid;place-items:center;font-size:18px;flex:none}
+.chat-top b{display:block;font-size:16px}
+.chat-log{background:#eef1f8;padding:14px;min-height:220px;display:flex;flex-direction:column;gap:6px}
+.cb{max-width:82%;padding:9px 13px;border-radius:16px;font-size:16px;animation:chatpop .25s;word-wrap:break-word}
+.cb.them{background:#fff;align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.cb.me{background:var(--link);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.cb.sys{align-self:center;background:#fff7df;border:1px solid #f0d58a;font-size:15px;text-align:center;max-width:95%}
+.typing{align-self:flex-start;color:var(--muted);font-size:14px;font-style:italic}
+@keyframes chatpop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.chat-opts{max-width:560px;margin:14px auto 0}
+.chat-opts .opts{margin-top:8px}
+.chat-end{max-width:560px;margin:14px auto 0;display:none}
+
 /* ---------- Karta wyniku ---------- */
 ul.status{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:6px;font-size:16px}
 ul.status li::before{content:"○ ";color:var(--muted)}
@@ -100,4 +116,5 @@ ul.status li.on::before{content:"● ";color:var(--teal)}
 @media (max-width:560px){
   section{padding:22px 18px}
   .opts.two{grid-template-columns:1fr}
+  .cb{max-width:92%}
 }

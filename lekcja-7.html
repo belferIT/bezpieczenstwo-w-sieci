@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lekcja 7: Czy każde Wi-Fi jest bezpieczne?</title>
+<link rel="stylesheet" href="wspolne/baza.css">
+<link rel="stylesheet" href="wspolne/lekcja.css">
+<style>
+  /* Zadanie 1: sytuacja z siecią */
+  .net{display:flex;gap:12px;align-items:center;background:var(--bg);border-radius:12px;padding:12px 14px;margin-bottom:12px;font-size:16px}
+  .net .ico{font-size:30px;flex:none}
+  .net b{color:var(--navy)}
+  /* Zadanie 2: lista sieci i kroki */
+  .wifi{max-width:420px;margin:0 auto;border:2px solid var(--line);border-radius:18px;overflow:hidden}
+  .wifi-top{background:var(--navy);color:#fff;padding:10px 14px;font-weight:700}
+  .wifi-scene{background:#fff7df;padding:10px 14px;font-size:15px}
+  .wifi-step{padding:14px}
+  .wifi-step > p{margin:0 0 10px;font-weight:700}
+  .wifi .opt .lock{float:right;color:var(--muted);font-weight:400}
+  /* Zasada 3-2-1 */
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px;text-align:center}
+  .three div{background:var(--teal-l);border-radius:12px;padding:14px}
+  .three b{display:block;font-size:34px;color:var(--teal);line-height:1.1}
+  @media (max-width:560px){.three{grid-template-columns:1fr}}
+</style>
+</head>
+<body class="druk-sciagi">
+
+<header>
+  <a class="back" href="index.html">← Wszystkie lekcje</a><br>
+  <span class="tag">BEZPIECZEŃSTWO W SIECI · LEKCJA 7</span>
+  <h1>Czy każde Wi-Fi jest bezpieczne?</h1>
+  <p>Przeczytaj krótkie wprowadzenie (ok. 6 minut), wykonaj trzy zadania, a na koniec misję domową.</p>
+</header>
+
+<main>
+
+<section>
+  <h2><span class="num">1</span> Wi-Fi, czyli rozmowa przez pośrednika</h2>
+  <p>Gdy łączysz się z Wi-Fi, twój telefon nie rozmawia z internetem bezpośrednio. Wszystko przechodzi przez <strong>router</strong> – skrzynkę, która przekazuje wiadomości dalej. W domu router jest twój. W kawiarni, galerii czy pociągu – <strong>należy do kogoś obcego</strong>, a w sieci mogą być też obcy ludzie.</p>
+  <div class="grid">
+    <div class="tile"><div class="ico">🏠</div><h3>Wi-Fi domowe</h3><p>Znasz właściciela, hasło mają tylko domownicy. Najbezpieczniejsze – jeśli jest dobrze ustawione.</p></div>
+    <div class="tile"><div class="ico">☕</div><h3>Wi-Fi publiczne</h3><p>Korzysta z niego wiele obcych osób. Nie wiesz, kto je ustawił i kto podgląda.</p></div>
+    <div class="tile"><div class="ico">📶</div><h3>Dane komórkowe</h3><p>Połączenie przez sieć operatora. Poza domem zwykle bezpieczniejsze niż publiczne Wi-Fi.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">2</span> Pułapki publicznego Wi-Fi</h2>
+  <div class="grid">
+    <div class="tile"><div class="ico">👯</div><h3>Zły bliźniak</h3><p>Oszust tworzy sieć o nazwie „Kawiarnia_FREE” obok prawdziwej „Kawiarnia”. Kto się połączy, przesyła wszystko przez jego urządzenie.</p></div>
+    <div class="tile"><div class="ico">📝</div><h3>Strona logowania do sieci</h3><p>Po połączeniu pojawia się strona. Prawdziwa każe zaakceptować regulamin – fałszywa prosi o hasło do Instagrama albo dane karty.</p></div>
+    <div class="tile"><div class="ico">🔓</div><h3>Stare strony bez kłódki</h3><p>Większość stron szyfruje połączenie (https), ale nie wszystkie. Na stronach bez szyfrowania inni w sieci mogą zobaczyć, co wysyłasz.</p></div>
+  </div>
+  <ul class="rules">
+    <li><strong>Zapytaj obsługę o dokładną nazwę sieci</strong> – nie łącz się z pierwszą „darmową” z listy.</li>
+    <li><strong>Nie loguj się do ważnych kont</strong> (bank, poczta) w publicznym Wi-Fi. Użyj danych komórkowych.</li>
+    <li><strong>Nie podawaj haseł ani danych karty</strong> na stronie logowania do sieci.</li>
+    <li><strong>Wyłącz automatyczne łączenie</strong> ze znanymi sieciami – telefon może sam podłączyć się do „bliźniaka”.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="num">3</span> Domowy router – brama do domu</h2>
+  <p>Router to brama do wszystkich urządzeń w domu: telefonów, laptopów, telewizora, a nawet kamerki czy odkurzacza. Ustawia go zwykle dorosły, ale warto wiedzieć, na co patrzeć:</p>
+  <table>
+    <thead><tr><th>Co sprawdzić?</th><th>Dlaczego?</th></tr></thead>
+    <tbody>
+      <tr><td>🔑 Hasło do panelu routera</td><td>Fabryczne hasła typu „admin” są w internecie. Trzeba je zmienić.</td></tr>
+      <tr><td>📶 Hasło do Wi-Fi</td><td>Długie, nie do zgadnięcia – jak fraza z lekcji 1. Szyfrowanie WPA2 lub WPA3.</td></tr>
+      <tr><td>🔄 Aktualizacje routera</td><td>Router też ma oprogramowanie z dziurami. Trzeba je łatać, jak w telefonie.</td></tr>
+      <tr><td>👋 Sieć dla gości</td><td>Goście korzystają z internetu, ale nie widzą waszych domowych urządzeń.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2><span class="num">4</span> Kopia zapasowa – plan B dla zdjęć</h2>
+  <p>Telefon może się zgubić, rozbić albo paść ofiarą ransomware (pamiętasz lekcję 6?). Wtedy zdjęcia i notatki przepadają – chyba że masz <strong>kopię zapasową</strong>. Specjaliści stosują zasadę <strong>3-2-1</strong>:</p>
+  <div class="three">
+    <div><b>3</b>kopie danych (oryginał + 2 kopie)</div>
+    <div><b>2</b>różne miejsca, np. telefon i komputer albo dysk</div>
+    <div><b>1</b>kopia poza domem, np. w chmurze</div>
+  </div>
+  <div class="tip">💡 Najprostszy start: włącz z rodzicem automatyczną kopię zdjęć w chmurze (np. Zdjęcia Google, iCloud). Kopia jest tak bezpieczna jak konto, na którym leży – dlatego to konto potrzebuje silnego hasła i weryfikacji dwuetapowej.</div>
+</section>
+
+<section id="zadanie1">
+  <h2><span class="num">✎</span> Zadanie 1: Bezpiecznie czy ryzykownie?</h2>
+  <p>Oceń każdą sytuację.</p>
+  <div id="nets"></div>
+  <p class="note" id="z1score" aria-live="polite"></p>
+</section>
+
+<section id="zadanie2">
+  <h2><span class="num">✎</span> Zadanie 2: Wi-Fi w kawiarni</h2>
+  <p>Jesteś w kawiarni „Kropka” i chcesz obejrzeć film. Przejdź przez kolejne kroki. Punkt dostajesz za dobry wybór za pierwszym razem.</p>
+  <div id="cafe"></div>
+  <p class="note" id="z2score" aria-live="polite"></p>
+</section>
+
+<section id="zadanie3">
+  <h2><span class="num">✎</span> Zadanie 3: Co zrobisz?</h2>
+  <p>Przeczytaj sytuacje i wybierz najlepszą reakcję.</p>
+  <div id="scenarios"></div>
+  <p class="note" id="z3score" aria-live="polite"></p>
+</section>
+
+<section id="karta">
+  <h2><span class="num">★</span> Twoja karta wyniku</h2>
+  <p>Gdy skończysz wszystkie trzy zadania, wpisz imię i klasę, a potem pokaż kartę nauczycielowi.</p>
+  <ul class="status" id="status"></ul>
+  <div class="row" style="max-width:560px">
+    <input type="text" id="name" placeholder="Wpisz swoje imię i klasę, np. Ola 7b" maxlength="40">
+    <button class="b-next" id="bCard">Pokaż kartę wyniku</button>
+  </div>
+  <div id="cardMsg" class="fb"></div>
+  <div class="card-result" id="card"></div>
+</section>
+
+<section id="misja">
+  <h2><span class="num">🕵️</span> Misja domowa cyberagenta: brama i sejf</h2>
+  <div class="misja-box">
+    <strong>Twoja misja (10–15 minut):</strong> razem z dorosłym, który ustawiał internet w domu, sprawdźcie domową bramę (router) i sejf na zdjęcia (kopię zapasową).
+    <ol>
+      <li>Sprawdźcie, czy hasło do Wi-Fi nie jest fabryczne (z naklejki na routerze) ani łatwe do zgadnięcia.</li>
+      <li>Zapytaj dorosłego, czy hasło do panelu routera zostało zmienione z fabrycznego. Jeśli nie wiadomo – zaplanujcie to razem.</li>
+      <li>Sprawdźcie, czy zdjęcia z twojego telefonu mają automatyczną kopię zapasową. Jeśli nie – włączcie ją.</li>
+    </ol>
+  </div>
+  <p class="note">🤫 Na następnej lekcji powiesz tylko, ile z trzech punktów było już w porządku. Nie zapisuj ani nie zdradzaj żadnych haseł – nawet nauczycielowi!</p>
+
+  <div class="sciaga" id="sciaga">
+    <h3>Ściąga dla domowników: Wi-Fi i kopie zapasowe</h3>
+    <ol>
+      <li><strong>Publiczne Wi-Fi to nie miejsce na bank i pocztę.</strong> Poza domem do ważnych spraw używaj danych komórkowych. Nazwę sieci sprawdzaj u obsługi.</li>
+      <li><strong>Strona logowania do sieci nie potrzebuje twoich haseł.</strong> Regulamin – tak. Hasło do Facebooka czy dane karty – nigdy.</li>
+      <li><strong>Router: zmień fabryczne hasła i aktualizuj oprogramowanie.</strong> Dla gości włącz osobną sieć.</li>
+      <li><strong>Kopia zapasowa zdjęć i dokumentów.</strong> Zasada 3-2-1: trzy kopie, dwa różne miejsca, jedna poza domem (np. w chmurze).</li>
+    </ol>
+    <div class="foot">🔐 Konto, na którym leży kopia w chmurze, zabezpiecz silnym hasłem i weryfikacją dwuetapową.</div>
+    <div class="btns noprint" style="margin-top:16px;justify-content:flex-start"><button class="b-next" id="bPrint">🖨️ Wydrukuj ściągę</button></div>
+  </div>
+</section>
+
+</main>
+<footer><a href="index.html">← Wróć do listy lekcji</a><br>Informatyka · Bezpieczeństwo w sieci</footer>
+
+<script src="wspolne/lekcja.js"></script>
+<script>
+/* ---------- Dane: Zadanie 1 ---------- */
+const NETS = [
+  {ico:"🚆", text:"W pociągu łączysz się z siecią przewoźnika, żeby obejrzeć film na YouTube.", safe:true,
+   why:"Oglądanie filmów w publicznym Wi-Fi jest w porządku. Nie podajesz haseł ani danych, a strona jest szyfrowana."},
+  {ico:"🏦", text:"W galerii handlowej przez darmowe Wi-Fi logujesz się do aplikacji banku rodzica, żeby sprawdzić saldo.", safe:false,
+   why:"Do banku i poczty poza domem używaj danych komórkowych. W obcej sieci nie wiesz, kto ją ustawił."},
+  {ico:"📝", text:"Po połączeniu z Wi-Fi w kawiarni strona prosi: „Zaloguj się kontem Instagram, aby korzystać z internetu”.", safe:false,
+   why:"Strona logowania do sieci może poprosić o akceptację regulaminu, ale nie o hasło do Instagrama. Tak oszuści zbierają hasła."},
+  {ico:"🏠", text:"W domu łączysz się z waszym Wi-Fi, które ma długie hasło i aktualny router.", safe:true,
+   why:"Dobrze ustawiona domowa sieć to najbezpieczniejsze miejsce na ważne sprawy."},
+  {ico:"👯", text:"Na liście widzisz „Biblioteka” i „Biblioteka_FREE_FAST”. Wybierasz tę drugą, bo jest szybsza.", safe:false,
+   why:"Podobna nazwa z dopiskiem „FREE” to typowy „zły bliźniak”. Zapytaj obsługę, która sieć jest prawdziwa."},
+  {ico:"📶", text:"Poza domem przełączasz się na dane komórkowe, żeby zapłacić BLIK-iem za bilet.", safe:true,
+   why:"Dane komórkowe to dobry wybór do płatności i logowania poza domem."}
+];
+
+/* ---------- Dane: Zadanie 2 ---------- */
+const STEPS = [
+  {q:"📶 Które Wi-Fi wybierasz?", scene:"Na paragonie jest napisane: „Wi-Fi: Kropka_Goscie, hasło na kubku”.",
+   opts:[
+     {t:"Kropka_Goscie", lock:"🔒 zabezpieczona", ok:true, fb:"Dobrze! Nazwa zgadza się z paragonem, a sieć ma hasło – obcy spoza kawiarni się do niej nie podłączą."},
+     {t:"Kropka_FREE_5G", lock:"otwarta", ok:false, fb:"Ta sieć tylko udaje kawiarnię. Otwarta sieć z „FREE” w nazwie może należeć do kogoś obcego."},
+     {t:"Darmowe_Wifi_Szybkie", lock:"otwarta", ok:false, fb:"Nie wiadomo, czyja to sieć. Szybkość nie ma znaczenia, jeśli ktoś podgląda twoje połączenie."}
+   ]},
+  {q:"📝 Po połączeniu pojawia się strona sieci. Co robisz?", scene:"Strona: „Witamy w Kropce! Zaakceptuj regulamin. Możesz też zalogować się kontem Google, aby dostać kod rabatowy na kawę”.",
+   opts:[
+     {t:"Akceptuję regulamin i pomijam logowanie kontem Google.", ok:true, fb:"Świetnie! Do internetu wystarczy regulamin. Rabat nie jest wart podawania hasła na nieznanej stronie."},
+     {t:"Loguję się kontem Google – rabat się przyda.", ok:false, fb:"Na stronie sieci nie wiesz, czy logujesz się naprawdę do Google, czy do podróbki. Hasła nie wpisuj."},
+     {t:"Wpisuję e-mail i hasło, ale do mniej ważnego konta.", ok:false, fb:"Każde hasło jest ważne – zwłaszcza jeśli używasz go też gdzie indziej. Pomiń logowanie."}
+   ]},
+  {q:"💬 Kolega pisze: „Szybko, zaloguj się do e-dziennika i sprawdź, co jest na jutro!”. Co robisz?",
+   opts:[
+     {t:"Przełączam się na dane komórkowe i dopiero wtedy loguję się do dziennika.", ok:true, fb:"Dokładnie tak. Do kont z hasłem poza domem używasz danych komórkowych."},
+     {t:"Loguję się przez Wi-Fi kawiarni – to tylko dziennik.", ok:false, fb:"Konto w dzienniku też jest chronione hasłem. Lepiej nie wpisywać go w obcej sieci."},
+     {t:"Proszę kolegę o jego login i hasło, żeby sprawdzić na jego koncie.", ok:false, fb:"Hasło jest tylko twoje – i tylko jego. Nie pożyczamy kont."}
+   ]},
+  {q:"🚪 Wychodzisz z kawiarni. Co jeszcze warto zrobić?",
+   opts:[
+     {t:"Każę telefonowi „zapomnieć” sieć kawiarni, żeby nie łączył się z nią sam.", ok:true, fb:"Bardzo dobrze! Telefon nie połączy się automatycznie z kimś, kto stworzy sieć o tej samej nazwie."},
+     {t:"Zostawiam automatyczne łączenie – będzie wygodniej następnym razem.", ok:false, fb:"Wygodne, ale ryzykowne: telefon może sam połączyć się z „bliźniakiem” o tej samej nazwie."},
+     {t:"Udostępniam hasło do Wi-Fi na grupie klasowej.", ok:false, fb:"To hasło kawiarni dla jej gości, a nie do rozsyłania dalej."}
+   ]}
+];
+
+/* ---------- Dane: Zadanie 3 ---------- */
+const SCEN = [
+  {q:"📱 Telefon spadł i ekran się rozbił. Telefon nie działa. Co uratuje twoje zdjęcia?",
+   a:["Nic – zdjęcia były tylko w telefonie i przepadły na zawsze.", "Kopia zapasowa w chmurze, którą wcześniej włączyliśmy z rodzicem.", "Zdjęcia odzyska każdy serwis za darmo, bez wyjątku."], ok:1,
+   why:"Kopia zapasowa działa tylko wtedy, gdy włączysz ją wcześniej. Dlatego zrób to dziś, a nie po wypadku."},
+  {q:"🔑 Na naklejce routera jest hasło Wi-Fi „12345678”. Rodzic mówi: „Działa, nie ruszamy”.",
+   a:["Zgadzam się – skoro działa, jest dobrze.", "Przyklejam hasło na drzwi wejściowe dla gości.", "Proponuję zmienić hasło na długą frazę i pokazuję rodzicowi ściągę z tej lekcji."], ok:2,
+   why:"Proste hasła Wi-Fi łatwo zgadnąć, a wtedy obcy korzysta z waszego internetu i widzi domowe urządzenia."},
+  {q:"🛍️ W galerii pojawia się sieć „Darmowe_Wifi_Galeria” bez hasła. Chcesz tylko sprawdzić rozkład autobusów.",
+   a:["Łączę się i sprawdzam rozkład – nie podaję żadnych haseł ani danych.", "Łączę się i przy okazji loguję do banku rodzica.", "Łączę się i podaję numer telefonu, żeby dostać „lepszy” internet."], ok:0,
+   why:"Przeglądanie stron bez logowania w publicznej sieci jest w porządku. Hasła, bank i dane osobowe zostaw na później."}
+];
+
+/* ---------- Punkty ---------- */
+const pts  = {z1:0, z2:0, z3:0};
+const done = {z1:false, z2:false, z3:false};
+const max  = {z1:NETS.length, z2:STEPS.length, z3:SCEN.length};
+const answered = {z1:0, z3:0};
+function counter(key){
+  return good => {
+    if (good) pts[key]++;
+    if (++answered[key] === max[key]) {
+      $(key + "score").textContent = `Wynik: ${pts[key]} / ${max[key]}`;
+      done[key] = true; updateStatus();
+    }
+  };
+}
+
+/* ---------- Zadanie 1 ---------- */
+makeVerdict($("nets"), NETS, {
+  labels: ["✅ Bezpiecznie", "⚠️ Ryzykownie"],
+  isYes: n => n.safe,
+  head: n => { const b = el("div", "net"); b.appendChild(el("div", "ico", n.ico)); b.appendChild(el("div", "", n.text)); return b; },
+  onAnswer: counter("z1")
+});
+
+/* ---------- Zadanie 2: kroki w kawiarni ---------- */
+let wStep = 0;
+function renderCafe(){
+  const box = $("cafe"); box.innerHTML = "";
+  const w = el("div", "wifi");
+  w.appendChild(el("div", "wifi-top", `☕ Kawiarnia „Kropka” · krok ${Math.min(wStep + 1, STEPS.length)} z ${STEPS.length}`));
+  if (wStep >= STEPS.length) {
+    const end = el("div", "wifi-step");
+    setFb(end.appendChild(makeFb()), true, `Wynik: ${pts.z2} / ${STEPS.length}.`, "Sprawdzona nazwa sieci, żadnych haseł na stronie logowania, ważne konta przez dane komórkowe i „zapomniana” sieć na koniec – tak wygląda bezpieczne publiczne Wi-Fi.");
+    const again = el("button", "b-ghost", "↺ Spróbuj ponownie"); again.style.marginTop = "12px";
+    again.onclick = () => { wStep = 0; pts.z2 = 0; done.z2 = false; $("z2score").textContent = ""; updateStatus(); renderCafe(); };
+    end.appendChild(again); w.appendChild(end); box.appendChild(w);
+    return;
+  }
+  const s = STEPS[wStep];
+  if (s.scene) w.appendChild(el("div", "wifi-scene", s.scene));
+  const st = el("div", "wifi-step");
+  st.appendChild(el("p", "", s.q));
+  const opts = el("div", "opts"); const fb = makeFb();
+  let first = true;
+  shuffle(s.opts).forEach(o => {
+    const b = el("button", "opt", o.t);
+    if (o.lock) b.appendChild(el("span", "lock", o.lock));
+    b.onclick = () => {
+      if (!o.ok) { first = false; b.disabled = true; b.classList.add("wrong"); setFb(fb, false, "❌ Lepiej nie.", o.fb + " Wybierz jeszcze raz."); return; }
+      if (first) pts.z2++;
+      opts.querySelectorAll("button").forEach(x => x.disabled = true);
+      b.classList.add("right");
+      setFb(fb, true, first ? "✅ Dobrze! (+1 pkt)" : "✅ Tak jest!", o.fb);
+      const next = el("button", "b-next", wStep === STEPS.length - 1 ? "Zobacz wynik →" : "Dalej →"); next.style.marginTop = "12px";
+      next.onclick = () => {
+        wStep++;
+        if (wStep === STEPS.length) { $("z2score").textContent = `Wynik: ${pts.z2} / ${max.z2}`; done.z2 = true; updateStatus(); }
+        renderCafe(); scrollToEl($("zadanie2"));
+      };
+      fb.appendChild(document.createElement("br")); fb.appendChild(next);
+    };
+    opts.appendChild(b);
+  });
+  st.appendChild(opts); st.appendChild(fb); w.appendChild(st); box.appendChild(w);
+}
+
+/* ---------- Zadanie 3 ---------- */
+makeScen($("scenarios"), SCEN, counter("z3"));
+
+/* ---------- Karta wyniku ---------- */
+const updateStatus = initScoreCard({
+  title: "Lekcja 7: Wi-Fi i kopie zapasowe",
+  tasks: [["z1", "Zadanie 1: Bezpiecznie czy ryzykownie?"], ["z2", "Zadanie 2: Wi-Fi w kawiarni"], ["z3", "Zadanie 3: Co zrobisz?"]],
+  pts, done, max
+});
+
+$("bPrint").onclick = () => window.print();
+renderCafe();
+</script>
+</body>
+</html>

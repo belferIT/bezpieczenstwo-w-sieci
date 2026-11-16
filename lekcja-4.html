@@ -17,26 +17,9 @@
   .levers{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
   .levers span{background:#fff;border-radius:999px;padding:2px 10px;font-size:14px;font-weight:600}
 
-  /* Zadanie 2: czat */
-  .chat{max-width:560px;margin:0 auto;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
-  .chat-top{background:var(--navy);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:15px}
-  .chat-top .av{width:34px;height:34px;border-radius:50%;background:#f7b6c8;display:grid;place-items:center;font-size:18px}
-  .chat-top b{display:block;font-size:16px}
-  .chat-log{background:#eef1f8;padding:14px;min-height:220px;display:flex;flex-direction:column;gap:6px}
-  .cb{max-width:82%;padding:9px 13px;border-radius:16px;font-size:16px;animation:pop .25s;word-wrap:break-word}
-  .cb.them{background:#fff;align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
-  .cb.me{background:var(--link);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
-  .cb.sys{align-self:center;background:#fff7df;border:1px solid #f0d58a;font-size:15px;text-align:center;max-width:95%}
-  .typing{align-self:flex-start;color:var(--muted);font-size:14px;font-style:italic}
-  @keyframes pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
-  .chat-opts{max-width:560px;margin:14px auto 0}
-  .chat-opts .opts{margin-top:8px}
-  .chat-end{max-width:560px;margin:14px auto 0;display:none}
-
   /* Zadanie 3: hasło rodzinne */
   .fam{font-size:clamp(19px,3.6vw,24px);font-weight:800;color:var(--navy);margin:0 0 12px;text-align:center}
 
-  @media (max-width:560px){.cb{max-width:92%}}
 </style>
 </head>
 <body class="druk-sciagi">
@@ -123,15 +106,7 @@
 <section id="zadanie2">
   <h2><span class="num">✎</span> Zadanie 2: Rozmowa z „Mają”</h2>
   <p>Maja to twoja koleżanka z klasy. Właśnie napisała do ciebie na Instagramie. Wybieraj odpowiedzi i zobacz, jak potoczy się rozmowa. Punkt dostajesz za dobry wybór za pierwszym razem.</p>
-  <div class="chat">
-    <div class="chat-top"><div class="av">🌸</div><div><b>Maja 🌸</b>aktywna teraz</div></div>
-    <div class="chat-log" id="chatLog" aria-live="polite"></div>
-  </div>
-  <div class="chat-opts" id="chatOpts"></div>
-  <div class="chat-end" id="chatEnd">
-    <div class="fb good" id="chatSum"></div>
-    <div class="btns" style="margin-top:14px"><button class="b-ghost" id="chatAgain">↺ Zagraj jeszcze raz</button></div>
-  </div>
+  <div id="chat"></div>
 </section>
 
 <section id="zadanie3">
@@ -309,77 +284,13 @@ Z1.forEach(m => {
 });
 
 /* ---------- Zadanie 2: rozmowa ---------- */
-let step = 0, firstTry = true, run = 0;
-const wait = ms => new Promise(r => setTimeout(r, ms));
-
-function bubble(cls, txt){
-  const d = document.createElement("div"); d.className = "cb " + cls; d.textContent = txt;
-  $("chatLog").appendChild(d);
-  return d;
-}
-async function playStep(){
-  const my = run;                       // przerywa animację po „Zagraj jeszcze raz”
-  const s = CHAT[step];
-  $("chatOpts").innerHTML = "";
-  for (const t of (s.sys || [])) { await wait(700); if (my !== run) return; bubble("sys", t); }
-  for (const t of s.them) {
-    const typing = document.createElement("div"); typing.className = "typing"; typing.textContent = "Maja pisze…";
-    $("chatLog").appendChild(typing);
-    await wait(650); if (my !== run) return;
-    typing.remove(); bubble("them", t);
-  }
-  await wait(300); if (my !== run) return;
-  showOpts();
-}
-function showOpts(){
-  const s = CHAT[step]; firstTry = true;
-  const box = $("chatOpts"); box.innerHTML = "";
-  const p = document.createElement("p"); p.style.cssText = "margin:0;font-weight:700"; p.textContent = "Co odpowiesz albo zrobisz?";
-  const opts = document.createElement("div"); opts.className = "opts";
-  const fb = makeFb();
-  shuffle(s.opts).forEach(o => {                    // losowa kolejność odpowiedzi
-    const b = document.createElement("button"); b.className = "opt"; b.textContent = o.t;
-    b.onclick = () => {
-      if (!o.ok) {
-        firstTry = false;
-        b.disabled = true; b.classList.add("wrong");
-        setFb(fb, false, "❌ Lepiej nie.", o.fb + " Wybierz jeszcze raz.");
-        return;
-      }
-      if (firstTry) pts.z2++;
-      opts.querySelectorAll("button").forEach(x => x.disabled = true);
-      b.classList.add("right");
-      setFb(fb, true, firstTry ? "✅ Dobrze! (+1 pkt)" : "✅ Tak jest!", o.fb);
-      if (o.me) bubble("me", o.me);
-      const next = document.createElement("button"); next.className = "b-next"; next.style.marginTop = "12px";
-      next.textContent = step === CHAT.length - 1 ? "Zakończ rozmowę →" : "Dalej →";
-      next.onclick = () => {
-        step++;
-        if (step < CHAT.length) { playStep(); scrollToEl($("chatLog"), "end"); }
-        else endChat();
-      };
-      fb.appendChild(document.createElement("br")); fb.appendChild(next);
-    };
-    opts.appendChild(b);
-  });
-  box.appendChild(p); box.appendChild(opts); box.appendChild(fb);
-}
-function endChat(){
-  $("chatOpts").innerHTML = "";
-  bubble("sys", "🚫 Konto zablokowane i zgłoszone. Maja odzyskuje konto z pomocą taty.");
-  const sum = $("chatSum"); sum.innerHTML = "";
-  const st = document.createElement("strong"); st.textContent = `Wynik: ${pts.z2} / ${CHAT.length}. `;
-  sum.appendChild(st);
-  sum.appendChild(document.createTextNode("Zauważ, jak oszust zmieniał emocje: najpierw prośba o pomoc, potem pośpiech, a na końcu poczucie winy. Wygrał ten, kto sprawdził innym kanałem."));
-  $("chatEnd").style.display = "block";
-  done.z2 = true; updateStatus();
-}
-function startChat(){
-  run++; step = 0; pts.z2 = 0; done.z2 = false;
-  $("chatLog").innerHTML = ""; $("chatEnd").style.display = "none";
-  updateStatus(); playStep();
-}
-$("chatAgain").onclick = startChat;
+const startChat = makeChat($("chat"), {
+  who: "Maja 🌸", avatar: "🌸", steps: CHAT,
+  endSys: "🚫 Konto zablokowane i zgłoszone. Maja odzyskuje konto z pomocą taty.",
+  summary: "Zauważ, jak oszust zmieniał emocje: najpierw prośba o pomoc, potem pośpiech, a na końcu poczucie winy. Wygrał ten, kto sprawdził innym kanałem.",
+  onStart: () => { pts.z2 = 0; done.z2 = false; updateStatus(); },
+  onEnd: p => { pts.z2 = p; done.z2 = true; updateStatus(); }
+});
 
 /* ---------- Zadanie 3 ---------- */
 let z3Done = 0;

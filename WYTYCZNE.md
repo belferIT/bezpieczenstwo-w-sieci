@@ -91,6 +91,7 @@ Gotowe klasy:
 | `.scen`, `.opts`, `.opts.two`, `.opt`, `.right`, `.wrong` | karta pytania z odpowiedziami |
 | `.fb.good`, `.fb.bad` | informacja zwrotna |
 | `.msg-app`, `.msg-body`, `.msg-from`, `.bubble` | wygląd wiadomości (ramkę `.msg` definiuje lekcja) |
+| `.chat`, `.cb`, `.chat-opts` … | czat tworzony przez `makeChat` – nie trzeba pisać HTML |
 | `.misja-box`, `.sciaga`, `.sciaga .foot` | misja domowa i ściąga |
 
 ---
@@ -106,6 +107,9 @@ Gotowe klasy:
 | `setFb(el, good, tytuł, tekst)` | wypełnia blok: zielony/czerwony, pogrubiony tytuł + tekst |
 | `makeScen(kontener, lista, onAnswer)` | pytania „Co zrobisz?”; **odpowiedzi w losowej kolejności** |
 | `makeVerdict(kontener, lista, cfg)` | ocena „tak / nie” (prawdziwa/fałszywa strona, dobre/słabe hasło) |
+| `makeCategory(kontener, lista, cfg)` | wybór jednej z kilku kategorii (np. „żart / krytyka / cyberprzemoc”) |
+| `makeChat(kontener, cfg)` | rozmowa na czacie z wyborem odpowiedzi; zwraca `start()` (lekcje 4, 10, 11, 13) |
+| `el(tag, klasa, tekst)` | tworzy element z klasą i tekstem (przez `textContent`) |
 | `initScoreCard({title, tasks, pts, done, max})` | karta wyniku; zwraca `updateStatus()` |
 | `renderCard(el, tytuł, imię, wynik, szczegóły)` | sama karta (gdy lekcja ma własny układ, jak lekcja 1) |
 | `readName(input)`, `bindNameInput(input, fn)` | pole imienia: walidacja i Enter |
@@ -134,6 +138,23 @@ const max  = {z1:…, z2:…, z3:…};
 // po ukończeniu zadania:  done.z1 = true; updateStatus();
 const updateStatus = initScoreCard({ title:"Lekcja N: …", tasks:[["z1","Zadanie 1: …"], …], pts, done, max });
 ```
+**`makeCategory`** – jak `makeVerdict`, ale z dowolną liczbą przycisków: `labels: [...]` i `answer: x => indeks`.
+
+**`makeChat` – rozmowa:**
+```js
+const startChat = makeChat($("chat"), {
+  who: "Maja 🌸", avatar: "🌸",            // opcjonalnie: avatarBg, status, typing, app, question
+  steps: [{sys:["dymek systemowy"], them:["wiadomość"], opts:[{t:"odpowiedź", ok:true, fb:"wyjaśnienie", me:"mój dymek"}]}],
+  endSys: "…", summary: "…",
+  onStart: () => { pts.z2 = 0; done.z2 = false; updateStatus(); },
+  onEnd: p => { pts.z2 = p; done.z2 = true; updateStatus(); }
+});
+startChat();   // wywołaj po initScoreCard
+```
+Dobrych odpowiedzi w kroku może być kilka (`ok:true`). Odpowiedzi pojawiają się w losowej kolejności.
+
+**Nazwy zmiennych:** na najwyższym poziomie skryptu nie używaj nazw zajętych przez przeglądarkę (`top`, `name`, `status`, `parent`, `self`, `length`, `history`, `location`) – `const top = …` zatrzyma cały skrypt.
+
 `initScoreCard` wywołaj **przed** pierwszym kodem, który od razu woła `updateStatus()` (np. przed `startChat()` w lekcji 4).
 
 Nową funkcję dopisuj do `wspolne/lekcja.js` dopiero, gdy jest potrzebna w co najmniej dwóch lekcjach.
