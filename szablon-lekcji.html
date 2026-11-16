@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<!--
+  SZABLON NOWEJ LEKCJI – Bezpieczeństwo w sieci
+  1. Skopiuj ten plik jako lekcja-N.html (N = numer lekcji).
+  2. Zamień wszystkie miejsca oznaczone [N] i [Tytuł…] oraz przykładowe treści.
+  3. Usuń ten komentarz, linię <meta name="robots"> i komentarze „SZABLON:”.
+  Zasady: plik WYTYCZNE.md w repozytorium.
+-->
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lekcja [N]: [Tytuł lekcji w formie pytania?]</title>
+<link rel="stylesheet" href="wspolne/baza.css">
+<link rel="stylesheet" href="wspolne/lekcja.css">
+<style>
+  /* Tylko style używane wyłącznie w tej lekcji. Wszystko wspólne jest w wspolne/lekcja.css. */
+  .url{font-family:ui-monospace,Consolas,monospace;font-size:clamp(15px,3.2vw,19px);word-break:break-all;
+       background:var(--bg);padding:10px 14px;border-radius:10px;margin-bottom:10px}
+</style>
+</head>
+<body class="druk-sciagi">
+
+<header>
+  <a class="back" href="index.html">← Wszystkie lekcje</a><br>
+  <span class="tag">BEZPIECZEŃSTWO W SIECI · LEKCJA [N]</span>
+  <h1>[Tytuł lekcji w formie pytania?]</h1>
+  <p>Przeczytaj krótkie wprowadzenie (ok. 6 minut), wykonaj trzy zadania, a na koniec misję domową.</p>
+</header>
+
+<main>
+
+<!-- ===== WPROWADZENIE: 3–4 krótkie sekcje numerowane 1, 2, 3, 4 ===== -->
+<section>
+  <h2><span class="num">1</span> [Pierwsza myśl – co i dlaczego?]</h2>
+  <p>[2–4 krótkie zdania. Zacznij od sytuacji znanej uczniowi.] Ważne pojęcie wyróżnij: <strong>pojęcie</strong>.</p>
+  <div class="grid">
+    <div class="tile"><div class="ico">🎮</div><h3>[Kafelek]</h3><p>[Jedno–dwa zdania.]</p></div>
+    <div class="tile"><div class="ico">💬</div><h3>[Kafelek]</h3><p>[Jedno–dwa zdania.]</p></div>
+    <div class="tile"><div class="ico">📱</div><h3>[Kafelek]</h3><p>[Jedno–dwa zdania.]</p></div>
+  </div>
+  <div class="tip">💡 [Najważniejsza rzecz do zapamiętania z tej sekcji.]</div>
+</section>
+
+<section>
+  <h2><span class="num">2</span> [Jak to działa?]</h2>
+  <p>[Wyjaśnienie z analogią z codziennego życia.]</p>
+  <div class="flow" aria-label="[Opis kroków dla czytnika ekranu]">
+    <span class="step">🪝 [Krok]</span><span class="arr">→</span>
+    <span class="step">🔗 [Krok]</span><span class="arr">→</span>
+    <span class="step">🔓 [Krok]</span>
+  </div>
+  <table>
+    <thead><tr><th>[Kolumna]</th><th>[Kolumna]</th></tr></thead>
+    <tbody>
+      <tr><td><code>[przykład]</code></td><td class="t-bad">[źle ✖]</td></tr>
+      <tr><td><code>[przykład]</code></td><td class="t-ok">[dobrze ✔]</td></tr>
+    </tbody>
+  </table>
+  <p class="note">[Przypis lub doprecyzowanie.]</p>
+</section>
+
+<section>
+  <h2><span class="num">3</span> [Co robić?]</h2>
+  <ul class="rules">
+    <li><strong>[Zasada].</strong> [Krótkie wyjaśnienie.]</li>
+    <li><strong>[Zasada].</strong> [Krótkie wyjaśnienie.]</li>
+    <li><strong>Powiedz dorosłemu.</strong> Rodzicowi albo nauczycielowi. To żaden wstyd.</li>
+  </ul>
+</section>
+
+<!-- ===== ZADANIA: zawsze trzy ===== -->
+<section id="zadanie1">
+  <h2><span class="num">✎</span> Zadanie 1: [Tytuł zadania]</h2>
+  <p>[Polecenie: co uczeń ma zrobić.]</p>
+  <!-- SZABLON: przykład oceny „tak / nie” – funkcja makeVerdict() -->
+  <div id="z1list"></div>
+  <p class="note" id="z1score" aria-live="polite"></p>
+</section>
+
+<section id="zadanie2">
+  <h2><span class="num">✎</span> Zadanie 2: [Tytuł zadania]</h2>
+  <p>[Polecenie.]</p>
+  <!-- SZABLON: tu zwykle jest własne, interaktywne zadanie lekcji (np. symulacja, czat, zaznaczanie).
+       Na przykład użyto tu makeScen(). -->
+  <div id="z2list"></div>
+  <p class="note" id="z2score" aria-live="polite"></p>
+</section>
+
+<section id="zadanie3">
+  <h2><span class="num">✎</span> Zadanie 3: Co zrobisz?</h2>
+  <p>Przeczytaj sytuacje i wybierz najlepszą reakcję.</p>
+  <div id="scenarios"></div>
+  <p class="note" id="z3score" aria-live="polite"></p>
+</section>
+
+<!-- ===== KARTA WYNIKU: nie zmieniaj identyfikatorów (używa ich initScoreCard) ===== -->
+<section id="karta">
+  <h2><span class="num">★</span> Twoja karta wyniku</h2>
+  <p>Gdy skończysz wszystkie trzy zadania, wpisz imię i klasę, a potem pokaż kartę nauczycielowi.</p>
+  <ul class="status" id="status"></ul>
+  <div class="row" style="max-width:560px">
+    <input type="text" id="name" placeholder="Wpisz swoje imię i klasę, np. Ola 7b" maxlength="40">
+    <button class="b-next" id="bCard">Pokaż kartę wyniku</button>
+  </div>
+  <div id="cardMsg" class="fb"></div>
+  <div class="card-result" id="card"></div>
+</section>
+
+<!-- ===== MISJA DOMOWA I ŚCIĄGA ===== -->
+<section id="misja">
+  <h2><span class="num">🕵️</span> Misja domowa cyberagenta: [nazwa misji]</h2>
+  <div class="misja-box">
+    <strong>Twoja misja (10–15 minut):</strong> razem z rodzicem, babcią, dziadkiem albo inną bliską osobą [co robicie].
+    <ol>
+      <li>[Krok.]</li>
+      <li>[Krok.]</li>
+      <li>[Krok.]</li>
+    </ol>
+  </div>
+  <p class="note">🤫 Na następnej lekcji opowiesz [co – bez danych prywatnych]. Nie zapisuj ani nie zdradzaj haseł, kodów ani numerów.</p>
+
+  <div class="sciaga" id="sciaga">
+    <h3>Ściąga dla domowników: [temat]</h3>
+    <ol>
+      <li><strong>[Zasada dla dorosłych].</strong> [Wyjaśnienie.]</li>
+      <li><strong>[Zasada].</strong> [Wyjaśnienie.]</li>
+      <li><strong>[Zasada].</strong> [Wyjaśnienie.]</li>
+    </ol>
+    <div class="foot">📩 Podejrzany SMS? Przekaż go na bezpłatny numer <strong>8080</strong> (CERT Polska) i usuń.</div>
+    <div class="btns noprint" style="margin-top:16px;justify-content:flex-start"><button class="b-next" id="bPrint">🖨️ Wydrukuj ściągę</button></div>
+  </div>
+</section>
+
+</main>
+<footer><a href="index.html">← Wróć do listy lekcji</a><br>Informatyka · Bezpieczeństwo w sieci</footer>
+
+<script src="wspolne/lekcja.js"></script>
+<script>
+/* ---------- Dane: Zadanie 1 (ocena tak / nie) ---------- */
+const Z1 = [
+  {pre:"https://", dom:"discord.com", post:"/login", real:true,  why:"[Wyjaśnienie poprawnej odpowiedzi.]"},
+  {pre:"https://discord.com.", dom:"nitro-free.xyz", post:"/login", real:false, why:"[Wyjaśnienie poprawnej odpowiedzi.]"}
+];
+
+/* ---------- Dane: Zadanie 2 i 3 (pytania z wyborem) ----------
+   q – sytuacja, a – odpowiedzi (podobnej długości!), ok – indeks poprawnej, why – wyjaśnienie.
+   Kolejność odpowiedzi na ekranie jest losowa. */
+const Z2 = [
+  {q:"🎮 [Sytuacja]", a:["[Odpowiedź]", "[Odpowiedź poprawna]", "[Odpowiedź]"], ok:1, why:"[Dlaczego tak.]"}
+];
+const SCEN = [
+  {q:"📩 [Sytuacja]", a:["[Odpowiedź poprawna]", "[Odpowiedź]", "[Odpowiedź]"], ok:0, why:"[Dlaczego tak.]"},
+  {q:"💬 [Sytuacja]", a:["[Odpowiedź]", "[Odpowiedź]", "[Odpowiedź poprawna]"], ok:2, why:"[Dlaczego tak.]"}
+];
+
+/* ---------- Punkty ---------- */
+const pts  = {z1:0, z2:0, z3:0};
+const done = {z1:false, z2:false, z3:false};
+const max  = {z1:Z1.length, z2:Z2.length, z3:SCEN.length};
+
+/* Wspólny licznik: dolicza punkt i po ostatniej odpowiedzi pokazuje wynik zadania. */
+const answered = {z1:0, z2:0, z3:0};
+function counter(key, total){
+  return good => {
+    if (good) pts[key]++;
+    if (++answered[key] === total) {
+      $(key + "score").textContent = `Wynik: ${pts[key]} / ${max[key]}`;
+      done[key] = true; updateStatus();
+    }
+  };
+}
+
+/* ---------- Zadanie 1 ---------- */
+makeVerdict($("z1list"), Z1, {
+  labels: ["✔ Prawdziwa strona", "✖ Fałszywa strona"],
+  isYes: u => u.real,
+  head: u => {
+    const el = document.createElement("div"); el.className = "url";
+    el.textContent = u.pre + u.dom + u.post;          // dane zawsze przez textContent
+    return el;
+  },
+  onAnswer: counter("z1", Z1.length)
+});
+
+/* ---------- Zadanie 2 ---------- */
+makeScen($("z2list"), Z2, counter("z2", Z2.length));
+
+/* ---------- Zadanie 3 ---------- */
+makeScen($("scenarios"), SCEN, counter("z3", SCEN.length));
+
+/* ---------- Karta wyniku ---------- */
+const updateStatus = initScoreCard({
+  title: "Lekcja [N]: [krótki tytuł]",
+  tasks: [["z1", "Zadanie 1: [Tytuł zadania]"], ["z2", "Zadanie 2: [Tytuł zadania]"], ["z3", "Zadanie 3: Co zrobisz?"]],
+  pts, done, max
+});
+
+/* ---------- Ściąga ---------- */
+$("bPrint").onclick = () => window.print();
+</script>
+</body>
+</html>
