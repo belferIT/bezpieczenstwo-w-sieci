@@ -7,7 +7,7 @@
 <style>
   :root{
     --navy:#1d2b4f; --ink:#24324f; --muted:#5b6785; --bg:#f4f6fb; --card:#ffffff;
-    --teal:#13897a; --teal-l:#e2f4f1; --red:#c8374b; --red-l:#fbe6e9;
+    --teal:#0e7468; --teal-l:#e2f4f1; --red:#c8374b; --red-l:#fbe6e9;
     --yellow:#ffc94a; --line:#dde2ee; --radius:16px;
   }
   *{box-sizing:border-box}
@@ -30,9 +30,9 @@
   .tile h3{margin:6px 0 4px;font-size:19px}
   .tile p{margin:0;color:var(--muted);font-size:16px}
   table{width:100%;border-collapse:collapse;margin-top:12px;font-size:17px}
-  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
   th{color:var(--muted);font-weight:600;font-size:15px}
-  code{font-family:ui-monospace,Consolas,monospace;background:var(--bg);padding:2px 8px;border-radius:6px}
+  code{font-family:ui-monospace,Consolas,monospace;background:var(--bg);padding:2px 8px;border-radius:6px;word-break:break-all}
   .t-bad{color:var(--red);font-weight:700}.t-ok{color:var(--teal);font-weight:700}
   .note{font-size:14px;color:var(--muted);margin-top:8px}
   ul.rules{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}
@@ -90,6 +90,7 @@
   .opt.right{background:var(--teal-l);outline:2px solid var(--teal)}
   .opt.wrong{background:var(--red-l);outline:2px solid var(--red)}
   @media (max-width:640px){.sim{grid-template-columns:1fr}}
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
   footer{text-align:center;color:var(--muted);font-size:14px;padding:20px}
   @media (max-width:560px){section{padding:22px 18px}body{font-size:17px}}
 </style>
@@ -159,7 +160,7 @@
       <button class="b-weak" id="bWeak">👎 Słabe</button>
       <button class="b-strong" id="bStrong">👍 Silne</button>
     </div>
-    <div id="fb" class="fb"></div>
+    <div id="fb" class="fb" aria-live="polite"></div>
     <div class="btns" style="margin-top:16px"><button class="b-next" id="bNext" style="display:none">Dalej →</button></div>
   </div>
 
@@ -178,15 +179,15 @@
 
 <section id="zadanie2">
   <h2><span class="num">✎</span> Zadanie 2: Wymyśl silne hasło</h2>
-  <p>Wymyśl hasło, które spełni wszystkie warunki i dostanie ocenę <strong>„Bardzo silne”</strong>. Najlepiej użyj frazy z kilku słów.</p>
+  <p>Wymyśl hasło, które spełni wszystkie warunki i dostanie ocenę <strong>„Bardzo silne”</strong>. Najlepiej użyj frazy z kilku przypadkowych słów – jeśli ma co najmniej 20 znaków, wielkie litery i cyfry nie są potrzebne.</p>
   <div class="warn">⚠️ Nie wpisuj tu swojego prawdziwego hasła! To tylko ćwiczenie. Nic nie jest nigdzie wysyłane.</div>
   <input type="text" id="pwInput" placeholder="Wpisz przykładowe hasło…" autocomplete="off" spellcheck="false">
   <div class="meter"><div id="meter"></div></div>
-  <div class="level" id="level">Zacznij pisać…</div>
+  <div class="level" id="level" aria-live="polite">Zacznij pisać…</div>
   <ul class="checks" id="checks">
     <li data-k="len">co najmniej 12 znaków</li>
-    <li data-k="mix">małe i wielkie litery</li>
-    <li data-k="digit">cyfra lub znak specjalny</li>
+    <li data-k="mix">małe i wielkie litery <span class="note">(albo fraza z 20+ znaków)</span></li>
+    <li data-k="digit">cyfra lub znak specjalny <span class="note">(albo fraza z 20+ znaków)</span></li>
     <li data-k="common">nie jest na liście popularnych haseł</li>
     <li data-k="year">nie zawiera roku (np. 2012)</li>
     <li data-k="repeat">bez powtórzeń typu „aaa” czy „123”</li>
@@ -229,7 +230,7 @@
         <button class="b-next" id="simGo">Zaloguj</button>
       </div>
       <button class="b-ghost" id="simGuess" style="display:none;margin-top:10px">🎲 Spróbuj zgadnąć kod</button>
-      <div id="simMsg" class="fb"></div>
+      <div id="simMsg" class="fb" aria-live="polite"></div>
     </div>
     <div class="sim-phone" id="phone">
       <div class="note" style="color:#c9d2ea">📱 Telefon Oli</div>
@@ -250,7 +251,7 @@
   <h2><span class="num">✎</span> Zadanie 3: Co zrobisz?</h2>
   <p>Przeczytaj sytuacje i wybierz najlepszą reakcję.</p>
   <div id="scenarios"></div>
-  <p class="note" id="scenScore"></p>
+  <p class="note" id="scenScore" aria-live="polite"></p>
 </section>
 
 </main>
@@ -353,13 +354,13 @@ function simTry(code){
     return;
   }
   tries++;
-  if (code === simCode) { simEnd(true, "😮 Niesamowite szczęście – szansa była jak 1 do miliona!"); return; }
+  if (code === simCode) { simEnd(true, "😮 Niesamowite szczęście – przy 3 próbach szansa to około 1 do 300 tysięcy!"); return; }
   if (tries >= 3) {
     simEnd(false, "⛔ <strong>Konto zablokowane po 3 błędnych próbach.</strong> Włamywacz znał hasło, a i tak nie wszedł. " +
       "Ola dostała powiadomienie o próbie logowania i zmieniła hasło.");
     $("phoneBody").innerHTML = `<div class="sms"><div class="note">Alert bezpieczeństwa · teraz</div>
       <strong>Ktoś próbował zalogować się na twoje konto.</strong> Jeśli to nie ty, zmień hasło.</div>`;
-  } else simMsg("bad", `❌ Zły kod (próba ${tries} z 3). Kod ma 6 cyfr – to milion możliwości.`);
+  } else simMsg("bad", `❌ Zły kod (próba ${tries} z 3). Kod ma 6 cyfr – to prawie milion możliwości.`);
 }
 function simMsg(type, html){ $("simMsg").className = "fb " + type; $("simMsg").innerHTML = html; }
 function simEnd(ok, html){
@@ -378,26 +379,31 @@ $("simGuess").onclick = () => {
 /* ---------- Zadanie 3: Co zrobisz? ---------- */
 const SCEN = [
   {q:"📩 Dostajesz SMS z kodem logowania, chociaż wcale się nie logowałeś. Co robisz?",
-   a:["Wpisuję kod, żeby sprawdzić, o co chodzi.", "Nie wpisuję kodu nikomu i od razu zmieniam hasło.", "Ignoruję – to pewnie pomyłka."], ok:1,
+   a:["Wpisuję kod na stronie logowania, żeby sprawdzić, o co chodzi.", "Nie wpisuję kodu nikomu i od razu zmieniam hasło.", "Ignoruję SMS-a – to pewnie pomyłka operatora."], ok:1,
    why:"Kod, o który nie prosiłeś, oznacza, że ktoś zna twoje hasło. Weryfikacja go zatrzymała – teraz zmień hasło, żeby nie próbował dalej."},
   {q:"💬 Kolega pisze na komunikatorze: „Sorki, wysłałem ci przez pomyłkę kod SMS, prześlesz mi go?”",
-   a:["Przesyłam – to przecież kolega.", "Pytam, do czego mu ten kod.", "Nie przesyłam. Dzwonię do kolegi albo pytam go osobiście – jego konto mogło zostać przejęte."], ok:2,
+   a:["Przesyłam – to przecież kolega, a pomyłki zdarzają się każdemu.", "Odpisuję i pytam, do czego mu ten kod, a potem decyduję.", "Nie przesyłam. Pytam kolegę osobiście lub dzwonię – jego konto mogło zostać przejęte."], ok:2,
    why:"To bardzo popularne oszustwo. Konto kolegi zostało przejęte, a włamywacz próbuje teraz wejść na twoje. Kodu nie podaje się nikomu."},
   {q:"📵 Zgubiłeś telefon, a masz włączoną weryfikację dwuetapową. Jak wejdziesz na konto?",
-   a:["Używam kodów zapasowych, które zapisałem przy włączaniu.", "Nie da się – konto przepadło.", "Wyłączę weryfikację, żeby to się nie powtórzyło."], ok:0,
+   a:["Używam kodów zapasowych, które zapisałem przy włączaniu.", "Nie da się – bez telefonu konto przepadło na zawsze.", "Zakładam nowe konto, a weryfikację na nim wyłączę."], ok:0,
    why:"Właśnie do tego służą kody zapasowe. Dlatego przy włączaniu weryfikacji trzeba je zapisać i schować w bezpiecznym miejscu."}
 ];
+function shuffle(arr){
+  const a = arr.slice();
+  for (let k = a.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; }
+  return a;
+}
 let scenPts = 0, scenDone = 0;
 SCEN.forEach((s, n) => {
   const box = document.createElement("div"); box.className = "scen";
   const p = document.createElement("p"); p.textContent = s.q; box.appendChild(p);
   const opts = document.createElement("div"); opts.className = "opts";
-  const fb = document.createElement("div"); fb.className = "fb";
-  s.a.forEach((txt, k) => {
+  const fb = document.createElement("div"); fb.className = "fb"; fb.setAttribute("aria-live", "polite");
+  const btns = s.a.map((txt, k) => {
     const b = document.createElement("button"); b.className = "opt"; b.textContent = txt;
     b.onclick = () => {
       opts.querySelectorAll("button").forEach(x => x.disabled = true);
-      opts.children[s.ok].classList.add("right");
+      btns[s.ok].classList.add("right");
       const good = k === s.ok;
       if (!good) b.classList.add("wrong"); else scenPts++;
       scenDone++;
@@ -405,8 +411,9 @@ SCEN.forEach((s, n) => {
       fb.innerHTML = `<strong>${good ? "✅ Dobrze!" : "❌ Nie tym razem."}</strong> ${s.why}`;
       if (scenDone === SCEN.length) $("scenScore").textContent = `Wynik: ${scenPts} / ${SCEN.length}`;
     };
-    opts.appendChild(b);
+    return b;
   });
+  shuffle(btns).forEach(b => opts.appendChild(b));   // losowa kolejność odpowiedzi
   box.appendChild(opts); box.appendChild(fb);
   $("scenarios").appendChild(box);
 });
@@ -414,19 +421,30 @@ SCEN.forEach((s, n) => {
 /* ---------- Zadanie 2 ---------- */
 const COMMON = ["123456","1234567","12345678","123456789","1234567890","qwerty","qwerty123","password","haslo","haslo1","haslo123",
   "111111","000000","abc123","iloveyou","admin","zaq12wsx","1qaz2wsx","polska","kochamcie","kotek","misiek","slonce","słońce",
-  "monika","marcin","bartek","agnieszka","football","pilka","piłka","minecraft","fortnite","roblox","dragon","superman","pokemon"];
+  "monika","marcin","bartek","agnieszka","football","pilka","piłka","minecraft","fortnite","roblox","dragon","superman","pokemon",
+  "hasło","hasło1","hasło123","password1","welcome","letmein","sunshine","princess","kochanie","zaq1xsw2"];
+/* Zamiana „sztuczek” na litery: P@ssw0rd → password. Programy włamywaczy znają te zamiany. */
+const LEET = {"@":"a","4":"a","0":"o","1":"i","!":"i","3":"e","5":"s","$":"s","7":"t"};
+const unleet = s => s.replace(/[@401!35$7]/g, ch => LEET[ch]);
+const PHRASE = 20;   // fraza z tylu znaków nie potrzebuje wielkich liter ani cyfr
 const LEVELS = [
-  {t:"Bardzo słabe", c:"#c8374b"}, {t:"Słabe", c:"#e0703a"}, {t:"Średnie", c:"#e3b230"},
-  {t:"Silne", c:"#5aa86a"}, {t:"Bardzo silne 🎉", c:"#13897a"}
+  /* c – kolor paska, tc – ciemniejszy kolor napisu (czytelny na białym tle) */
+  {t:"Bardzo słabe", c:"#c8374b", tc:"#b02a3e"}, {t:"Słabe", c:"#e0703a", tc:"#a8481c"}, {t:"Średnie", c:"#e3b230", tc:"#7a5a00"},
+  {t:"Silne", c:"#5aa86a", tc:"#2f7a3e"}, {t:"Bardzo silne 🎉", c:"#0e7468", tc:"#0e7468"}
 ];
 function check(pw){
   const low = pw.toLowerCase();
   const stripped = low.replace(/[^a-ząćęłńóśźż]/g, "");
+  const variants = [unleet(low), unleet(low.replace(/1/g, "l"))];   // „1” udaje „i” albo „l”
+  const phrase = pw.length >= PHRASE;
+  const known = w => w.length > 0 && COMMON.includes(w);
+  const onList = variants.some(known);
+  const onListStripped = variants.some(v => known(v.replace(/[^a-ząćęłńóśźż]/g, "")));
   const r = {
     len: pw.length >= 12,
-    mix: /[a-ząćęłńóśźż]/.test(pw) && /[A-ZĄĆĘŁŃÓŚŹŻ]/.test(pw),
-    digit: /[0-9]/.test(pw) || /[^A-Za-z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/.test(pw),
-    common: !(COMMON.includes(low) || (stripped.length > 0 && COMMON.includes(stripped) && pw.length < 12)),
+    mix: phrase || (/[a-ząćęłńóśźż]/.test(pw) && /[A-ZĄĆĘŁŃÓŚŹŻ]/.test(pw)),
+    digit: phrase || /[0-9]/.test(pw) || /[^A-Za-z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/.test(pw),
+    common: !(known(low) || onList || ((known(stripped) || onListStripped) && pw.length < 12)),
     year: !/(19|20)\d\d/.test(pw),
     repeat: !/(.)\1\1/.test(pw) && !/(012|123|234|345|456|567|678|789|abc|qwe)/i.test(pw)
   };
@@ -459,7 +477,7 @@ $("pwInput").addEventListener("input", e => {
   $("meter").style.width = ((s + 1) / 5 * 100) + "%";
   $("meter").style.background = LEVELS[s].c;
   $("level").textContent = LEVELS[s].t;
-  $("level").style.color = LEVELS[s].c;
+  $("level").style.color = LEVELS[s].tc;
 });
 </script>
 </body>

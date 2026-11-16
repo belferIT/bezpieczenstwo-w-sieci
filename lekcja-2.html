@@ -7,7 +7,7 @@
 <style>
   :root{
     --navy:#1d2b4f; --ink:#24324f; --muted:#5b6785; --bg:#f4f6fb; --card:#ffffff;
-    --teal:#13897a; --teal-l:#e2f4f1; --red:#c8374b; --red-l:#fbe6e9;
+    --teal:#0e7468; --teal-l:#e2f4f1; --red:#c8374b; --red-l:#fbe6e9;
     --yellow:#ffc94a; --line:#dde2ee; --radius:16px;
   }
   *{box-sizing:border-box}
@@ -30,7 +30,7 @@
   .tile h3{margin:6px 0 4px;font-size:19px}
   .tile p{margin:0;color:var(--muted);font-size:16px}
   table{width:100%;border-collapse:collapse;margin-top:12px;font-size:17px}
-  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
   th{color:var(--muted);font-weight:600;font-size:15px}
   code{font-family:ui-monospace,Consolas,monospace;background:var(--bg);padding:2px 8px;border-radius:6px;word-break:break-all}
   .t-bad{color:var(--red);font-weight:700}.t-ok{color:var(--teal);font-weight:700}
@@ -118,6 +118,7 @@
   .cheat ol{margin:10px 0 0;padding-left:26px;display:grid;gap:12px}
   .cheat .note{color:var(--muted)}
 
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
   footer{text-align:center;color:var(--muted);font-size:14px;padding:20px}
   @media (max-width:640px){.cols{grid-template-columns:1fr}}
   @media (max-width:560px){section{padding:22px 18px}body{font-size:17px}
@@ -210,19 +211,20 @@
 <section id="zadanie1">
   <h2><span class="num">✎</span> Zadanie 1: Konto przejęte – co po kolei?</h2>
   <p>Ola nie może zalogować się na Instagram. Jej znajomi dostają od niej dziwne wiadomości. Ułóż plan ratunkowy: <strong>klikaj kroki w dobrej kolejności</strong>. Uwaga – dwa kroki są złe!</p>
+  <p class="note" style="margin-top:-6px">Punkty: +1 za każdy krok wybrany bez pomyłki. Kliknięcie złego kroku albo kroku za wcześnie zabiera punkt za krok, który właśnie układasz.</p>
   <div class="progress"><div id="z1bar"></div></div>
   <div class="cols">
     <div>
       <h3>🗂️ Kroki do wyboru</h3>
       <div class="pool" id="pool"></div>
-      <div id="z1fb" class="fb"></div>
+      <div id="z1fb" class="fb" aria-live="polite"></div>
     </div>
     <div>
       <h3>✅ Plan Oli</h3>
       <ol class="plan" id="plan"></ol>
     </div>
   </div>
-  <p class="note" id="z1score"></p>
+  <p class="note" id="z1score" aria-live="polite"></p>
   <div class="btns" style="margin-top:12px"><button class="b-ghost" id="z1again" style="display:none">↺ Spróbuj ponownie</button></div>
 </section>
 
@@ -243,17 +245,17 @@
   <div id="demo">
     <div class="tip">🕵️ <strong>Sprawdź sam.</strong> Włamywacz poznał tylko hasło do poczty Oli. Zobacz, co może zrobić.</div>
     <div class="btns" style="margin-top:14px"><button class="b-weak" id="bDemo">🕵️ Włamywacz klika „Nie pamiętam hasła”</button></div>
-    <div id="demoFb" class="fb"></div>
+    <div id="demoFb" class="fb" aria-live="polite"></div>
   </div>
   <div id="z2rest"></div>
-  <p class="note" id="z2score"></p>
+  <p class="note" id="z2score" aria-live="polite"></p>
 </section>
 
 <section id="zadanie3">
   <h2><span class="num">✎</span> Zadanie 3: Co zrobisz?</h2>
   <p>Przeczytaj sytuacje i wybierz najlepszą reakcję.</p>
   <div id="scenarios"></div>
-  <p class="note" id="z3score"></p>
+  <p class="note" id="z3score" aria-live="polite"></p>
 </section>
 
 <section id="karta">
@@ -264,7 +266,7 @@
     <input type="text" id="name" placeholder="Wpisz swoje imię i klasę, np. Ola 7b" maxlength="40">
     <button class="b-next" id="bCard">Pokaż kartę wyniku</button>
   </div>
-  <div id="cardMsg" class="fb"></div>
+  <div id="cardMsg" class="fb" aria-live="polite"></div>
   <div class="card-result" id="card"></div>
 </section>
 
@@ -335,43 +337,43 @@ const TRAPS = [
 /* ---------- Dane: Zadanie 2 ---------- */
 const Z2_FIRST = [
   {q:"🔐 Włamywacz może poznać hasło tylko do jednego konta Oli. Które da mu najwięcej?",
-   a:["🎮 Roblox – Ola ma tam rzadkie przedmioty.", "📸 Instagram – Ola ma 800 obserwujących.", "📧 Poczta e-mail."], ok:2,
+   a:["🎮 Roblox – Ola ma tam rzadkie przedmioty.", "📸 Instagram – Ola ma 800 obserwujących.", "📧 Poczta e-mail – Ola używa jej rzadko."], ok:2,
    why:"Poczta otwiera resztę. Przez nią włamywacz zresetuje hasło do każdego podłączonego konta. Sprawdź to sam poniżej."}
 ];
 const Z2_REST = [
   {q:"🛡️ Jak najlepiej chronić pocztę e-mail?",
-   a:["Takim samym hasłem jak w grach – żeby go nie zapomnieć.",
+   a:["Takim samym hasłem jak w grach – żeby go nie zapomnieć i szybko się logować.",
       "Najsilniejszą frazą, weryfikacją dwuetapową i schowanymi kodami zapasowymi.",
-      "Najlepiej w ogóle nie używać poczty."], ok:1,
+      "Najlepiej w ogóle nie używać poczty, a konta zakładać przez numer telefonu."], ok:1,
    why:"Najważniejsze konto dostaje najlepszą ochronę. A bez poczty nie założysz większości kont – lepiej ją dobrze zabezpieczyć."},
   {q:"❓ Przy zakładaniu konta pojawia się pytanie pomocnicze: „Imię twojego pierwszego zwierzaka?”. Twój pies Burek jest na wielu zdjęciach na twoim profilu. Co wpiszesz?",
-   a:["Burek – przecież to prawda.",
+   a:["Burek – przecież to prawda, więc na pewno nie zapomnę.",
       "Zmyśloną odpowiedź, np. „Tramwaj-Kakao”, i zapiszę ją w menedżerze haseł.",
-      "Nic – zostawię puste pole."], ok:1,
+      "Nic – zostawię puste pole, a jeśli się nie da, wpiszę cokolwiek i zapomnę."], ok:1,
    why:"Prawdziwą odpowiedź włamywacz znajdzie na twoim profilu. Zmyślona odpowiedź działa jak dodatkowe hasło. Nikt jej nie zgadnie."}
 ];
 
 /* ---------- Dane: Zadanie 3 ---------- */
 const SCEN = [
   {q:"📩 Dostajesz e-mail: „W naszej grze doszło do wycieku danych. Twoje hasło mogło wyciec”. To samo hasło masz jeszcze w dwóch innych miejscach.",
-   a:["Zmieniam hasło tylko w tej grze.",
+   a:["Klikam link z e-maila i zmieniam hasło w tej grze. Inne konta zostawiam.",
       "Wchodzę do gry sam (nie przez link) i zmieniam hasło. Potem zmieniam je też w dwóch pozostałych miejscach – każde na inne.",
-      "Nic nie robię – nikt nie będzie szukał akurat mnie."], ok:1,
+      "Nic nie robię – takich kont są miliony, nikt nie będzie szukał akurat mnie."], ok:1,
    why:"Programy włamywaczy sprawdzają wykradzione hasła wszędzie. Zmień je we wszystkich miejscach, gdzie było takie samo. Do gry wchodź sam, bo e-mail o „wycieku” może też udawać oszust."},
   {q:"🔐 Masz 15 kont. Jak najlepiej zapamiętać 15 różnych haseł?",
-   a:["Jedno hasło z inną cyfrą na końcu: kotek1, kotek2, kotek3…",
-      "Karteczka przyklejona do monitora.",
-      "Menedżer haseł z jednym bardzo silnym hasłem głównym, ustawiony razem z rodzicem."], ok:2,
+   a:["Jedno hasło z inną cyfrą na końcu: kotek1, kotek2, kotek3… – łatwo zapamiętać.",
+      "Karteczka z hasłami przyklejona do monitora albo schowana pod klawiaturą.",
+      "Menedżer haseł z jednym bardzo silnym hasłem głównym, ustawiony z rodzicem."], ok:2,
    why:"Menedżer pamięta wszystkie hasła za ciebie. Ty pamiętasz tylko jedno – hasło główne. Sztuczkę z cyframi programy włamywaczy znają od dawna."},
   {q:"🕵️ Klikasz link z wiadomości i widzisz stronę logowania do Steama. Menedżer haseł nie podpowiada hasła, choć zwykle to robi. Co to znaczy?",
    a:["To prawie na pewno fałszywa strona. Zamykam ją i wchodzę do Steama sam.",
-      "Menedżer się zepsuł – wpiszę hasło ręcznie.",
-      "Wyłączę menedżer haseł, bo przeszkadza."], ok:0,
+      "Menedżer się zepsuł albo nie ma internetu – wpiszę hasło ręcznie.",
+      "Wyłączę menedżer haseł, bo przeszkadza mi w logowaniu na nowych stronach."], ok:0,
    why:"Menedżer pamięta prawdziwy adres strony. Jeśli nie podpowiada hasła, adres jest inny – to znak, że ktoś podrobił stronę. O fałszywych stronach dowiesz się więcej na lekcji 3."},
   {q:"💬 Twoje konto w grze zostało przejęte. Ktoś pisze w komentarzach: „Odzyskam każde konto w 10 minut, tylko 50 zł BLIK-iem”.",
-   a:["Płacę – 50 zł to niewiele za moje konto.",
+   a:["Płacę – 50 zł to niewiele za konto, w które włożyłem tyle czasu.",
       "Nie odpisuję. Z rodzicem odzyskuję konto w oficjalnej aplikacji albo przez pomoc techniczną gry.",
-      "Daję mu swój login i hasło, żeby było szybciej."], ok:1,
+      "Nie płacę od razu, ale daję mu login i hasło, żeby sprawdził, czy się da."], ok:1,
    why:"„Odzyskiwacze kont” to oszuści. Konto odzyskasz tylko przez oficjalną pomoc. Nikomu nie dawaj kodu BLIK, loginu ani hasła."}
 ];
 
@@ -450,12 +452,12 @@ function makeScen(container, list, key, onEach){
     const card = document.createElement("div"); card.className = "scen";
     const p = document.createElement("p"); p.textContent = s.q; card.appendChild(p);
     const opts = document.createElement("div"); opts.className = "opts";
-    const fb = document.createElement("div"); fb.className = "fb";
-    s.a.forEach((txt, k) => {
+    const fb = document.createElement("div"); fb.className = "fb"; fb.setAttribute("aria-live", "polite");
+    const btns = s.a.map((txt, k) => {
       const b = document.createElement("button"); b.className = "opt"; b.textContent = txt;
       b.onclick = () => {
         opts.querySelectorAll("button").forEach(x => x.disabled = true);
-        opts.children[s.ok].classList.add("right");
+        btns[s.ok].classList.add("right");
         const good = k === s.ok;
         if (!good) b.classList.add("wrong"); else pts[key]++;
         setFb(fb, good, good ? "✅ Dobrze!" : "❌ Nie tym razem.", s.why);
@@ -466,8 +468,9 @@ function makeScen(container, list, key, onEach){
           done[key] = true; updateStatus();
         }
       };
-      opts.appendChild(b);
+      return b;
     });
+    shuffle(btns).forEach(b => opts.appendChild(b));   // losowa kolejność odpowiedzi
     card.appendChild(opts); card.appendChild(fb);
     container.appendChild(card);
   });

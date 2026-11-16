@@ -7,7 +7,7 @@
 <style>
   :root{
     --navy:#1d2b4f; --ink:#24324f; --muted:#5b6785; --bg:#f4f6fb; --card:#ffffff;
-    --teal:#13897a; --teal-l:#e2f4f1; --red:#c8374b; --red-l:#fbe6e9;
+    --teal:#0e7468; --teal-l:#e2f4f1; --red:#c8374b; --red-l:#fbe6e9;
     --yellow:#ffc94a; --orange:#e0703a; --line:#dde2ee; --link:#1a5fd0; --radius:16px;
   }
   *{box-sizing:border-box}
@@ -30,7 +30,7 @@
   .tile h3{margin:6px 0 4px;font-size:19px}
   .tile p{margin:0;color:var(--muted);font-size:16px}
   table{width:100%;border-collapse:collapse;margin-top:12px;font-size:17px}
-  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
   th{color:var(--muted);font-weight:600;font-size:15px}
   code{font-family:ui-monospace,Consolas,monospace;background:var(--bg);padding:2px 8px;border-radius:6px;word-break:break-all}
   .t-bad{color:var(--red);font-weight:700}.t-ok{color:var(--teal);font-weight:700}
@@ -94,6 +94,7 @@
   .picking .seg{cursor:pointer;outline:1px dashed #9aa6c4;outline-offset:1px}
   .picking .seg:hover{background:#fff4cc}
   .seg.picked{background:#ffe08a;outline:2px solid #d9a21a}
+  .picking .seg:focus-visible{outline:3px solid var(--navy);outline-offset:2px}
   .seg.found{background:var(--teal-l);outline:2px solid var(--teal)}
   .seg.missed{background:#fff1d6;outline:2px dashed var(--orange)}
   .seg.wrongpick{background:var(--red-l);outline:2px solid var(--red);text-decoration:line-through}
@@ -122,6 +123,7 @@
   ul.status li::before{content:"○ ";color:var(--muted)}
   ul.status li.on::before{content:"● ";color:var(--teal)}
 
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
   footer{text-align:center;color:var(--muted);font-size:14px;padding:20px}
   @media (max-width:560px){section{padding:22px 18px}body{font-size:17px}.opts.two{grid-template-columns:1fr}
        .q{padding:16px 12px}}
@@ -183,12 +185,15 @@
 
   <h3 style="margin:24px 0 6px;color:var(--navy)">Jak przeczytać adres strony?</h3>
   <p style="margin-top:0">Adres strony jest jak adres na kopercie. Liczy się <strong>nazwa tuż przed pierwszym pojedynczym ukośnikiem „/”</strong> (albo na samym końcu, jeśli ukośnika nie ma). To ona mówi, czyja jest strona. Wszystko, co stoi przed nią, oszust może dopisać, jak chce.</p>
+  <p><strong>Dwie pułapki:</strong> jeśli przed ukośnikiem pojawi się znak <code>?</code> albo <code>#</code>, nazwa kończy się już na nim. A jeśli w nazwie jest znak <code>@</code>, wszystko, co stoi przed nim, w ogóle się nie liczy.</p>
   <table>
     <thead><tr><th>Adres</th><th>Czyja to strona?</th></tr></thead>
     <tbody>
       <tr><td><code>https://<span class="dom-in">steamcommunity.com</span>/login</code></td><td class="t-ok">Steam ✔</td></tr>
       <tr><td><code>https://steamcommunity.com.<span class="dom-in">skins-gift.ru</span>/login</code></td><td class="t-bad">skins-gift.ru ✖</td></tr>
       <tr><td><code>https://<span class="dom-in">steamcornmunity.com</span>/login</code></td><td class="t-bad">podróbka ✖ („rn” udaje „m”)</td></tr>
+      <tr><td><code>https://steamcommunity.com@<span class="dom-in">skins-gift.ru</span>/login</code></td><td class="t-bad">skins-gift.ru ✖ (to, co przed „@”, się nie liczy)</td></tr>
+      <tr><td><code>https://<span class="dom-in">skins-gift.ru</span>?a=steamcommunity.com/login</code></td><td class="t-bad">skins-gift.ru ✖ (nazwa kończy się na „?”)</td></tr>
     </tbody>
   </table>
   <p class="note">🔒 Kłódka obok adresu oznacza tylko, że połączenie jest szyfrowane. Nie oznacza, że strona jest uczciwa – fałszywe strony też mają kłódki.</p>
@@ -215,7 +220,7 @@
 <section id="zadanie1">
   <h2><span class="num">✎</span> Zadanie 1: Oszustwo czy nie?</h2>
   <p>Przeczytaj każdą wiadomość i oceń ją. Jeśli to oszustwo, zaznacz w niej wszystkie podejrzane fragmenty.</p>
-  <p class="note" style="margin-top:-6px">Punkty: +1 za dobrą ocenę, +1 za każdą znalezioną czerwoną flagę, −1 za fragment zaznaczony bez powodu.</p>
+  <p class="note" style="margin-top:-6px">Punkty: +1 za dobrą ocenę, +1 za każdą znalezioną czerwoną flagę, −1 za fragment zaznaczony bez powodu (w jednej wiadomości nie stracisz więcej punktów, niż zdobyłeś za flagi).</p>
   <div class="progress"><div id="mbar"></div></div>
 
   <div id="z1quiz" class="q">
@@ -227,13 +232,13 @@
     </div>
     <div class="tip mark-hint" id="markHint">
       <strong>Dobrze, to oszustwo! (+1 pkt)</strong><br>
-      Teraz <strong>kliknij podejrzane fragmenty</strong> wiadomości: nadawcę, zdania, link. Kliknij jeszcze raz, żeby odznaczyć.
-      <div class="note" id="pickCount"></div>
+      Teraz <strong>kliknij podejrzane fragmenty</strong> wiadomości: nadawcę, zdania, link. Kliknij jeszcze raz, żeby odznaczyć. Możesz też przechodzić klawiszem Tab i zaznaczać Enterem lub spacją.
+      <div class="note" id="pickCount" aria-live="polite"></div>
     </div>
     <div class="btns" style="margin-top:14px">
       <button class="b-next" id="bCheck" style="display:none">Sprawdź zaznaczenia</button>
     </div>
-    <div id="mfb" class="fb"></div>
+    <div id="mfb" class="fb" aria-live="polite"></div>
     <div class="btns" style="margin-top:16px"><button class="b-next" id="bNextMsg" style="display:none">Dalej →</button></div>
   </div>
 
@@ -247,16 +252,16 @@
 
 <section id="zadanie2">
   <h2><span class="num">✎</span> Zadanie 2: Prawdziwa czy fałszywa strona?</h2>
-  <p>Znajdź w każdym adresie nazwę przed pierwszym ukośnikiem „/” i zdecyduj, czy to prawdziwa strona.</p>
+  <p>Znajdź w każdym adresie nazwę przed pierwszym ukośnikiem „/” (uważaj na „?” i „@”) i zdecyduj, czy to prawdziwa strona.</p>
   <div id="urls"></div>
-  <p class="note" id="z2score"></p>
+  <p class="note" id="z2score" aria-live="polite"></p>
 </section>
 
 <section id="zadanie3">
   <h2><span class="num">✎</span> Zadanie 3: Co zrobisz?</h2>
   <p>Przeczytaj sytuacje i wybierz najlepszą reakcję.</p>
   <div id="scenarios"></div>
-  <p class="note" id="z3score"></p>
+  <p class="note" id="z3score" aria-live="polite"></p>
 </section>
 
 <section id="karta">
@@ -267,7 +272,7 @@
     <input type="text" id="name" placeholder="Wpisz swoje imię i klasę, np. Ola 7b" maxlength="40">
     <button class="b-next" id="bCard">Pokaż kartę wyniku</button>
   </div>
-  <div id="cardMsg" class="fb"></div>
+  <div id="cardMsg" class="fb" aria-live="polite"></div>
   <div class="card-result" id="card"></div>
 </section>
 
@@ -361,6 +366,8 @@ const URLS = [
    why:"Przyjrzyj się: rob1ox – zamiast litery „l” jest cyfra „1”. To podróbka."},
   {pre:"https://instagram.", dom:"weryfikacja-konta.net", post:"/login", real:false,
    why:"Przed pierwszym „/” stoi weryfikacja-konta.net. „instagram” na początku to tylko przebranie."},
+  {pre:"https://discord.com@", dom:"nitro-gift.click", post:"/login", real:false,
+   why:"Wszystko przed „@” się nie liczy. Prawdziwy właściciel to nitro-gift.click, a „discord.com” to tylko przebranie."},
   {pre:"https://", dom:"discord.com", post:"/login", real:true,
    why:"Przed pierwszym „/” stoi discord.com – to prawdziwa strona Discorda."}
 ];
@@ -368,19 +375,19 @@ const URLS = [
 /* ---------- Dane: Zadanie 3 ---------- */
 const SCEN = [
   {q:"🎮 Kliknąłeś link o darmowych skinach i wpisałeś login i hasło. Strona się „zawiesiła”. Co teraz?",
-   a:["Nic – pewnie nie zadziałało.",
+   a:["Nic – strona się zawiesiła, więc pewnie nic nie dostała i nie zadziałało.",
       "Od razu zmieniam hasło (w aplikacji, nie przez link), włączam weryfikację dwuetapową i mówię rodzicowi.",
-      "Czekam i obserwuję, czy ktoś się zaloguje."], ok:1,
+      "Czekam kilka dni i obserwuję, czy ktoś obcy zaloguje się na moje konto."], ok:1,
    why:"Strona „zawiesiła się”, bo już dostała twoje hasło. Liczy się czas. Zmień hasło w aplikacji – i wszędzie tam, gdzie było takie samo. To może się przytrafić każdemu, więc nie wstydź się powiedzieć dorosłemu."},
   {q:"📱 Dostajesz SMS-a o paczce, która czeka na dopłatę. Nic nie zamawiałeś. Co robisz?",
-   a:["Klikam link, żeby sprawdzić, co to za paczka.",
-      "Odpisuję, że to pomyłka.",
+   a:["Klikam link, żeby tylko sprawdzić, co to za paczka – płacić nie muszę.",
+      "Odpisuję, że to pomyłka, bo nic nie zamawiałem, i proszę o wyjaśnienie.",
       "Nie klikam. Przekazuję SMS-a na bezpłatny numer 8080 i go usuwam."], ok:2,
    why:"Odpisanie pokazuje oszustom, że twój numer działa. Przekazanie na 8080 pomaga zablokować fałszywą stronę – chronisz też innych."},
   {q:"💬 Kolega, który nigdy tak nie pisze, wysyła ci: „to ty na tym filmiku?? 😂” i link.",
-   a:["Klikam – muszę zobaczyć!",
+   a:["Klikam – muszę zobaczyć, co to za filmik, zanim zobaczą go inni!",
       "Nie klikam. Pytam kolegę inną drogą (osobiście albo przez telefon), czy to on wysłał.",
-      "Przesyłam link innym, żeby sprawdzili za mnie."], ok:1,
+      "Przesyłam link innym kolegom, żeby sprawdzili za mnie, co tam jest."], ok:1,
    why:"Ciekawość to też przynęta. Jeśli kolega tego nie wysłał, jego konto zostało przejęte – daj mu znać, żeby zmienił hasło."}
 ];
 
@@ -402,11 +409,16 @@ function segEl(s){
   const sp = document.createElement("span");
   sp.className = "seg" + (type === "lnk" ? " lnk" : "") + (type === "btn" ? " fakebtn" : "");
   sp.textContent = t;
-  sp.dataset.f = f || "";
-  sp.addEventListener("click", () => {
+  sp.dataset.f = f || "";      // rola przycisku i tabindex dochodzą dopiero w fazie zaznaczania
+  const toggle = () => {
     if (phase !== "mark") return;
-    sp.classList.toggle("picked");
+    const on = sp.classList.toggle("picked");
+    sp.setAttribute("aria-pressed", on);
     updatePickCount();
+  };
+  sp.addEventListener("click", toggle);
+  sp.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
   });
   return sp;
 }
@@ -463,6 +475,8 @@ function classify(saysScam){
     pts.z1++;
     phase = "mark";
     box.classList.add("picking");
+    box.querySelectorAll(".seg").forEach(sg => { sg.tabIndex = 0; sg.setAttribute("role", "button"); sg.setAttribute("aria-pressed", "false"); });
+    box.querySelector(".seg").focus();
     $("markHint").style.display = "block";
     $("bCheck").style.display = "inline-block";
     updatePickCount();
@@ -498,6 +512,7 @@ function checkMarks(){
 
 function reveal(m, found, wrong, classifiedRight, fp){
   box.classList.remove("picking");
+  box.querySelectorAll(".seg").forEach(sg => { sg.removeAttribute("tabindex"); sg.removeAttribute("aria-pressed"); sg.removeAttribute("role"); });
   box.querySelectorAll(".seg").forEach(s => {
     const wasPicked = s.classList.contains("picked");
     s.classList.remove("picked");
@@ -548,7 +563,7 @@ function finishMsg(){
 
 function nextMsg(){
   cur++;
-  if (cur < MSGS.length) { showMsg(); $("zadanie1").scrollIntoView({behavior:"smooth"}); return; }
+  if (cur < MSGS.length) { showMsg(); $("zadanie1").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); return; }
   $("mbar").style.width = "100%";
   $("z1quiz").style.display = "none";
   $("z1result").style.display = "block";
@@ -583,7 +598,7 @@ URLS.forEach(u => {
   url.appendChild(document.createTextNode(u.pre)); url.appendChild(dom); url.appendChild(document.createTextNode(u.post));
   card.appendChild(url);
   const opts = document.createElement("div"); opts.className = "opts two";
-  const fb = document.createElement("div"); fb.className = "fb";
+  const fb = document.createElement("div"); fb.className = "fb"; fb.setAttribute("aria-live", "polite");
   [[true, "✔ Prawdziwa strona"], [false, "✖ Fałszywa strona"]].forEach(([val, txt]) => {
     const b = document.createElement("button"); b.className = "opt"; b.textContent = txt;
     b.onclick = () => {
@@ -609,17 +624,22 @@ URLS.forEach(u => {
 });
 
 /* ---------- Zadanie 3 ---------- */
+function shuffle(arr){
+  const a = arr.slice();
+  for (let k = a.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; }
+  return a;
+}
 let z3Done = 0;
 SCEN.forEach(s => {
   const card = document.createElement("div"); card.className = "scen";
   const p = document.createElement("p"); p.textContent = s.q; card.appendChild(p);
   const opts = document.createElement("div"); opts.className = "opts";
-  const fb = document.createElement("div"); fb.className = "fb";
-  s.a.forEach((txt, k) => {
+  const fb = document.createElement("div"); fb.className = "fb"; fb.setAttribute("aria-live", "polite");
+  const btns = s.a.map((txt, k) => {
     const b = document.createElement("button"); b.className = "opt"; b.textContent = txt;
     b.onclick = () => {
       opts.querySelectorAll("button").forEach(x => x.disabled = true);
-      opts.children[s.ok].classList.add("right");
+      btns[s.ok].classList.add("right");
       const good = k === s.ok;
       if (!good) b.classList.add("wrong"); else pts.z3++;
       fb.className = "fb " + (good ? "good" : "bad");
@@ -631,8 +651,9 @@ SCEN.forEach(s => {
         done.z3 = true; updateStatus();
       }
     };
-    opts.appendChild(b);
+    return b;
   });
+  shuffle(btns).forEach(b => opts.appendChild(b));   // losowa kolejność odpowiedzi
   card.appendChild(opts); card.appendChild(fb);
   $("scenarios").appendChild(card);
 });
