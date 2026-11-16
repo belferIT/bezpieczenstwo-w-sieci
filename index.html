@@ -3,57 +3,280 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bezpieczeństwo w sieci – lekcje dla klas 7–8</title>
+<title>Bezpieczeństwo w sieci</title>
 <style>
-  :root{--navy:#1d2b4f;--ink:#24324f;--muted:#5b6785;--bg:#f4f6fb;--teal:#13897a;--yellow:#ffc94a;--line:#dde2ee}
+  :root{--navy:#1d2b4f;--ink:#24324f;--muted:#5b6785;--bg:#f4f6fb;--teal:#13897a;--teal-l:#e2f4f1;--yellow:#ffc94a;--line:#dde2ee}
   *{box-sizing:border-box}
   body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;font-size:18px}
   header{background:var(--navy);color:#fff;padding:56px 20px 72px;text-align:center}
   header .tag{display:inline-block;background:var(--yellow);color:var(--navy);font-weight:700;padding:4px 14px;border-radius:999px;font-size:14px;letter-spacing:.5px}
   header h1{font-size:clamp(30px,5vw,48px);margin:16px auto 8px;line-height:1.2}
   header p{opacity:.85;margin:0 auto;max-width:600px}
-  main{max-width:880px;margin:-40px auto 0;padding:0 16px 60px;display:grid;gap:18px}
+  main{max-width:880px;margin:-40px auto 0;padding:0 16px 60px}
+
+  /* Spis treści */
+  .toc{background:#fff;border-radius:16px;padding:22px 26px;box-shadow:0 2px 10px rgba(29,43,79,.06);margin-bottom:28px}
+  .toc h2{margin:0 0 4px;font-size:22px;color:var(--navy)}
+  .toc .count{margin:0 0 12px;color:var(--muted);font-size:16px}
+  .toc ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
+  .toc a{display:flex;gap:10px;align-items:center;background:var(--bg);border-radius:10px;padding:10px 14px;
+    text-decoration:none;color:var(--navy);font-weight:600;font-size:16px}
+  .toc a:hover{background:var(--teal-l)}
+  .toc .m{background:var(--navy);color:#fff;width:28px;height:28px;border-radius:50%;display:inline-grid;place-items:center;font-size:14px;flex:none}
+
+  /* Moduły */
+  .module{margin-top:36px;scroll-margin-top:16px}
+  .module-head{display:flex;align-items:center;gap:12px;margin:0 4px 14px}
+  .module-head .m{background:var(--navy);color:#fff;width:36px;height:36px;border-radius:50%;display:inline-grid;place-items:center;font-size:18px;font-weight:700;flex:none}
+  .module-head h2{margin:0;font-size:24px;color:var(--navy);line-height:1.25}
+  .module-head p{margin:0;color:var(--muted);font-size:15px}
+  .list{display:grid;gap:14px}
+
+  /* Kafelki lekcji */
   .lesson{display:flex;gap:20px;align-items:center;background:#fff;border-radius:16px;padding:22px 26px;
     box-shadow:0 2px 10px rgba(29,43,79,.06);text-decoration:none;color:inherit;transition:transform .15s, box-shadow .15s}
   a.lesson:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(29,43,79,.12)}
+  a.lesson:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
   .lesson .ico{font-size:40px;flex:none;width:64px;height:64px;display:grid;place-items:center;background:var(--bg);border-radius:14px}
-  .lesson h2{margin:0;font-size:22px;color:var(--navy)}
+  .lesson h3{margin:0;font-size:22px;color:var(--navy);line-height:1.3}
   .lesson p{margin:2px 0 0;color:var(--muted);font-size:16px}
   .lesson .go{margin-left:auto;font-weight:800;color:var(--teal);white-space:nowrap}
-  .lesson.soon{opacity:.55}
-  .lesson.soon .go{color:var(--muted);font-weight:600}
   .num{font-size:13px;font-weight:700;color:var(--teal);letter-spacing:.5px}
+  .opt-tag{display:inline-block;background:var(--teal-l);color:var(--teal);border-radius:999px;padding:0 8px;margin-left:6px;font-size:12px}
+
+  /* Lekcje, których jeszcze nie ma */
+  .lesson.soon{box-shadow:none;border:2px dashed var(--line);background:rgba(255,255,255,.6)}
+  .lesson.soon .ico{filter:grayscale(1);opacity:.6}
+  .lesson.soon h3{color:var(--muted)}
+  .lesson.soon .num{color:var(--muted)}
+  .lesson.soon .go{background:#fff7df;color:#8a6500;border-radius:999px;padding:4px 12px;font-size:14px;font-weight:700}
+
   footer{text-align:center;color:var(--muted);font-size:14px;padding:20px}
-  @media (max-width:560px){.lesson{flex-wrap:wrap}.lesson .go{margin-left:0}}
+  @media (max-width:560px){
+    .lesson{flex-wrap:wrap;padding:18px}
+    .lesson .go{margin-left:0}
+    .lesson .ico{width:52px;height:52px;font-size:32px}
+    body{font-size:17px}
+  }
 </style>
 </head>
 <body>
 <header>
-  <span class="tag">INFORMATYKA · KLASY 7–8</span>
+  <span class="tag">INFORMATYKA</span>
   <h1>Bezpieczeństwo w sieci</h1>
   <p>Krótkie lekcje z zadaniami. Wybierz lekcję, którą wskaże nauczyciel.</p>
 </header>
+
 <main>
-  <!-- Aby dodać nową lekcję: skopiuj blok <a class="lesson">…</a> i zmień numer, tytuł, opis i nazwę pliku. -->
-  <a class="lesson" href="lekcja-1.html">
-    <div class="ico">🔐</div>
-    <div>
-      <div class="num">LEKCJA 1</div>
-      <h2>Dlaczego silne hasło jest tak ważne?</h2>
-      <p>Jak włamywacze zgadują hasła, zasady silnego hasła i weryfikacja dwuetapowa.</p>
+
+  <!-- ===== SPIS TREŚCI ===== -->
+  <nav class="toc" aria-label="Spis treści">
+    <h2>Spis treści</h2>
+    <p class="count" id="count">6 modułów · 14 lekcji + 1 dodatkowa</p>
+    <ol>
+      <li><a href="#modul-1"><span class="m">1</span> Moje konta</a></li>
+      <li><a href="#modul-2"><span class="m">2</span> Rozpoznaj oszustwo</a></li>
+      <li><a href="#modul-3"><span class="m">3</span> Moje urządzenia</a></li>
+      <li><a href="#modul-4"><span class="m">4</span> Ja w sieci</a></li>
+      <li><a href="#modul-5"><span class="m">5</span> Informacja i AI</a></li>
+      <li><a href="#modul-6"><span class="m">6</span> Finał</a></li>
+    </ol>
+  </nav>
+
+  <!--
+    JAK UDOSTĘPNIĆ NOWĄ LEKCJĘ:
+    1. Zamień   <div class="lesson soon">   na   <a class="lesson" href="lekcja-N.html">
+    2. Zamień zamykające </div> tego kafelka na </a>
+    3. Zamień   <span class="go">Już wkrótce</span>   na   <span class="go">Start →</span>
+    Licznik gotowych lekcji w spisie treści zaktualizuje się sam.
+  -->
+
+  <!-- ===== MODUŁ 1 ===== -->
+  <section class="module" id="modul-1">
+    <div class="module-head"><span class="m">1</span><div><h2>Moje konta</h2><p>Jak chronić hasła i konta</p></div></div>
+    <div class="list">
+      <a class="lesson" href="lekcja-1.html">
+        <div class="ico">🔐</div>
+        <div>
+          <div class="num">LEKCJA 1</div>
+          <h3>Dlaczego silne hasło jest tak ważne?</h3>
+          <p>Jak włamywacze zgadują hasła, zasady silnego hasła i weryfikacja dwuetapowa.</p>
+        </div>
+        <span class="go">Start →</span>
+      </a>
+      <div class="lesson soon">
+        <div class="ico">🗝️</div>
+        <div>
+          <div class="num">LEKCJA 2</div>
+          <h3>Jak zapamiętać wiele haseł i odzyskać konto?</h3>
+          <p>Menedżer haseł, wyciek danych i odzyskiwanie przejętego konta.</p>
+        </div>
+        <span class="go">Już wkrótce</span>
+      </div>
     </div>
-    <span class="go">Start →</span>
-  </a>
-  <a class="lesson" href="lekcja-2.html">
-    <div class="ico">🎣</div>
-    <div>
-      <div class="num">LEKCJA 2</div>
-      <h2>Phishing – jak nie dać się złowić?</h2>
-      <p>Jak rozpoznać fałszywe wiadomości i strony – także te o „darmowych skinach”.</p>
+  </section>
+
+  <!-- ===== MODUŁ 2 ===== -->
+  <section class="module" id="modul-2">
+    <div class="module-head"><span class="m">2</span><div><h2>Rozpoznaj oszustwo</h2><p>Fałszywe wiadomości, presja czasu i pieniądze</p></div></div>
+    <div class="list">
+      <a class="lesson" href="lekcja-3.html">
+        <div class="ico">🎣</div>
+        <div>
+          <div class="num">LEKCJA 3</div>
+          <h3>Phishing – jak nie dać się złowić?</h3>
+          <p>Jak rozpoznać fałszywe wiadomości i strony – także te o „darmowych skinach”.</p>
+        </div>
+        <span class="go">Start →</span>
+      </a>
+      <div class="lesson soon">
+        <div class="ico">🎭</div>
+        <div>
+          <div class="num">LEKCJA 4</div>
+          <h3>Dlaczego oszuści tak się spieszą?</h3>
+          <p>Oszustwa „na…”: jak oszuści grają na emocjach i presji czasu.</p>
+        </div>
+        <span class="go">Już wkrótce</span>
+      </div>
+      <div class="lesson soon">
+        <div class="ico">💳</div>
+        <div>
+          <div class="num">LEKCJA 5</div>
+          <h3>Jak bezpiecznie płacić w sieci?</h3>
+          <p>Zakupy w internecie, kody BLIK i płatności w grach.</p>
+        </div>
+        <span class="go">Już wkrótce</span>
+      </div>
     </div>
-    <span class="go">Start →</span>
-  </a>
+  </section>
+
+  <!-- ===== MODUŁ 3 ===== -->
+  <section class="module" id="modul-3">
+    <div class="module-head"><span class="m">3</span><div><h2>Moje urządzenia</h2><p>Telefon, komputer i domowa sieć</p></div></div>
+    <div class="list">
+      <div class="lesson soon">
+        <div class="ico">🦠</div>
+        <div>
+          <div class="num">LEKCJA 6</div>
+          <h3>Skąd się biorą wirusy w telefonie?</h3>
+          <p>Złośliwe oprogramowanie, aktualizacje i uprawnienia aplikacji.</p>
+        </div>
+        <span class="go">Już wkrótce</span>
+      </div>
+      <div class="lesson soon">
+        <div class="ico">📶</div>
+        <div>
+          <div class="num">LEKCJA 7</div>
+          <h3>Czy każde Wi-Fi jest bezpieczne?</h3>
+          <p>Publiczne Wi-Fi, domowy router i kopie zapasowe.</p>
+        </div>
+        <span class="go">Już wkrótce</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MODUŁ 4 ===== -->
+  <section class="module" id="modul-4">
+    <div class="module-head"><span class="m">4</span><div><h2>Ja w sieci</h2><p>Prywatność, wizerunek i relacje z innymi</p></div></div>
+    <div class="list">
+      <div class="lesson soon">
+        <div class="ico">👣</div>
+        <div>
+          <div class="num">LEKCJA 8</div>
+          <h3>Co zostawiasz po sobie w sieci?</h3>
+          <p>Cyfrowy ślad i ustawienia prywatności.</p>
+        </div>
+        <span class="go">Już wkrótce</span>
+      </div>
+      <div class="lesson soon">
+        <div class="ico">📸</div>
+        <div>
+          <div class="num">LEKCJA 9</div>
+          <h3>Czy mogę to opublikować?</h3>
+          <p>Wizerunek, prawo autorskie i licencje Creative Commons.</p>
+        </div>
+        <span class="go">Już wkrótce</span>
+      </div>
+      <div class="lesson soon">
+        <div class="ico">🤝</div>
+        <div>
+          <div class="num">LEKCJA 10</div>
+          <h3>Jak reagować na hejt i cyberprzemoc?</h3>
+          <p>Co zrobić, gdy dotyczy to ciebie albo gdy jesteś świadkiem.</p>
+        </div>
+        <span class="go">Już wkrótce</span>
+      </div>
+      <div class="lesson soon">
+        <div class="ico">🚧</div>
+        <div>
+          <div class="num">LEKCJA 11</div>
+          <h3>Kto naprawdę jest po drugiej stronie?</h3>
+          <p>Nieznajomi w sieci, sygnały ostrzegawcze i twoje granice.</p>
+        </div>
+        <span class="go">Już wkrótce</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MODUŁ 5 ===== -->
+  <section class="module" id="modul-5">
+    <div class="module-head"><span class="m">5</span><div><h2>Informacja i AI</h2><p>Jak oceniać to, co widzisz i słyszysz</p></div></div>
+    <div class="list">
+      <div class="lesson soon">
+        <div class="ico">📰</div>
+        <div>
+          <div class="num">LEKCJA 12</div>
+          <h3>Jak odróżnić prawdę od fake newsa?</h3>
+          <p>Fake newsy, clickbait i sprawdzanie źródeł.</p>
+        </div>
+        <span class="go">Już wkrótce</span>
+      </div>
+      <div class="lesson soon">
+        <div class="ico">🤖</div>
+        <div>
+          <div class="num">LEKCJA 13</div>
+          <h3>Czy możesz wierzyć temu, co widzisz i słyszysz?</h3>
+          <p>AI bezpiecznie: deepfake, klonowanie głosu i czatboty.</p>
+        </div>
+        <span class="go">Już wkrótce</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MODUŁ 6 ===== -->
+  <section class="module" id="modul-6">
+    <div class="module-head"><span class="m">6</span><div><h2>Finał</h2><p>Wszystko, czego się nauczysz, w jednej grze</p></div></div>
+    <div class="list">
+      <div class="lesson soon">
+        <div class="ico">🧩</div>
+        <div>
+          <div class="num">LEKCJA 14</div>
+          <h3>Czy uciekniesz z cyber-escape roomu?</h3>
+          <p>Zagadki z całego kursu i domowy plan bezpieczeństwa.</p>
+        </div>
+        <span class="go">Już wkrótce</span>
+      </div>
+      <div class="lesson soon">
+        <div class="ico">⏰</div>
+        <div>
+          <div class="num">LEKCJA 15 <span class="opt-tag">DODATKOWA</span></div>
+          <h3>Kto walczy o twoją uwagę?</h3>
+          <p>Higiena cyfrowa: czas przed ekranem i powiadomienia.</p>
+        </div>
+        <span class="go">Już wkrótce</span>
+      </div>
+    </div>
+  </section>
+
 </main>
 <footer>Informatyka · Bezpieczeństwo w sieci</footer>
+
+<script>
+/* Licznik gotowych lekcji w spisie treści – liczy kafelki-linki. */
+const all = document.querySelectorAll("main .lesson").length;
+const ready = document.querySelectorAll("main a.lesson").length;
+document.getElementById("count").textContent =
+  `6 modułów · gotowe lekcje: ${ready} z ${all}`;
+</script>
 </body>
 </html>
