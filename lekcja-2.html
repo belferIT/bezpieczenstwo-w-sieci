@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lekcja 2: Jak zapamiętać wiele haseł i odzyskać konto?</title>
+<style>
+  :root{
+    --navy:#1d2b4f; --ink:#24324f; --muted:#5b6785; --bg:#f4f6fb; --card:#ffffff;
+    --teal:#13897a; --teal-l:#e2f4f1; --red:#c8374b; --red-l:#fbe6e9;
+    --yellow:#ffc94a; --line:#dde2ee; --radius:16px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.6;font-size:18px}
+  header{background:var(--navy);color:#fff;padding:48px 20px 64px;text-align:center}
+  header .tag{display:inline-block;background:var(--yellow);color:var(--navy);font-weight:700;
+       padding:4px 14px;border-radius:999px;font-size:14px;letter-spacing:.5px}
+  header h1{font-size:clamp(28px,5vw,44px);margin:16px auto 8px;max-width:800px;line-height:1.2}
+  header p{opacity:.85;margin:0 auto;max-width:620px}
+  main{max-width:880px;margin:-36px auto 0;padding:0 16px 60px}
+  section{background:var(--card);border-radius:var(--radius);padding:28px 28px;margin-bottom:24px;
+       box-shadow:0 2px 10px rgba(29,43,79,.06)}
+  h2{margin:0 0 12px;font-size:26px;color:var(--navy);display:flex;align-items:center;gap:10px}
+  h2 .num{background:var(--navy);color:#fff;width:36px;height:36px;border-radius:50%;
+       display:inline-grid;place-items:center;font-size:18px;flex:none}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
+  .tile{background:var(--bg);border-radius:12px;padding:18px}
+  .tile .ico{font-size:32px}
+  .tile h3{margin:6px 0 4px;font-size:19px}
+  .tile p{margin:0;color:var(--muted);font-size:16px}
+  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:17px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;font-size:15px}
+  code{font-family:ui-monospace,Consolas,monospace;background:var(--bg);padding:2px 8px;border-radius:6px;word-break:break-all}
+  .t-bad{color:var(--red);font-weight:700}.t-ok{color:var(--teal);font-weight:700}
+  .note{font-size:14px;color:var(--muted);margin-top:8px}
+  ul.rules{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}
+  ul.rules li{background:var(--teal-l);border-radius:10px;padding:12px 16px 12px 48px;position:relative}
+  ul.rules li::before{content:"✔";position:absolute;left:18px;top:12px;color:var(--teal);font-weight:900}
+  .tip{background:#fff7df;border-left:5px solid var(--yellow);padding:14px 18px;border-radius:8px;margin-top:16px}
+  .tip ol{margin:6px 0 0;padding-left:22px}
+
+  /* Wspólne elementy zadań (jak w lekcji 1) */
+  .progress{height:10px;background:var(--line);border-radius:999px;overflow:hidden;margin:8px 0 20px}
+  .progress div{height:100%;background:var(--teal);width:0;transition:width .3s}
+  .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:14px 28px;cursor:pointer;
+       transition:transform .1s, opacity .2s}
+  button:active{transform:scale(.97)}
+  button:disabled{opacity:.45;cursor:default}
+  .b-weak{background:var(--red);color:#fff}.b-strong{background:var(--teal);color:#fff}
+  .b-next{background:var(--navy);color:#fff}.b-ghost{background:var(--bg);color:var(--navy)}
+  .fb{margin-top:18px;padding:14px 18px;border-radius:10px;text-align:left;display:none}
+  .fb.good{background:var(--teal-l);display:block}.fb.bad{background:var(--red-l);display:block}
+  .card-result{border:3px dashed var(--navy);border-radius:14px;padding:18px;margin:18px auto 0;max-width:420px;display:none;text-align:center}
+  input[type=text]{font:inherit;width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:12px}
+  input[type=text]:focus{outline:none;border-color:var(--teal)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .row input{flex:1;min-width:200px}
+  .scen{border:2px solid var(--line);border-radius:14px;padding:18px;margin-top:14px}
+  .scen p{margin:0 0 10px;font-weight:600}
+  .opts{display:grid;gap:8px}
+  .opt{background:var(--bg);color:var(--ink);font-weight:600;text-align:left;padding:12px 16px}
+  .opt.right{background:var(--teal-l);outline:2px solid var(--teal)}
+  .opt.wrong{background:var(--red-l);outline:2px solid var(--red)}
+
+  /* Sejf – menedżer haseł */
+  .vault{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin-top:16px;
+       background:var(--bg);border-radius:12px;padding:16px;font-size:16px}
+  .vault .k{background:#fff;border-radius:999px;padding:6px 14px;font-weight:600;border:2px solid var(--line)}
+  .vault .safe{background:var(--navy);color:#fff;border-radius:12px;padding:10px 16px;font-weight:700;text-align:center}
+  .vault .arr{color:var(--muted);font-weight:800}
+
+  /* Zadanie 1: kolejność kroków */
+  .plan{list-style:none;padding:0;margin:0;display:grid;gap:8px;counter-reset:krok}
+  .plan li{background:var(--teal-l);border-radius:10px;padding:10px 14px 10px 52px;position:relative;font-weight:600;
+       counter-increment:krok;animation:pop .3s}
+  .plan li::before{content:counter(krok);position:absolute;left:12px;top:9px;width:28px;height:28px;border-radius:50%;
+       background:var(--teal);color:#fff;display:grid;place-items:center;font-size:15px}
+  .plan li.slot{background:transparent;border:2px dashed var(--line);color:var(--muted);font-weight:400;animation:none}
+  .plan li.slot::before{background:var(--line);color:var(--muted)}
+  .pool{display:grid;gap:8px;margin-top:8px}
+  .pool .opt.shake{animation:shake .35s}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px}
+  .cols h3{margin:0 0 8px;font-size:18px;color:var(--navy)}
+  @keyframes pop{from{transform:scale(.95)}to{transform:scale(1)}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+  /* Zadanie 2: mapa kont */
+  .map{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px;text-align:center}
+  .acc{background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:12px 8px;font-size:15px;
+       transition:background .3s, border-color .3s}
+  .acc .ico{font-size:30px;display:block}
+  .acc b{display:block;font-size:16px;color:var(--navy)}
+  .acc small{color:var(--muted)}
+  .acc.mail{background:var(--navy);border-color:var(--navy);color:#fff;grid-column:2;grid-row:2}
+  .acc.mail b,.acc.mail small{color:#fff}
+  .acc.lost{background:var(--red-l);border-color:var(--red)}
+  .acc.lost small{color:var(--red);font-weight:700}
+  .acc.mail.lost{background:var(--red);border-color:var(--red)}
+  #demo{display:none;margin-top:18px}
+
+  /* Karta wyniku */
+  ul.status{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:6px;font-size:16px}
+  ul.status li::before{content:"○ ";color:var(--muted)}
+  ul.status li.on::before{content:"● ";color:var(--teal)}
+
+  /* Misja domowa i ściąga */
+  .mission{background:var(--navy);color:#fff}
+  .mission h2{color:#fff}
+  .mission h2 .num{background:var(--yellow);color:var(--navy)}
+  .mission .box{background:rgba(255,255,255,.08);border-radius:12px;padding:16px 18px;margin-top:14px}
+  .mission .box ol{margin:6px 0 0;padding-left:22px}
+  .mission .note{color:#c9d2ea}
+  .cheat{background:#fff;color:var(--ink);border-radius:14px;padding:22px 24px;margin-top:16px;font-size:20px}
+  .cheat h3{margin:0 0 4px;font-size:24px;color:var(--navy)}
+  .cheat ol{margin:10px 0 0;padding-left:26px;display:grid;gap:12px}
+  .cheat .note{color:var(--muted)}
+
+  footer{text-align:center;color:var(--muted);font-size:14px;padding:20px}
+  @media (max-width:640px){.cols{grid-template-columns:1fr}}
+  @media (max-width:560px){section{padding:22px 18px}body{font-size:17px}
+       .map{grid-template-columns:repeat(2,1fr)}.acc.mail{grid-column:1 / -1;grid-row:1}}
+
+  /* Wydruk: tylko ściąga dla domowników */
+  @media print{
+    body{background:#fff}
+    header,footer,main > section:not(#misja){display:none}
+    #misja{background:#fff;color:#000;box-shadow:none;padding:0}
+    #misja > *:not(#sciaga){display:none}
+    .cheat{font-size:22px;padding:0}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" style="color:#fff;opacity:.8;display:inline-block;margin-bottom:16px;text-decoration:none">← Wszystkie lekcje</a><br>
+  <span class="tag">BEZPIECZEŃSTWO W SIECI · LEKCJA 2</span>
+  <h1>Jak zapamiętać wiele haseł i odzyskać konto?</h1>
+  <p>Przeczytaj krótkie wprowadzenie (ok. 6 minut), a potem wykonaj trzy zadania.</p>
+</header>
+
+<main>
+
+<section>
+  <h2><span class="num">1</span> Ile masz kont?</h2>
+  <p>Policz w myślach: gry, komunikatory, media społecznościowe, muzyka, dziennik, poczta. Wychodzi łatwo 10, a nawet 20 kont. Na <a href="lekcja-1.html">lekcji 1</a> poznałeś zasadę: <strong>każde konto ma inne hasło</strong>. Tylko jak zapamiętać 20 różnych haseł?</p>
+  <div class="grid">
+    <div class="tile"><div class="ico">🔁</div><h3>Jedno hasło wszędzie</h3><p>Wygodne, ale gdy wycieknie z jednej gry, otwiera wszystkie twoje konta.</p></div>
+    <div class="tile"><div class="ico">🔢</div><h3>kotek1, kotek2, kotek3…</h3><p>Programy włamywaczy znają tę sztuczkę. Jedno hasło zdradza resztę.</p></div>
+    <div class="tile"><div class="ico">🟨</div><h3>Karteczka na monitorze</h3><p>Każdy, kto przejdzie obok, zobaczy twoje hasło.</p></div>
+  </div>
+  <div class="tip">💡 Jest lepszy sposób. Nie musisz pamiętać wszystkich haseł – wystarczy <strong>jedno</strong>.</div>
+</section>
+
+<section>
+  <h2><span class="num">2</span> Menedżer haseł – sejf na klucze</h2>
+  <p><strong>Menedżer haseł</strong> to aplikacja, która działa jak sejf. W środku trzyma wszystkie twoje hasła. Ty pamiętasz tylko jedno: <strong>hasło główne</strong>, czyli klucz do sejfu.</p>
+  <div class="vault" aria-label="Jedno hasło główne otwiera sejf z wieloma hasłami">
+    <span class="k">🔑 hasło główne</span><span class="arr">→</span>
+    <span class="safe">🗄️ menedżer haseł</span><span class="arr">→</span>
+    <span class="k">🎮 gra</span><span class="k">💬 komunikator</span><span class="k">📸 Instagram</span><span class="k">📧 poczta</span>
+  </div>
+  <div class="grid">
+    <div class="tile"><div class="ico">🎲</div><h3>Wymyśla hasła</h3><p>Tworzy długie, losowe hasła. Nie musisz ich znać na pamięć.</p></div>
+    <div class="tile"><div class="ico">✍️</div><h3>Wpisuje je za ciebie</h3><p>Na stronie logowania sam podpowiada właściwe hasło.</p></div>
+    <div class="tile"><div class="ico">🕵️</div><h3>Rozpoznaje podróbki</h3><p>Pamięta prawdziwy adres strony. Na fałszywej stronie hasła nie podpowie – to sygnał alarmowy!</p></div>
+  </div>
+  <ul class="rules">
+    <li><strong>Hasło główne musi być bardzo silne</strong> – długa fraza z lekcji 1, np. <code>księżyc-tańczy-z-pingwinem</code>. I tylko twoje.</li>
+    <li><strong>Włącz weryfikację dwuetapową</strong> także w menedżerze haseł.</li>
+    <li><strong>Ustaw go razem z rodzicem.</strong> Menedżer haseł jest często wbudowany w telefon albo przeglądarkę.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="num">3</span> Wyciek danych – to nie twoja wina</h2>
+  <p><strong>Wyciek danych</strong> to sytuacja, gdy włamywacze ukradną dane z serwera jakiejś firmy, np. gry. Wyobraź sobie, że ktoś włamał się do zakładu, który dorabia klucze, i ukradł całą skrzynkę kluczy. Ty niczego złego nie zrobiłeś, ale twój klucz też jest w tej skrzynce.</p>
+  <div class="grid">
+    <div class="tile"><div class="ico">📦</div><h3>Co wycieka?</h3><p>Loginy, adresy e-mail, hasła, czasem numery telefonów.</p></div>
+    <div class="tile"><div class="ico">🤖</div><h3>Co robią włamywacze?</h3><p>Program sprawdza ukradzione hasło na innych stronach: w poczcie, na Instagramie, na Discordzie.</p></div>
+    <div class="tile"><div class="ico">📩</div><h3>Skąd się dowiesz?</h3><p>Firma zwykle wysyła e-mail o wycieku. Możesz też sprawdzić swój adres z rodzicem na stronie <code>haveibeenpwned.com</code>.</p></div>
+  </div>
+  <div class="tip">🛡️ <strong>Wyciekło hasło? Działaj tak:</strong>
+    <ol>
+      <li>Zmień hasło w tym serwisie. Wejdź do aplikacji sam, nie przez link z wiadomości.</li>
+      <li>Zmień je też wszędzie tam, gdzie było <strong>takie samo</strong>.</li>
+      <li>Włącz weryfikację dwuetapową. Wtedy samo hasło włamywaczowi nie wystarczy.</li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">4</span> Poczta e-mail – klucz główny do wszystkiego</h2>
+  <p>Gdy klikasz <strong>„Nie pamiętam hasła”</strong>, gdzie trafia link do zmiany hasła? Do twojej <strong>poczty e-mail</strong>. Kto ma twoją pocztę, ten może „odzyskać” prawie każde twoje konto. Dlatego poczta to <strong>najważniejsze konto</strong>. Chroń ją najsilniejszym hasłem i weryfikacją dwuetapową.</p>
+  <h3 style="margin:22px 0 6px;color:var(--navy)">Twoje koła ratunkowe</h3>
+  <table>
+    <thead><tr><th>Co to jest?</th><th>Jak go używać bezpiecznie?</th></tr></thead>
+    <tbody>
+      <tr><td>📱 Telefon i e-mail zapasowy</td><td>Muszą być aktualne. Na nie przyjdzie kod, gdy stracisz dostęp do konta.</td></tr>
+      <tr><td>🧾 Kody zapasowe</td><td>Dostajesz je przy włączaniu weryfikacji dwuetapowej. Schowaj je w domu, najlepiej z rodzicem.</td></tr>
+      <tr><td>❓ Pytania pomocnicze</td><td>„Imię twojego psa?” – odpowiedź często widać na twoim profilu. Wymyśl odpowiedź, której nikt nie zgadnie, i zapisz ją w menedżerze haseł.</td></tr>
+    </tbody>
+  </table>
+  <div class="tip">🆘 <strong>Ktoś przejął twoje konto?</strong> To może się przytrafić każdemu, także dorosłym. Powiedz rodzicowi i odzyskujcie konto <strong>tylko w oficjalnej aplikacji</strong>. Ktoś w komentarzach obiecuje, że „odzyska konto za 50 zł”? To oszust – chce zarobić na twoim kłopocie.</div>
+</section>
+
+<section id="zadanie1">
+  <h2><span class="num">✎</span> Zadanie 1: Konto przejęte – co po kolei?</h2>
+  <p>Ola nie może zalogować się na Instagram. Jej znajomi dostają od niej dziwne wiadomości. Ułóż plan ratunkowy: <strong>klikaj kroki w dobrej kolejności</strong>. Uwaga – dwa kroki są złe!</p>
+  <div class="progress"><div id="z1bar"></div></div>
+  <div class="cols">
+    <div>
+      <h3>🗂️ Kroki do wyboru</h3>
+      <div class="pool" id="pool"></div>
+      <div id="z1fb" class="fb"></div>
+    </div>
+    <div>
+      <h3>✅ Plan Oli</h3>
+      <ol class="plan" id="plan"></ol>
+    </div>
+  </div>
+  <p class="note" id="z1score"></p>
+  <div class="btns" style="margin-top:12px"><button class="b-ghost" id="z1again" style="display:none">↺ Spróbuj ponownie</button></div>
+</section>
+
+<section id="zadanie2">
+  <h2><span class="num">✎</span> Zadanie 2: Które konto jest najważniejsze?</h2>
+  <p>Oto konta Oli. Wszystkie są podłączone do jednego adresu e-mail. Odpowiedz na pytania.</p>
+  <div class="map" id="map">
+    <div class="acc" data-acc><span class="ico">🎮</span><b>Roblox</b><small>e-mail: ola…@poczta.pl</small></div>
+    <div class="acc" data-acc><span class="ico">💬</span><b>Discord</b><small>e-mail: ola…@poczta.pl</small></div>
+    <div class="acc" data-acc><span class="ico">📸</span><b>Instagram</b><small>e-mail: ola…@poczta.pl</small></div>
+    <div class="acc" data-acc><span class="ico">🎵</span><b>Muzyka</b><small>e-mail: ola…@poczta.pl</small></div>
+    <div class="acc mail" id="mailAcc"><span class="ico">📧</span><b>Poczta e-mail</b><small>ola…@poczta.pl</small></div>
+    <div class="acc" data-acc><span class="ico">🛒</span><b>Sklep z aplikacjami</b><small>e-mail: ola…@poczta.pl</small></div>
+    <div class="acc" data-acc><span class="ico">🎬</span><b>Filmy i seriale</b><small>e-mail: ola…@poczta.pl</small></div>
+    <div class="acc" data-acc><span class="ico">🕹️</span><b>Steam</b><small>e-mail: ola…@poczta.pl</small></div>
+  </div>
+  <div id="z2first"></div>
+  <div id="demo">
+    <div class="tip">🕵️ <strong>Sprawdź sam.</strong> Włamywacz poznał tylko hasło do poczty Oli. Zobacz, co może zrobić.</div>
+    <div class="btns" style="margin-top:14px"><button class="b-weak" id="bDemo">🕵️ Włamywacz klika „Nie pamiętam hasła”</button></div>
+    <div id="demoFb" class="fb"></div>
+  </div>
+  <div id="z2rest"></div>
+  <p class="note" id="z2score"></p>
+</section>
+
+<section id="zadanie3">
+  <h2><span class="num">✎</span> Zadanie 3: Co zrobisz?</h2>
+  <p>Przeczytaj sytuacje i wybierz najlepszą reakcję.</p>
+  <div id="scenarios"></div>
+  <p class="note" id="z3score"></p>
+</section>
+
+<section id="karta">
+  <h2><span class="num">★</span> Twoja karta wyniku</h2>
+  <p>Gdy skończysz wszystkie trzy zadania, wpisz imię i klasę, a potem pokaż kartę nauczycielowi.</p>
+  <ul class="status" id="status"></ul>
+  <div class="row" style="max-width:560px">
+    <input type="text" id="name" placeholder="Wpisz swoje imię i klasę, np. Ola 7b" maxlength="40">
+    <button class="b-next" id="bCard">Pokaż kartę wyniku</button>
+  </div>
+  <div id="cardMsg" class="fb"></div>
+  <div class="card-result" id="card"></div>
+</section>
+
+<section id="misja" class="mission">
+  <h2><span class="num">🕶️</span> Misja domowa cyberagenta: mapa kont</h2>
+  <p>Twoja misja na 10–15 minut. Zrób ją z rodzicem, babcią, dziadkiem albo inną bliską osobą.</p>
+  <div class="box">
+    <strong>Co robicie?</strong>
+    <ol>
+      <li>Weźcie kartkę. Na środku narysujcie kopertę – to poczta e-mail domownika.</li>
+      <li>Dookoła wypiszcie konta, które są do niej podłączone: bank, sklepy, media społecznościowe, komunikatory. Połączcie je strzałkami z kopertą.</li>
+      <li>Sprawdźcie razem: czy poczta ma włączoną weryfikację dwuetapową i aktualny numer telefonu do odzyskiwania konta?</li>
+    </ol>
+  </div>
+  <div class="box">
+    🚫 <strong>Na mapie nie zapisujecie żadnych haseł, kodów ani numerów.</strong> Tylko nazwy kont i strzałki. Na następnej lekcji opowiesz, ile kont było podłączonych do jednej poczty.
+  </div>
+  <p class="note">Pokaż domownikowi ściągę poniżej albo ją wydrukuj.</p>
+  <div class="btns" style="justify-content:flex-start"><button class="b-ghost" id="bPrint">🖨️ Drukuj ściągę</button></div>
+
+  <div class="cheat" id="sciaga">
+    <h3>Ściąga dla domowników: hasła i konta</h3>
+    <div class="note">Bezpieczeństwo w sieci · lekcja 2</div>
+    <ol>
+      <li><strong>Poczta e-mail to klucz do wszystkich kont.</strong> Przez nią resetuje się hasła do banku, sklepów i portali. Niech ma najsilniejsze hasło i włączoną weryfikację dwuetapową.</li>
+      <li><strong>Każde konto – inne hasło.</strong> Zapamiętywanie ułatwi menedżer haseł, często wbudowany w telefon lub przeglądarkę. Gdy jedno hasło wycieknie, reszta kont jest bezpieczna.</li>
+      <li><strong>Wyciek albo przejęte konto?</strong> Zmień hasło, wchodząc na stronę lub do aplikacji samodzielnie, nie przez link z wiadomości. Zmień je wszędzie tam, gdzie było takie samo. Nie płać nikomu, kto obiecuje „odzyskać konto”.</li>
+    </ol>
+  </div>
+</section>
+
+</main>
+<footer><a href="index.html">← Wróć do listy lekcji</a><br>Informatyka · klasy 7–8 · Bezpieczeństwo w sieci</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ---------- Dane: Zadanie 1 ----------
+   STEPS – kroki w dobrej kolejności. hint – podpowiedź, gdy uczeń wybierze krok za wcześnie.
+   TRAPS – złe kroki, które nigdy nie pasują do planu. */
+const STEPS = [
+  {t:"🗣️ Powiedz rodzicowi lub innemu dorosłemu.",
+   why:"Dobry początek. Nie musisz radzić sobie sam. Dorosły pomoże spokojnie przejść przez kolejne kroki.",
+   hint:"Zanim zaczniesz cokolwiek zmieniać, nie zostawaj z tym sam."},
+  {t:"📧 Zabezpiecz pocztę e-mail: zmień jej hasło.",
+   why:"Przez pocztę odzyskuje się inne konta. Jeśli włamywacz ma pocztę, przejmie każde konto z powrotem.",
+   hint:"Najpierw zabezpiecz konto, przez które odzyskuje się wszystkie inne."},
+  {t:"🔄 Odzyskaj konto w oficjalnej aplikacji („Nie pamiętam hasła”).",
+   why:"Tylko oficjalna aplikacja lub strona, na którą wchodzisz sam. Link do zmiany hasła przyjdzie na twoją – już bezpieczną – pocztę.",
+   hint:"Najpierw trzeba odzyskać dostęp do samego konta."},
+  {t:"🔑 Ustaw nowe, silne hasło i wyloguj inne urządzenia.",
+   why:"Nowa fraza z lekcji 1 zamyka drzwi. Wylogowanie innych urządzeń wyrzuca włamywacza, nawet jeśli wciąż jest zalogowany.",
+   hint:"Po odzyskaniu konta pierwsza rzecz to nowe hasło."},
+  {t:"📱 Włącz weryfikację dwuetapową i schowaj kody zapasowe.",
+   why:"Drugi zamek w drzwiach. Następnym razem samo hasło włamywaczowi nie wystarczy.",
+   hint:"Teraz dodaj drugi zamek do drzwi."},
+  {t:"📣 Ostrzeż znajomych i zmień hasło tam, gdzie było takie samo.",
+   why:"Znajomi nie odpowiedzą na dziwne wiadomości z twojego konta. A konta z tym samym hasłem też są w niebezpieczeństwie.",
+   hint:""}
+];
+const TRAPS = [
+  {t:"💸 Zapłać osobie z komentarzy, która „odzyska konto za 50 zł”.",
+   why:"To oszust. Nikt spoza firmy nie odzyska twojego konta. Stracisz pieniądze, a konta i tak nie będzie."},
+  {t:"⏳ Poczekaj kilka dni, może samo się naprawi.",
+   why:"Samo się nie naprawi. Każdy dzień to kolejne wiadomości do twoich znajomych i więcej czasu dla włamywacza."}
+];
+
+/* ---------- Dane: Zadanie 2 ---------- */
+const Z2_FIRST = [
+  {q:"🔐 Włamywacz może poznać hasło tylko do jednego konta Oli. Które da mu najwięcej?",
+   a:["🎮 Roblox – Ola ma tam rzadkie przedmioty.", "📸 Instagram – Ola ma 800 obserwujących.", "📧 Poczta e-mail."], ok:2,
+   why:"Poczta otwiera resztę. Przez nią włamywacz zresetuje hasło do każdego podłączonego konta. Sprawdź to sam poniżej."}
+];
+const Z2_REST = [
+  {q:"🛡️ Jak najlepiej chronić pocztę e-mail?",
+   a:["Takim samym hasłem jak w grach – żeby go nie zapomnieć.",
+      "Najsilniejszą frazą, weryfikacją dwuetapową i schowanymi kodami zapasowymi.",
+      "Najlepiej w ogóle nie używać poczty."], ok:1,
+   why:"Najważniejsze konto dostaje najlepszą ochronę. A bez poczty nie założysz większości kont – lepiej ją dobrze zabezpieczyć."},
+  {q:"❓ Przy zakładaniu konta pojawia się pytanie pomocnicze: „Imię twojego pierwszego zwierzaka?”. Twój pies Burek jest na wielu zdjęciach na twoim profilu. Co wpiszesz?",
+   a:["Burek – przecież to prawda.",
+      "Zmyśloną odpowiedź, np. „Tramwaj-Kakao”, i zapiszę ją w menedżerze haseł.",
+      "Nic – zostawię puste pole."], ok:1,
+   why:"Prawdziwą odpowiedź włamywacz znajdzie na twoim profilu. Zmyślona odpowiedź działa jak dodatkowe hasło. Nikt jej nie zgadnie."}
+];
+
+/* ---------- Dane: Zadanie 3 ---------- */
+const SCEN = [
+  {q:"📩 Dostajesz e-mail: „W naszej grze doszło do wycieku danych. Twoje hasło mogło wyciec”. To samo hasło masz jeszcze w dwóch innych miejscach.",
+   a:["Zmieniam hasło tylko w tej grze.",
+      "Wchodzę do gry sam (nie przez link) i zmieniam hasło. Potem zmieniam je też w dwóch pozostałych miejscach – każde na inne.",
+      "Nic nie robię – nikt nie będzie szukał akurat mnie."], ok:1,
+   why:"Programy włamywaczy sprawdzają wykradzione hasła wszędzie. Zmień je we wszystkich miejscach, gdzie było takie samo. Do gry wchodź sam, bo e-mail o „wycieku” może też udawać oszust."},
+  {q:"🔐 Masz 15 kont. Jak najlepiej zapamiętać 15 różnych haseł?",
+   a:["Jedno hasło z inną cyfrą na końcu: kotek1, kotek2, kotek3…",
+      "Karteczka przyklejona do monitora.",
+      "Menedżer haseł z jednym bardzo silnym hasłem głównym, ustawiony razem z rodzicem."], ok:2,
+   why:"Menedżer pamięta wszystkie hasła za ciebie. Ty pamiętasz tylko jedno – hasło główne. Sztuczkę z cyframi programy włamywaczy znają od dawna."},
+  {q:"🕵️ Klikasz link z wiadomości i widzisz stronę logowania do Steama. Menedżer haseł nie podpowiada hasła, choć zwykle to robi. Co to znaczy?",
+   a:["To prawie na pewno fałszywa strona. Zamykam ją i wchodzę do Steama sam.",
+      "Menedżer się zepsuł – wpiszę hasło ręcznie.",
+      "Wyłączę menedżer haseł, bo przeszkadza."], ok:0,
+   why:"Menedżer pamięta prawdziwy adres strony. Jeśli nie podpowiada hasła, adres jest inny – to znak, że ktoś podrobił stronę. O fałszywych stronach dowiesz się więcej na lekcji 3."},
+  {q:"💬 Twoje konto w grze zostało przejęte. Ktoś pisze w komentarzach: „Odzyskam każde konto w 10 minut, tylko 50 zł BLIK-iem”.",
+   a:["Płacę – 50 zł to niewiele za moje konto.",
+      "Nie odpisuję. Z rodzicem odzyskuję konto w oficjalnej aplikacji albo przez pomoc techniczną gry.",
+      "Daję mu swój login i hasło, żeby było szybciej."], ok:1,
+   why:"„Odzyskiwacze kont” to oszuści. Konto odzyskasz tylko przez oficjalną pomoc. Nikomu nie dawaj kodu BLIK, loginu ani hasła."}
+];
+
+/* ---------- Punkty ---------- */
+const pts  = {z1:0, z2:0, z3:0};
+const done = {z1:false, z2:false, z3:false};
+const max  = {z1: STEPS.length, z2: Z2_FIRST.length + Z2_REST.length, z3: SCEN.length};
+
+function shuffle(arr){
+  const a = arr.slice();
+  for (let k = a.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; }
+  return a;
+}
+function setFb(el, good, title, text){
+  el.className = "fb " + (good ? "good" : "bad");
+  el.innerHTML = "";
+  const s = document.createElement("strong"); s.textContent = title + " ";
+  el.appendChild(s); el.appendChild(document.createTextNode(text));
+}
+
+/* ---------- Zadanie 1 ---------- */
+let pos = 0, missHere = false;
+function startZ1(){
+  pos = 0; missHere = false; pts.z1 = 0; done.z1 = false;
+  $("z1fb").className = "fb"; $("z1score").textContent = ""; $("z1again").style.display = "none";
+  $("z1bar").style.width = "0";
+  const plan = $("plan"); plan.innerHTML = "";
+  STEPS.forEach(() => { const li = document.createElement("li"); li.className = "slot"; li.textContent = "…"; plan.appendChild(li); });
+  const pool = $("pool"); pool.innerHTML = "";
+  let items = STEPS.map((s, n) => ({s, n})).concat(TRAPS.map(s => ({s, n:-1})));
+  do { items = shuffle(items); } while (items[0].n === 0);
+  items.forEach(({s, n}) => {
+    const b = document.createElement("button"); b.className = "opt"; b.textContent = s.t;
+    b.onclick = () => pickStep(b, s, n);
+    pool.appendChild(b);
+  });
+  updateStatus();
+}
+function pickStep(b, s, n){
+  if (n === pos) {                                  // dobry krok
+    if (!missHere) pts.z1++;
+    const li = $("plan").children[pos];
+    li.className = ""; li.textContent = s.t;
+    b.remove();
+    setFb($("z1fb"), true, missHere ? "✅ Tak, to ten krok." : "✅ Dobrze! (+1 pkt)", s.why);
+    pos++; missHere = false;
+    $("z1bar").style.width = (pos / STEPS.length * 100) + "%";
+    if (pos === STEPS.length) finishZ1();
+    return;
+  }
+  missHere = true;
+  b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake");
+  if (n === -1) {                                   // pułapka
+    b.classList.add("wrong"); b.disabled = true;
+    setFb($("z1fb"), false, "❌ To zły krok.", s.why);
+  } else {                                          // dobry krok, ale za wcześnie
+    setFb($("z1fb"), false, "🤔 Jeszcze nie teraz.", "Ten krok też jest ważny, ale przyjdzie później. Podpowiedź: " + STEPS[pos].hint);
+  }
+}
+function finishZ1(){
+  $("pool").querySelectorAll("button").forEach(x => { x.disabled = true; x.classList.add("wrong"); });
+  const fb = $("z1fb");
+  const p = document.createElement("p"); p.style.margin = "8px 0 0";
+  p.textContent = "🎉 Plan gotowy! Dwa kroki, które zostały, to pułapki: płacenie „odzyskiwaczom” i czekanie.";
+  fb.appendChild(p);
+  $("z1score").textContent = `Wynik: ${pts.z1} / ${max.z1} (punkt za każdy krok wybrany za pierwszym razem)`;
+  $("z1again").style.display = "inline-block";
+  done.z1 = true; updateStatus();
+}
+$("z1again").onclick = startZ1;
+
+/* ---------- Pytania z wyborem (zadania 2 i 3) ---------- */
+const answered = {z2:0, z3:0};
+function makeScen(container, list, key, onEach){
+  list.forEach(s => {
+    const card = document.createElement("div"); card.className = "scen";
+    const p = document.createElement("p"); p.textContent = s.q; card.appendChild(p);
+    const opts = document.createElement("div"); opts.className = "opts";
+    const fb = document.createElement("div"); fb.className = "fb";
+    s.a.forEach((txt, k) => {
+      const b = document.createElement("button"); b.className = "opt"; b.textContent = txt;
+      b.onclick = () => {
+        opts.querySelectorAll("button").forEach(x => x.disabled = true);
+        opts.children[s.ok].classList.add("right");
+        const good = k === s.ok;
+        if (!good) b.classList.add("wrong"); else pts[key]++;
+        setFb(fb, good, good ? "✅ Dobrze!" : "❌ Nie tym razem.", s.why);
+        answered[key]++;
+        if (onEach) onEach();
+        if (answered[key] === max[key]) {
+          $(key + "score").textContent = `Wynik: ${pts[key]} / ${max[key]}`;
+          done[key] = true; updateStatus();
+        }
+      };
+      opts.appendChild(b);
+    });
+    card.appendChild(opts); card.appendChild(fb);
+    container.appendChild(card);
+  });
+}
+
+/* ---------- Zadanie 2 ---------- */
+makeScen($("z2first"), Z2_FIRST, "z2", () => { $("demo").style.display = "block"; });
+$("bDemo").onclick = () => {
+  $("bDemo").disabled = true;
+  $("mailAcc").classList.add("lost");
+  $("mailAcc").querySelector("small").textContent = "przejęta!";
+  const accs = Array.from(document.querySelectorAll("[data-acc]"));
+  accs.forEach((el, n) => setTimeout(() => {
+    el.classList.add("lost");
+    el.querySelector("small").textContent = "link do resetu → przejęte";
+    if (n === accs.length - 1) {
+      setFb($("demoFb"), false, `😱 Jedno hasło – ${accs.length + 1} przejętych kont.`,
+        "Włamywacz na każdym koncie kliknął „Nie pamiętam hasła”. Linki do zmiany hasła przyszły do poczty, którą już miał. Dlatego poczta potrzebuje najlepszej ochrony.");
+      makeScen($("z2rest"), Z2_REST, "z2");
+    }
+  }, 350 * (n + 1)));
+};
+
+/* ---------- Zadanie 3 ---------- */
+makeScen($("scenarios"), SCEN, "z3");
+
+/* ---------- Karta wyniku ---------- */
+const TASKS = [["z1", "Zadanie 1: Konto przejęte – co po kolei?"], ["z2", "Zadanie 2: Które konto jest najważniejsze?"], ["z3", "Zadanie 3: Co zrobisz?"]];
+function updateStatus(){
+  const ul = $("status"); ul.innerHTML = "";
+  TASKS.forEach(([k, label]) => {
+    const li = document.createElement("li");
+    li.className = done[k] ? "on" : "";
+    li.textContent = label + " – " + (done[k] ? `${pts[k]} / ${max[k]} pkt` : "jeszcze nieukończone");
+    ul.appendChild(li);
+  });
+  $("card").style.display = "none";
+}
+function showCard(){
+  const name = $("name").value.trim();
+  const msg = $("cardMsg");
+  if (!name) { $("name").focus(); $("name").style.borderColor = "var(--red)"; return; }
+  const missing = TASKS.filter(([k]) => !done[k]).map(([, l]) => l.split(":")[0]);
+  if (missing.length) {
+    msg.className = "fb bad";
+    msg.textContent = "Najpierw dokończ: " + missing.join(", ") + ".";
+    return;
+  }
+  msg.className = "fb"; msg.textContent = "";
+  const total = pts.z1 + pts.z2 + pts.z3;
+  const totalMax = max.z1 + max.z2 + max.z3;
+  const d = new Date().toLocaleString("pl-PL", {dateStyle:"short", timeStyle:"short"});
+  const c = $("card"); c.innerHTML = "";
+  const add = (txt, css) => { const el = document.createElement("div"); el.textContent = txt; if (css) el.style.cssText = css; else el.className = "note"; c.appendChild(el); };
+  add("KARTA WYNIKU · Lekcja 2: Hasła i odzyskiwanie konta");
+  add(name, "font-size:22px;font-weight:800;margin:6px 0");   // tekst ucznia tylko jako textContent
+  add(`${total} / ${totalMax}`, "font-size:40px;font-weight:800;color:var(--teal)");
+  add(`Zadanie 1: ${pts.z1}/${max.z1} · Zadanie 2: ${pts.z2}/${max.z2} · Zadanie 3: ${pts.z3}/${max.z3}`);
+  add(d);
+  add("Pokaż tę kartę nauczycielowi.");
+  c.style.display = "block";
+}
+$("bCard").onclick = showCard;
+$("name").addEventListener("keydown", e => { if (e.key === "Enter") showCard(); $("name").style.borderColor = ""; });
+
+/* ---------- Ściąga ---------- */
+$("bPrint").onclick = () => window.print();
+
+startZ1();
+</script>
+</body>
+</html>
