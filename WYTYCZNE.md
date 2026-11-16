@@ -79,7 +79,7 @@ Gotowe klasy:
 
 | Klasa | Wygląd / zastosowanie |
 |---|---|
-| `.grid` + `.tile` (`.ico`, `h3`, `p`) | siatka kafelków z emoji |
+| `.grid` + `.tile` (`.ico`, `h3`, `p`) | siatka kafelków z emoji; sama dobiera układ: 2 i 4 elementy w dwóch kolumnach, niepełny ostatni rząd wyśrodkowany. Klasę `.grid` dodawaj do każdej grupy paneli (np. `class="grid help"`) zamiast pisać własną siatkę |
 | `ul.rules` | lista zasad z ✔ |
 | `.tip` | żółta ramka „zapamiętaj” |
 | `.note` | mały szary tekst, przypisy |
