@@ -13,8 +13,7 @@
 
   /* Spis treści */
   .toc{background:#fff;border-radius:16px;padding:22px 26px;box-shadow:0 2px 10px rgba(29,43,79,.06);margin-bottom:28px}
-  .toc h2{margin:0 0 4px;font-size:22px;color:var(--navy)}
-  .toc .count{margin:0 0 12px;color:var(--muted);font-size:16px}
+  .toc h2{margin:0 0 12px;font-size:22px;color:var(--navy)}
   .toc ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
   .toc a{display:flex;gap:10px;align-items:center;background:var(--bg);border-radius:10px;padding:10px 14px;
     text-decoration:none;color:var(--navy);font-weight:600;font-size:16px}
@@ -66,7 +65,6 @@
   <!-- ===== SPIS TREŚCI ===== -->
   <nav class="toc" aria-label="Spis treści">
     <h2>Spis treści</h2>
-    <p class="count" id="count">6 modułów · 14 lekcji + 1 dodatkowa</p>
     <ol>
       <li><a href="#modul-1"><span class="m">1</span> Moje konta</a></li>
       <li><a href="#modul-2"><span class="m">2</span> Rozpoznaj oszustwo</a></li>
@@ -82,7 +80,6 @@
     1. Zamień   <div class="lesson soon">   na   <a class="lesson" href="lekcja-N.html">
     2. Zamień zamykające </div> tego kafelka na </a>
     3. Zamień   <span class="go">Już wkrótce</span>   na   <span class="go">Start →</span>
-    Licznik gotowych lekcji w spisie treści zaktualizuje się sam.
   -->
 
   <!-- ===== MODUŁ 1 ===== -->
@@ -265,12 +262,5 @@
 </main>
 <footer>Informatyka · Bezpieczeństwo w sieci</footer>
 
-<script>
-/* Licznik gotowych lekcji w spisie treści – liczy kafelki-linki. */
-const all = document.querySelectorAll("main .lesson").length;
-const ready = document.querySelectorAll("main a.lesson").length;
-document.getElementById("count").textContent =
-  `6 modułów · gotowe lekcje: ${ready} z ${all}`;
-</script>
 </body>
 </html>

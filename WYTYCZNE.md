@@ -213,7 +213,6 @@ Uczniowie często otwierają lekcje na telefonie.
    - `<div class="lesson soon">` → `<a class="lesson" href="lekcja-N.html">`,
    - zamykające `</div>` tego kafelka → `</a>`,
    - `Już wkrótce` → `Start →`.
-   Licznik gotowych lekcji zaktualizuje się sam.
 3. Jeśli lekcja zmienia tytuł lub opis, popraw go też na kafelku w `index.html`.
 
 ---
