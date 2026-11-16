@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lekcja 1: Dlaczego silne hasło jest tak ważne?</title>
+<style>
+  :root{
+    --navy:#1d2b4f; --ink:#24324f; --muted:#5b6785; --bg:#f4f6fb; --card:#ffffff;
+    --teal:#13897a; --teal-l:#e2f4f1; --red:#c8374b; --red-l:#fbe6e9;
+    --yellow:#ffc94a; --line:#dde2ee; --radius:16px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.6;font-size:18px}
+  header{background:var(--navy);color:#fff;padding:48px 20px 64px;text-align:center}
+  header .tag{display:inline-block;background:var(--yellow);color:var(--navy);font-weight:700;
+       padding:4px 14px;border-radius:999px;font-size:14px;letter-spacing:.5px}
+  header h1{font-size:clamp(28px,5vw,44px);margin:16px auto 8px;max-width:800px;line-height:1.2}
+  header p{opacity:.85;margin:0 auto;max-width:620px}
+  main{max-width:880px;margin:-36px auto 0;padding:0 16px 60px}
+  section{background:var(--card);border-radius:var(--radius);padding:28px 28px;margin-bottom:24px;
+       box-shadow:0 2px 10px rgba(29,43,79,.06)}
+  h2{margin:0 0 12px;font-size:26px;color:var(--navy);display:flex;align-items:center;gap:10px}
+  h2 .num{background:var(--navy);color:#fff;width:36px;height:36px;border-radius:50%;
+       display:inline-grid;place-items:center;font-size:18px;flex:none}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
+  .tile{background:var(--bg);border-radius:12px;padding:18px}
+  .tile .ico{font-size:32px}
+  .tile h3{margin:6px 0 4px;font-size:19px}
+  .tile p{margin:0;color:var(--muted);font-size:16px}
+  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:17px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;font-size:15px}
+  code{font-family:ui-monospace,Consolas,monospace;background:var(--bg);padding:2px 8px;border-radius:6px}
+  .t-bad{color:var(--red);font-weight:700}.t-ok{color:var(--teal);font-weight:700}
+  .note{font-size:14px;color:var(--muted);margin-top:8px}
+  ul.rules{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}
+  ul.rules li{background:var(--teal-l);border-radius:10px;padding:12px 16px 12px 48px;position:relative}
+  ul.rules li::before{content:"✔";position:absolute;left:18px;top:12px;color:var(--teal);font-weight:900}
+  .tip{background:#fff7df;border-left:5px solid var(--yellow);padding:14px 18px;border-radius:8px;margin-top:16px}
+
+  /* Zadanie 1 */
+  .progress{height:10px;background:var(--line);border-radius:999px;overflow:hidden;margin:8px 0 20px}
+  .progress div{height:100%;background:var(--teal);width:0;transition:width .3s}
+  .q{border:2px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+  .q .pw{font-family:ui-monospace,Consolas,monospace;font-size:clamp(20px,4vw,30px);font-weight:700;
+       word-break:break-all;margin:6px 0 18px;color:var(--navy)}
+  .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:14px 28px;cursor:pointer;
+       transition:transform .1s, opacity .2s}
+  button:active{transform:scale(.97)}
+  button:disabled{opacity:.45;cursor:default}
+  .b-weak{background:var(--red);color:#fff}.b-strong{background:var(--teal);color:#fff}
+  .b-next{background:var(--navy);color:#fff}.b-ghost{background:var(--bg);color:var(--navy)}
+  .fb{margin-top:18px;padding:14px 18px;border-radius:10px;text-align:left;display:none}
+  .fb.good{background:var(--teal-l);display:block}.fb.bad{background:var(--red-l);display:block}
+  .result{text-align:center;display:none}
+  .result .big{font-size:56px;font-weight:800;color:var(--navy);margin:4px 0}
+  .card-result{border:3px dashed var(--navy);border-radius:14px;padding:18px;margin:18px auto 0;max-width:420px;display:none}
+  input[type=text]{font:inherit;width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:12px}
+  input[type=text]:focus{outline:none;border-color:var(--teal)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .row input{flex:1;min-width:200px}
+
+  /* Zadanie 2 */
+  .warn{background:var(--red-l);color:#8a1f2e;padding:12px 16px;border-radius:10px;font-weight:600;margin:12px 0}
+  .meter{height:16px;background:var(--line);border-radius:999px;overflow:hidden;margin:16px 0 6px}
+  .meter div{height:100%;width:0;transition:width .3s, background .3s}
+  .level{font-weight:800;font-size:20px}
+  ul.checks{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:6px;font-size:16px}
+  ul.checks li::before{content:"○ ";color:var(--muted)}
+  ul.checks li.on::before{content:"● ";color:var(--teal)}
+  ul.checks li.off-bad::before{content:"✖ ";color:var(--red)}
+  /* Weryfikacja dwuetapowa */
+  .sim{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-top:16px}
+  .sim-pc{border:2px solid var(--line);border-radius:14px;padding:18px}
+  .sim-field{background:var(--bg);border-radius:10px;padding:10px 14px;margin-top:8px;font-size:16px}
+  .sim-phone{background:var(--navy);color:#fff;border-radius:28px;padding:22px 18px;min-height:240px;
+       border:6px solid #0f1830;display:flex;flex-direction:column}
+  .sms{background:#fff;color:var(--ink);border-radius:14px;padding:12px 14px;margin-top:12px;font-size:15px;animation:pop .3s}
+  .sms .code{font-family:ui-monospace,Consolas,monospace;font-size:28px;font-weight:800;letter-spacing:4px;color:var(--navy)}
+  .locked{margin:auto;text-align:center;font-size:15px;opacity:.9}
+  .locked .ico{font-size:44px}
+  @keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+  .scen{border:2px solid var(--line);border-radius:14px;padding:18px;margin-top:14px}
+  .scen p{margin:0 0 10px;font-weight:600}
+  .opts{display:grid;gap:8px}
+  .opt{background:var(--bg);color:var(--ink);font-weight:600;text-align:left;padding:12px 16px}
+  .opt.right{background:var(--teal-l);outline:2px solid var(--teal)}
+  .opt.wrong{background:var(--red-l);outline:2px solid var(--red)}
+  @media (max-width:640px){.sim{grid-template-columns:1fr}}
+  footer{text-align:center;color:var(--muted);font-size:14px;padding:20px}
+  @media (max-width:560px){section{padding:22px 18px}body{font-size:17px}}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" style="color:#fff;opacity:.8;display:inline-block;margin-bottom:16px;text-decoration:none">← Wszystkie lekcje</a><br>
+  <span class="tag">BEZPIECZEŃSTWO W SIECI · LEKCJA 1</span>
+  <h1>Dlaczego silne hasło jest tak ważne?</h1>
+  <p>Przeczytaj krótkie wprowadzenie (ok. 5 minut), a potem wykonaj trzy zadania.</p>
+</header>
+
+<main>
+
+<section>
+  <h2><span class="num">1</span> Hasło to klucz do twojego życia w sieci</h2>
+  <p>Twoje konta (szkolne, w grach, na Instagramie, TikToku czy Discordzie) chroni najczęściej tylko jedna rzecz: <strong>hasło</strong>. Jeśli ktoś je pozna, może zrobić wszystko to, co ty.</p>
+  <div class="grid">
+    <div class="tile"><div class="ico">💬</div><h3>Podszywanie się</h3><p>Ktoś pisze do twoich znajomych jako ty, prosi o kody BLIK albo wysyła dziwne linki.</p></div>
+    <div class="tile"><div class="ico">🎮</div><h3>Utrata konta</h3><p>Znikają postępy w grze, skiny, zdjęcia i wiadomości. Czasem konta nie da się odzyskać.</p></div>
+    <div class="tile"><div class="ico">🔓</div><h3>Efekt domina</h3><p>Jeśli masz to samo hasło wszędzie, jedno włamanie otwiera wszystkie twoje konta.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">2</span> Jak włamywacze zgadują hasła?</h2>
+  <p>Nikt nie siedzi i nie wpisuje haseł ręcznie. Robią to <strong>programy</strong>, które w sekundę sprawdzają miliony możliwości. Najpierw próbują:</p>
+  <div class="grid">
+    <div class="tile"><div class="ico">📋</div><h3>Listy popularnych haseł</h3><p><code>123456</code>, <code>qwerty</code>, <code>haslo1</code> – sprawdzane są jako pierwsze.</p></div>
+    <div class="tile"><div class="ico">🔎</div><h3>Informacje o tobie</h3><p>Imię, imię psa, rok urodzenia, ulubiony klub – często widać je na twoim profilu.</p></div>
+    <div class="tile"><div class="ico">🔁</div><h3>Znane sztuczki</h3><p>Zamiana <code>a</code> na <code>@</code> czy <code>o</code> na <code>0</code> – programy znają je od dawna.</p></div>
+  </div>
+  <table>
+    <thead><tr><th>Hasło</th><th>Ile czasu potrzebuje program, żeby je złamać?*</th></tr></thead>
+    <tbody>
+      <tr><td><code>kotek</code></td><td class="t-bad">natychmiast</td></tr>
+      <tr><td><code>Ola2012</code></td><td class="t-bad">kilka sekund</td></tr>
+      <tr><td><code>P@ssw0rd</code></td><td class="t-bad">natychmiast (jest na listach)</td></tr>
+      <tr><td><code>zielony-rower-je-pizze</code></td><td class="t-ok">tysiące lat</td></tr>
+    </tbody>
+  </table>
+  <p class="note">* Wartości przybliżone, dla programu sprawdzającego miliardy haseł na sekundę. Liczy się jedna rzecz: <strong>długość</strong> i nieprzewidywalność.</p>
+</section>
+
+<section>
+  <h2><span class="num">3</span> Zasady silnego hasła</h2>
+  <ul class="rules">
+    <li><strong>Długie</strong> – co najmniej 12 znaków. Długość jest ważniejsza niż dziwne znaki.</li>
+    <li><strong>Fraza zamiast słowa</strong> – połącz 3–4 przypadkowe słowa, np. <code>księżyc-tańczy-z-pingwinem</code>.</li>
+    <li><strong>Bez danych o tobie</strong> – żadnych imion, dat urodzenia, nazw klubów ani zwierzaków.</li>
+    <li><strong>Każde konto ma inne hasło</strong> – wtedy jedno włamanie nie otwiera wszystkiego.</li>
+    <li><strong>Hasło jest tylko twoje</strong> – nie podawaj go nawet najlepszemu przyjacielowi.</li>
+  </ul>
+  <div class="tip">💡 Nawet najlepsze hasło może wyciec. Dlatego jest jeszcze jedna warstwa ochrony – poznasz ją po zadaniach o hasłach.</div>
+</section>
+
+<section id="zadanie1">
+  <h2><span class="num">✎</span> Zadanie 1: Silne czy słabe?</h2>
+  <p>Oceń każde hasło. Po odpowiedzi zobaczysz wyjaśnienie.</p>
+  <div class="progress"><div id="bar"></div></div>
+
+  <div id="quiz" class="q">
+    <div id="qcount" class="note"></div>
+    <div id="qpw" class="pw"></div>
+    <div class="btns">
+      <button class="b-weak" id="bWeak">👎 Słabe</button>
+      <button class="b-strong" id="bStrong">👍 Silne</button>
+    </div>
+    <div id="fb" class="fb"></div>
+    <div class="btns" style="margin-top:16px"><button class="b-next" id="bNext" style="display:none">Dalej →</button></div>
+  </div>
+
+  <div id="result" class="result">
+    <p>Twój wynik:</p>
+    <div class="big" id="score"></div>
+    <p id="scoreMsg"></p>
+    <div class="row" style="max-width:520px;margin:12px auto 0">
+      <input type="text" id="name" placeholder="Wpisz swoje imię i klasę, np. Ola 7b" maxlength="40">
+      <button class="b-next" id="bCard">Pokaż kartę wyniku</button>
+    </div>
+    <div class="card-result" id="card"></div>
+    <div class="btns" style="margin-top:16px"><button class="b-ghost" id="bAgain">↺ Spróbuj ponownie</button></div>
+  </div>
+</section>
+
+<section id="zadanie2">
+  <h2><span class="num">✎</span> Zadanie 2: Wymyśl silne hasło</h2>
+  <p>Wymyśl hasło, które spełni wszystkie warunki i dostanie ocenę <strong>„Bardzo silne”</strong>. Najlepiej użyj frazy z kilku słów.</p>
+  <div class="warn">⚠️ Nie wpisuj tu swojego prawdziwego hasła! To tylko ćwiczenie. Nic nie jest nigdzie wysyłane.</div>
+  <input type="text" id="pwInput" placeholder="Wpisz przykładowe hasło…" autocomplete="off" spellcheck="false">
+  <div class="meter"><div id="meter"></div></div>
+  <div class="level" id="level">Zacznij pisać…</div>
+  <ul class="checks" id="checks">
+    <li data-k="len">co najmniej 12 znaków</li>
+    <li data-k="mix">małe i wielkie litery</li>
+    <li data-k="digit">cyfra lub znak specjalny</li>
+    <li data-k="common">nie jest na liście popularnych haseł</li>
+    <li data-k="year">nie zawiera roku (np. 2012)</li>
+    <li data-k="repeat">bez powtórzeń typu „aaa” czy „123”</li>
+  </ul>
+</section>
+
+<section id="2fa">
+  <h2><span class="num">4</span> Weryfikacja dwuetapowa – drugi zamek w drzwiach</h2>
+  <p>Wyobraź sobie drzwi z <strong>dwoma zamkami</strong>. Do pierwszego potrzebujesz klucza (to twoje <strong>hasło</strong>). Do drugiego – kodu, który pojawia się tylko na <strong>twoim telefonie</strong>. Złodziej, który ukradł klucz, i tak stoi pod drzwiami.</p>
+  <div class="grid">
+    <div class="tile"><div class="ico">🧠</div><h3>Coś, co wiesz</h3><p>Hasło. Może wyciec, ktoś może je podejrzeć albo wyłudzić.</p></div>
+    <div class="tile"><div class="ico">📱</div><h3>Coś, co masz</h3><p>Telefon z kodem lub aplikacją. Włamywacz z drugiego końca świata go nie ma.</p></div>
+  </div>
+
+  <h3 style="margin:24px 0 6px;color:var(--navy)">Rodzaje drugiego kroku</h3>
+  <table>
+    <thead><tr><th>Sposób</th><th>Jak działa</th></tr></thead>
+    <tbody>
+      <tr><td>💬 Kod SMS</td><td>Dostajesz SMS z jednorazowym kodem. Najprostszy, ale najmniej bezpieczny.</td></tr>
+      <tr><td>🔢 Aplikacja z kodami</td><td>Aplikacja na telefonie co 30 sekund pokazuje nowy kod. Działa nawet bez zasięgu.</td></tr>
+      <tr><td>🔔 Powiadomienie</td><td>Telefon pyta: „Czy to ty się logujesz?”. Klikasz „Tak” albo „Nie”.</td></tr>
+      <tr><td>🔑 Klucz bezpieczeństwa</td><td>Mały fizyczny klucz USB. Najbezpieczniejszy, używany np. w firmach.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin:28px 0 6px;color:var(--navy)">Sprawdź sam: symulacja logowania</h3>
+  <p style="margin-top:0">Hasło do konta wyciekło. Zaloguj się najpierw jako właściciel, a potem jako włamywacz, który zna hasło.</p>
+  <div class="btns" style="justify-content:flex-start">
+    <button class="b-strong" id="simOwner">🙂 Jestem właścicielem</button>
+    <button class="b-weak" id="simHacker">🕵️ Jestem włamywaczem</button>
+  </div>
+  <div class="sim" id="sim" style="display:none">
+    <div class="sim-pc">
+      <div class="note">💻 Ekran logowania</div>
+      <div class="sim-field">👤 ola.7b</div>
+      <div class="sim-field">🔒 ••••••••••••• <span class="t-ok">✔ hasło poprawne</span></div>
+      <label for="simCode" style="font-weight:700;display:block;margin-top:12px">Krok 2: wpisz kod z telefonu</label>
+      <div class="row" style="margin-top:6px">
+        <input type="text" id="simCode" inputmode="numeric" maxlength="6" placeholder="6 cyfr">
+        <button class="b-next" id="simGo">Zaloguj</button>
+      </div>
+      <button class="b-ghost" id="simGuess" style="display:none;margin-top:10px">🎲 Spróbuj zgadnąć kod</button>
+      <div id="simMsg" class="fb"></div>
+    </div>
+    <div class="sim-phone" id="phone">
+      <div class="note" style="color:#c9d2ea">📱 Telefon Oli</div>
+      <div id="phoneBody"></div>
+    </div>
+  </div>
+
+  <h3 style="margin:28px 0 6px;color:var(--navy)">Trzy żelazne zasady</h3>
+  <ul class="rules">
+    <li><strong>Kodu nie podajesz nikomu.</strong> Żaden kolega, „pracownik banku” ani „administrator gry” nie potrzebuje twojego kodu. Kto o niego prosi – oszukuje.</li>
+    <li><strong>Kod, o który nie prosiłeś = alarm.</strong> Ktoś zna twoje hasło. Nie klikaj „Tak”, nie wpisuj kodu, od razu zmień hasło.</li>
+    <li><strong>Zapisz kody zapasowe.</strong> Przy włączaniu dostaniesz kody awaryjne. Schowaj je w bezpiecznym miejscu (najlepiej z rodzicem) – przydadzą się, gdy zgubisz telefon.</li>
+  </ul>
+  <div class="tip">🛠️ <strong>Jak włączyć?</strong> W większości aplikacji: <em>Ustawienia → Bezpieczeństwo (lub Konto) → Weryfikacja dwuetapowa</em>. Poproś rodzica o pomoc i zacznij od najważniejszych kont: poczty e-mail i komunikatorów.</div>
+</section>
+
+<section id="zadanie-2fa">
+  <h2><span class="num">✎</span> Zadanie 3: Co zrobisz?</h2>
+  <p>Przeczytaj sytuacje i wybierz najlepszą reakcję.</p>
+  <div id="scenarios"></div>
+  <p class="note" id="scenScore"></p>
+</section>
+
+</main>
+<footer><a href="index.html">← Wróć do listy lekcji</a><br>Informatyka · klasy 7–8 · Bezpieczeństwo w sieci</footer>
+
+<script>
+/* ---------- Zadanie 1 ---------- */
+const QUESTIONS = [
+  {pw:"123456", strong:false, why:"To najpopularniejsze hasło na świecie. Programy sprawdzają je jako pierwsze."},
+  {pw:"zielony-rower-je-pizze-o-7", strong:true, why:"Długa fraza z przypadkowych słów – łatwa do zapamiętania, bardzo trudna do zgadnięcia."},
+  {pw:"Ola2012", strong:false, why:"Imię i rok urodzenia to pierwsze, co sprawdzi włamywacz. Do tego jest za krótkie."},
+  {pw:"P@ssw0rd", strong:false, why:"Zamiana liter na @ i 0 to znana sztuczka. To hasło jest na listach popularnych haseł."},
+  {pw:"Tramwaj!Kakao#Chmura9", strong:true, why:"Długie, przypadkowe słowa, różne znaki i brak danych osobowych. Świetne hasło!"},
+  {pw:"MojPiesBurek", strong:false, why:"Imię psa łatwo znaleźć na twoim profilu w mediach społecznościowych."},
+  {pw:"kotek", strong:false, why:"Tylko 5 znaków i zwykłe słowo ze słownika – program złamie je natychmiast."},
+  {pw:"księżyc_tańczy_z_pingwinem", strong:true, why:"Zabawna, długa fraza. Nikt jej nie zgadnie, a ty łatwo ją zapamiętasz."}
+];
+let i = 0, points = 0;
+const $ = id => document.getElementById(id);
+
+function showQ(){
+  const q = QUESTIONS[i];
+  $("qcount").textContent = `Hasło ${i+1} z ${QUESTIONS.length}`;
+  $("qpw").textContent = q.pw;
+  $("fb").className = "fb"; $("fb").innerHTML = "";
+  $("bWeak").disabled = $("bStrong").disabled = false;
+  $("bNext").style.display = "none";
+  $("bar").style.width = (i / QUESTIONS.length * 100) + "%";
+}
+function answer(saysStrong){
+  const q = QUESTIONS[i];
+  const ok = saysStrong === q.strong;
+  if (ok) points++;
+  $("bWeak").disabled = $("bStrong").disabled = true;
+  $("fb").className = "fb " + (ok ? "good" : "bad");
+  $("fb").innerHTML = `<strong>${ok ? "✅ Dobrze!" : "❌ Nie tym razem."}</strong> To hasło jest <strong>${q.strong ? "silne" : "słabe"}</strong>. ${q.why}`;
+  $("bNext").textContent = i === QUESTIONS.length - 1 ? "Zobacz wynik →" : "Dalej →";
+  $("bNext").style.display = "inline-block";
+}
+function next(){
+  i++;
+  if (i < QUESTIONS.length) { showQ(); return; }
+  $("bar").style.width = "100%";
+  $("quiz").style.display = "none";
+  $("result").style.display = "block";
+  $("score").textContent = `${points} / ${QUESTIONS.length}`;
+  const pct = points / QUESTIONS.length;
+  $("scoreMsg").textContent = pct === 1 ? "Perfekcyjnie! Jesteś ekspertem od haseł. 🏆"
+    : pct >= .75 ? "Bardzo dobrze! Przejrzyj jeszcze błędne odpowiedzi."
+    : pct >= .5 ? "Nieźle, ale wróć do zasad silnego hasła i spróbuj ponownie."
+    : "Przeczytaj jeszcze raz wprowadzenie i spróbuj ponownie – dasz radę!";
+}
+function showCard(){
+  const name = $("name").value.trim();
+  if (!name) { $("name").focus(); $("name").style.borderColor = "var(--red)"; return; }
+  const d = new Date().toLocaleString("pl-PL", {dateStyle:"short", timeStyle:"short"});
+  const c = $("card");
+  c.innerHTML = `<div class="note">KARTA WYNIKU · Lekcja 1: Silne hasła</div>
+    <div style="font-size:22px;font-weight:800;margin:6px 0"></div>
+    <div style="font-size:40px;font-weight:800;color:var(--teal)">${points} / ${QUESTIONS.length}</div>
+    <div class="note">${d}</div><div class="note">Pokaż tę kartę nauczycielowi.</div>`;
+  c.children[1].textContent = name; // bez wstawiania HTML z pola tekstowego
+  c.style.display = "block";
+}
+$("bWeak").onclick = () => answer(false);
+$("bStrong").onclick = () => answer(true);
+$("bNext").onclick = next;
+$("bCard").onclick = showCard;
+$("name").addEventListener("keydown", e => { if (e.key === "Enter") showCard(); $("name").style.borderColor = ""; });
+$("bAgain").onclick = () => {
+  i = 0; points = 0;
+  $("result").style.display = "none"; $("card").style.display = "none";
+  $("quiz").style.display = "block"; showQ();
+};
+showQ();
+
+/* ---------- Symulacja 2FA ---------- */
+let simCode = "", simMode = "", tries = 0;
+function startSim(mode){
+  simMode = mode; tries = 0;
+  simCode = String(Math.floor(100000 + Math.random() * 900000));
+  $("sim").style.display = "grid";
+  $("simCode").value = ""; $("simCode").disabled = false; $("simGo").disabled = false;
+  $("simMsg").className = "fb"; $("simMsg").innerHTML = "";
+  $("simGuess").style.display = mode === "hacker" ? "inline-block" : "none";
+  $("simGuess").disabled = false;
+  if (mode === "owner") {
+    $("phoneBody").innerHTML = `<div class="sms"><div class="note">Wiadomość · teraz</div>
+      Twój kod logowania: <div class="code">${simCode}</div>
+      <div class="note">Nie podawaj go nikomu.</div></div>`;
+  } else {
+    $("phoneBody").innerHTML = `<div class="locked"><div class="ico">🔒</div>
+      Telefon Oli jest w jej kieszeni.<br>Włamywacz go nie ma – nie widzi kodu.</div>`;
+  }
+}
+function simTry(code){
+  if (simMode === "owner") {
+    if (code === simCode) simEnd(true, "✅ <strong>Zalogowano!</strong> Ty masz telefon, więc drugi krok zajął ci kilka sekund.");
+    else simMsg("bad", "Kod się nie zgadza. Przepisz go dokładnie z telefonu.");
+    return;
+  }
+  tries++;
+  if (code === simCode) { simEnd(true, "😮 Niesamowite szczęście – szansa była jak 1 do miliona!"); return; }
+  if (tries >= 3) {
+    simEnd(false, "⛔ <strong>Konto zablokowane po 3 błędnych próbach.</strong> Włamywacz znał hasło, a i tak nie wszedł. " +
+      "Ola dostała powiadomienie o próbie logowania i zmieniła hasło.");
+    $("phoneBody").innerHTML = `<div class="sms"><div class="note">Alert bezpieczeństwa · teraz</div>
+      <strong>Ktoś próbował zalogować się na twoje konto.</strong> Jeśli to nie ty, zmień hasło.</div>`;
+  } else simMsg("bad", `❌ Zły kod (próba ${tries} z 3). Kod ma 6 cyfr – to milion możliwości.`);
+}
+function simMsg(type, html){ $("simMsg").className = "fb " + type; $("simMsg").innerHTML = html; }
+function simEnd(ok, html){
+  simMsg(ok ? "good" : "bad", html);
+  $("simCode").disabled = $("simGo").disabled = $("simGuess").disabled = true;
+}
+$("simOwner").onclick = () => startSim("owner");
+$("simHacker").onclick = () => startSim("hacker");
+$("simGo").onclick = () => simTry($("simCode").value.trim());
+$("simCode").addEventListener("keydown", e => { if (e.key === "Enter") $("simGo").click(); });
+$("simGuess").onclick = () => {
+  const g = String(Math.floor(100000 + Math.random() * 900000));
+  $("simCode").value = g; simTry(g);
+};
+
+/* ---------- Zadanie 3: Co zrobisz? ---------- */
+const SCEN = [
+  {q:"📩 Dostajesz SMS z kodem logowania, chociaż wcale się nie logowałeś. Co robisz?",
+   a:["Wpisuję kod, żeby sprawdzić, o co chodzi.", "Nie wpisuję kodu nikomu i od razu zmieniam hasło.", "Ignoruję – to pewnie pomyłka."], ok:1,
+   why:"Kod, o który nie prosiłeś, oznacza, że ktoś zna twoje hasło. Weryfikacja go zatrzymała – teraz zmień hasło, żeby nie próbował dalej."},
+  {q:"💬 Kolega pisze na komunikatorze: „Sorki, wysłałem ci przez pomyłkę kod SMS, prześlesz mi go?”",
+   a:["Przesyłam – to przecież kolega.", "Pytam, do czego mu ten kod.", "Nie przesyłam. Dzwonię do kolegi albo pytam go osobiście – jego konto mogło zostać przejęte."], ok:2,
+   why:"To bardzo popularne oszustwo. Konto kolegi zostało przejęte, a włamywacz próbuje teraz wejść na twoje. Kodu nie podaje się nikomu."},
+  {q:"📵 Zgubiłeś telefon, a masz włączoną weryfikację dwuetapową. Jak wejdziesz na konto?",
+   a:["Używam kodów zapasowych, które zapisałem przy włączaniu.", "Nie da się – konto przepadło.", "Wyłączę weryfikację, żeby to się nie powtórzyło."], ok:0,
+   why:"Właśnie do tego służą kody zapasowe. Dlatego przy włączaniu weryfikacji trzeba je zapisać i schować w bezpiecznym miejscu."}
+];
+let scenPts = 0, scenDone = 0;
+SCEN.forEach((s, n) => {
+  const box = document.createElement("div"); box.className = "scen";
+  const p = document.createElement("p"); p.textContent = s.q; box.appendChild(p);
+  const opts = document.createElement("div"); opts.className = "opts";
+  const fb = document.createElement("div"); fb.className = "fb";
+  s.a.forEach((txt, k) => {
+    const b = document.createElement("button"); b.className = "opt"; b.textContent = txt;
+    b.onclick = () => {
+      opts.querySelectorAll("button").forEach(x => x.disabled = true);
+      opts.children[s.ok].classList.add("right");
+      const good = k === s.ok;
+      if (!good) b.classList.add("wrong"); else scenPts++;
+      scenDone++;
+      fb.className = "fb " + (good ? "good" : "bad");
+      fb.innerHTML = `<strong>${good ? "✅ Dobrze!" : "❌ Nie tym razem."}</strong> ${s.why}`;
+      if (scenDone === SCEN.length) $("scenScore").textContent = `Wynik: ${scenPts} / ${SCEN.length}`;
+    };
+    opts.appendChild(b);
+  });
+  box.appendChild(opts); box.appendChild(fb);
+  $("scenarios").appendChild(box);
+});
+
+/* ---------- Zadanie 2 ---------- */
+const COMMON = ["123456","1234567","12345678","123456789","1234567890","qwerty","qwerty123","password","haslo","haslo1","haslo123",
+  "111111","000000","abc123","iloveyou","admin","zaq12wsx","1qaz2wsx","polska","kochamcie","kotek","misiek","slonce","słońce",
+  "monika","marcin","bartek","agnieszka","football","pilka","piłka","minecraft","fortnite","roblox","dragon","superman","pokemon"];
+const LEVELS = [
+  {t:"Bardzo słabe", c:"#c8374b"}, {t:"Słabe", c:"#e0703a"}, {t:"Średnie", c:"#e3b230"},
+  {t:"Silne", c:"#5aa86a"}, {t:"Bardzo silne 🎉", c:"#13897a"}
+];
+function check(pw){
+  const low = pw.toLowerCase();
+  const stripped = low.replace(/[^a-ząćęłńóśźż]/g, "");
+  const r = {
+    len: pw.length >= 12,
+    mix: /[a-ząćęłńóśźż]/.test(pw) && /[A-ZĄĆĘŁŃÓŚŹŻ]/.test(pw),
+    digit: /[0-9]/.test(pw) || /[^A-Za-z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/.test(pw),
+    common: !(COMMON.includes(low) || (stripped.length > 0 && COMMON.includes(stripped) && pw.length < 12)),
+    year: !/(19|20)\d\d/.test(pw),
+    repeat: !/(.)\1\1/.test(pw) && !/(012|123|234|345|456|567|678|789|abc|qwe)/i.test(pw)
+  };
+  let s = 0;
+  if (pw.length >= 8) s++;
+  if (pw.length >= 12) s++;
+  if (pw.length >= 16) s++;
+  if (r.mix && r.digit) s++;
+  if (!r.year) s--;
+  if (!r.repeat) s--;
+  if (!r.common || pw.length < 6) s = 0;
+  s = Math.max(0, Math.min(4, s));
+  // "Bardzo silne" tylko gdy wszystkie warunki spełnione
+  if (s === 4 && !Object.values(r).every(Boolean)) s = 3;
+  return {r, s};
+}
+$("pwInput").addEventListener("input", e => {
+  const pw = e.target.value;
+  const items = document.querySelectorAll("#checks li");
+  if (!pw) {
+    $("meter").style.width = "0"; $("level").textContent = "Zacznij pisać…"; $("level").style.color = "";
+    items.forEach(li => li.className = ""); return;
+  }
+  const {r, s} = check(pw);
+  items.forEach(li => {
+    const ok = r[li.dataset.k];
+    const negative = ["common","year","repeat"].includes(li.dataset.k);
+    li.className = ok ? "on" : (negative ? "off-bad" : "");
+  });
+  $("meter").style.width = ((s + 1) / 5 * 100) + "%";
+  $("meter").style.background = LEVELS[s].c;
+  $("level").textContent = LEVELS[s].t;
+  $("level").style.color = LEVELS[s].c;
+});
+</script>
+</body>
+</html>
