@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lekcja 4: Dlaczego oszuści tak się spieszą?</title>
+<style>
+  :root{
+    --navy:#1d2b4f; --ink:#24324f; --muted:#5b6785; --bg:#f4f6fb; --card:#ffffff;
+    --teal:#13897a; --teal-l:#e2f4f1; --red:#c8374b; --red-l:#fbe6e9;
+    --yellow:#ffc94a; --orange:#e0703a; --line:#dde2ee; --link:#1a5fd0; --radius:16px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.6;font-size:18px}
+  header{background:var(--navy);color:#fff;padding:48px 20px 64px;text-align:center}
+  header .tag{display:inline-block;background:var(--yellow);color:var(--navy);font-weight:700;
+       padding:4px 14px;border-radius:999px;font-size:14px;letter-spacing:.5px}
+  header h1{font-size:clamp(28px,5vw,44px);margin:16px auto 8px;max-width:800px;line-height:1.2}
+  header p{opacity:.85;margin:0 auto;max-width:620px}
+  main{max-width:880px;margin:-36px auto 0;padding:0 16px 60px}
+  section{background:var(--card);border-radius:var(--radius);padding:28px 28px;margin-bottom:24px;
+       box-shadow:0 2px 10px rgba(29,43,79,.06)}
+  h2{margin:0 0 12px;font-size:26px;color:var(--navy);display:flex;align-items:center;gap:10px}
+  h2 .num{background:var(--navy);color:#fff;width:36px;height:36px;border-radius:50%;
+       display:inline-grid;place-items:center;font-size:18px;flex:none}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
+  .tile{background:var(--bg);border-radius:12px;padding:18px}
+  .tile .ico{font-size:32px}
+  .tile h3{margin:6px 0 4px;font-size:19px}
+  .tile p{margin:0;color:var(--muted);font-size:16px}
+  .note{font-size:14px;color:var(--muted);margin-top:8px}
+  ul.rules{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}
+  ul.rules li{background:var(--teal-l);border-radius:10px;padding:12px 16px 12px 48px;position:relative}
+  ul.rules li::before{content:"✔";position:absolute;left:18px;top:12px;color:var(--teal);font-weight:900}
+  .tip{background:#fff7df;border-left:5px solid var(--yellow);padding:14px 18px;border-radius:8px;margin-top:16px}
+  .tip ul{margin:6px 0 0;padding-left:22px}
+
+  /* Scenariusz oszusta */
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px;font-size:15px}
+  .flow .step{background:var(--bg);border-radius:999px;padding:6px 14px;font-weight:600}
+  .flow .arr{color:var(--muted);font-weight:700}
+
+  /* Wspólne elementy zadań (jak w lekcjach 1 i 3) */
+  .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:14px 28px;cursor:pointer;
+       transition:transform .1s, opacity .2s}
+  button:active{transform:scale(.97)}
+  button:disabled{opacity:.45;cursor:default}
+  .b-next{background:var(--navy);color:#fff}.b-ghost{background:var(--bg);color:var(--navy)}
+  .fb{margin-top:14px;padding:14px 18px;border-radius:10px;text-align:left;display:none}
+  .fb.good{background:var(--teal-l);display:block}.fb.bad{background:var(--red-l);display:block}
+  .fb p{margin:8px 0 0}
+  .card-result{border:3px dashed var(--navy);border-radius:14px;padding:18px;margin:18px auto 0;max-width:420px;display:none;text-align:center}
+  input[type=text]{font:inherit;width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:12px}
+  input[type=text]:focus{outline:none;border-color:var(--teal)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .row input{flex:1;min-width:200px}
+  .scen{border:2px solid var(--line);border-radius:14px;padding:18px;margin-top:14px}
+  .scen > p{margin:0 0 10px;font-weight:600}
+  .opts{display:grid;gap:8px}
+  .opts.two{grid-template-columns:1fr 1fr}
+  .opt{background:var(--bg);color:var(--ink);font-weight:600;text-align:left;padding:12px 16px}
+  .opt.right{background:var(--teal-l);outline:2px solid var(--teal)}
+  .opt.also{background:#eef8f6;outline:2px dashed var(--teal)}
+  .opt.wrong{background:var(--red-l);outline:2px solid var(--red)}
+
+  /* Wiadomości (jak w lekcji 3) */
+  .msg{border-radius:18px;overflow:hidden;text-align:left;border:2px solid var(--line);background:#fff;margin-bottom:14px}
+  .msg-app{background:var(--navy);color:#fff;font-size:14px;padding:8px 14px;font-weight:600}
+  .msg-body{background:#eef1f8;padding:14px}
+  .msg-from{font-weight:700;font-size:15px;margin-bottom:6px;color:var(--navy)}
+  .bubble{background:#fff;border-radius:4px 16px 16px 16px;padding:12px 14px;font-size:17px;
+       box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  .levers{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .levers span{background:#fff;border-radius:999px;padding:2px 10px;font-size:14px;font-weight:600}
+
+  /* Zadanie 2: czat */
+  .chat{max-width:560px;margin:0 auto;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+  .chat-top{background:var(--navy);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:15px}
+  .chat-top .av{width:34px;height:34px;border-radius:50%;background:#f7b6c8;display:grid;place-items:center;font-size:18px}
+  .chat-top b{display:block;font-size:16px}
+  .chat-log{background:#eef1f8;padding:14px;min-height:220px;display:flex;flex-direction:column;gap:6px}
+  .cb{max-width:82%;padding:9px 13px;border-radius:16px;font-size:16px;animation:pop .25s;word-wrap:break-word}
+  .cb.them{background:#fff;align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  .cb.me{background:var(--link);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+  .cb.sys{align-self:center;background:#fff7df;border:1px solid #f0d58a;font-size:15px;text-align:center;max-width:95%}
+  .typing{align-self:flex-start;color:var(--muted);font-size:14px;font-style:italic}
+  @keyframes pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+  .chat-opts{max-width:560px;margin:14px auto 0}
+  .chat-opts .opts{margin-top:8px}
+  .chat-end{max-width:560px;margin:14px auto 0;display:none}
+
+  /* Zadanie 3: hasło rodzinne */
+  .fam{font-size:clamp(19px,3.6vw,24px);font-weight:800;color:var(--navy);margin:0 0 12px;text-align:center}
+
+  /* Karta wyniku */
+  ul.status{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:6px;font-size:16px}
+  ul.status li::before{content:"○ ";color:var(--muted)}
+  ul.status li.on::before{content:"● ";color:var(--teal)}
+
+  /* Misja domowa i ściąga */
+  .mission{background:var(--teal-l);border-radius:12px;padding:16px 18px;margin-top:12px}
+  .sciaga{border:3px solid var(--navy);border-radius:14px;padding:22px;margin-top:18px}
+  .sciaga h3{margin:0 0 4px;color:var(--navy);font-size:24px;line-height:1.3}
+  .sciaga ol{margin:12px 0 0;padding-left:26px;font-size:20px;display:grid;gap:12px}
+  .sciaga .foot{margin-top:16px;font-size:17px;border-top:2px solid var(--line);padding-top:12px}
+
+  footer{text-align:center;color:var(--muted);font-size:14px;padding:20px}
+  @media (max-width:560px){section{padding:22px 18px}body{font-size:17px}.opts.two{grid-template-columns:1fr}
+       .cb{max-width:92%}}
+
+  /* Drukowanie: tylko ściąga dla domowników */
+  @media print{
+    body{background:#fff}
+    body *{visibility:hidden}
+    #sciaga, #sciaga *{visibility:visible}
+    #sciaga{position:absolute;left:0;top:0;width:100%;border-width:2px}
+    #sciaga .noprint{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" style="color:#fff;opacity:.8;display:inline-block;margin-bottom:16px;text-decoration:none">← Wszystkie lekcje</a><br>
+  <span class="tag">BEZPIECZEŃSTWO W SIECI · LEKCJA 4</span>
+  <h1>Dlaczego oszuści tak się spieszą?</h1>
+  <p>Przeczytaj krótkie wprowadzenie (ok. 6 minut), a potem wykonaj trzy zadania.</p>
+</header>
+
+<main>
+
+<section>
+  <h2><span class="num">1</span> Socjotechnika, czyli „hakowanie” ludzi</h2>
+  <p>Najsprytniejsi oszuści wcale nie włamują się do komputerów. Włamują się… do ludzi. Nazywa się to <strong>socjotechniką</strong>.</p>
+  <p>Wyobraź sobie złodzieja przed drzwiami. Może godzinami męczyć się z zamkiem. Ale może też zapukać, powiedzieć „Dzień dobry, jestem z gazowni” i poczekać, aż <strong>sam mu otworzysz</strong>. Oszust w sieci robi to samo. Zamiast łamać hasło, gra na twoich <strong>emocjach</strong>. Gdy czujesz silne emocje, trudniej spokojnie myśleć. I o to mu chodzi.</p>
+  <div class="grid">
+    <div class="tile"><div class="ico">😱</div><h3>Strach</h3><p>„Twoje konto zostanie zablokowane!”, „Masz kłopoty!”.</p></div>
+    <div class="tile"><div class="ico">⏰</div><h3>Pośpiech</h3><p>„Tylko 10 minut!”, „Szybko, kolejka czeka!”. Nie masz czasu nikogo zapytać.</p></div>
+    <div class="tile"><div class="ico">🤝</div><h3>Chęć pomocy</h3><p>„Pomóż mi, jestem w kłopotach”. Dobre serce to nic złego, ale oszust je wykorzystuje.</p></div>
+    <div class="tile"><div class="ico">👮</div><h3>Zaufanie do „ważnej osoby”</h3><p>Udaje policjanta, pracownika banku albo administratora gry. Takich osób słuchamy odruchowo.</p></div>
+  </div>
+  <div class="tip">💡 <strong>Dobra wiadomość:</strong> emocję da się zauważyć. Jeśli po jakiejś wiadomości nagle czujesz strach albo pośpiech, to nie znak, żeby działać szybko. To znak, żeby się <strong>zatrzymać</strong>.</div>
+</section>
+
+<section>
+  <h2><span class="num">2</span> Oszustwa „na…”, czyli gotowe scenariusze</h2>
+  <p>Oszuści nie wymyślają wszystkiego od nowa. Mają gotowe scenariusze, jak aktorzy w teatrze. Nazywamy je od tego, kogo udają:</p>
+  <div class="grid">
+    <div class="tile"><div class="ico">👵</div><h3>Na wnuczka</h3><p>Dzwoni „wnuczek” albo „ktoś z rodziny”: wypadek, kłopoty, pilnie potrzebne pieniądze. Najczęściej do dziadków.</p></div>
+    <div class="tile"><div class="ico">👮</div><h3>Na policjanta</h3><p>„Policjant” mówi, że łapie oszustów i potrzebuje pomocy. Trzeba tylko przekazać mu pieniądze.</p></div>
+    <div class="tile"><div class="ico">💸</div><h3>Na BLIK od znajomego</h3><p>Oszust przejmuje konto znajomego (pamiętasz lekcję 3?) i pisze do wszystkich: „wyślij BLIK, oddam jutro”.</p></div>
+    <div class="tile"><div class="ico">🎧</div><h3>Fałszywy konsultant</h3><p>„Pracownik banku” albo „administrator gry” ostrzega przed zagrożeniem i prosi o kod, hasło albo instalację aplikacji.</p></div>
+  </div>
+  <p style="margin:18px 0 0">Każdy scenariusz ma podobne kroki:</p>
+  <div class="flow" aria-label="Kroki oszustwa">
+    <span class="step">🎭 Przebranie</span><span class="arr">→</span>
+    <span class="step">😱 Emocja</span><span class="arr">→</span>
+    <span class="step">⏰ Pośpiech</span><span class="arr">→</span>
+    <span class="step">🤫 „Nie mów nikomu”</span><span class="arr">→</span>
+    <span class="step">💸 Prośba o pieniądze lub kod</span>
+  </div>
+  <p class="note">📱 Oszuści potrafią podrobić numer albo nazwę, która wyświetla się na ekranie, np. „Bank” czy „Policja”. To, co widzisz na ekranie, nie dowodzi, kto naprawdę dzwoni.</p>
+  <p class="note">👔 U dorosłych te same sztuczki wyglądają np. tak: telefon „z banku” albo e-mail od „prezesa firmy”, który każe pilnie zrobić przelew.</p>
+</section>
+
+<section>
+  <h2><span class="num">3</span> Zasada: STOP – sprawdź innym kanałem</h2>
+  <p><strong>Kanał</strong> to droga, którą ktoś się z tobą kontaktuje: czat, SMS, telefon, rozmowa twarzą w twarz. Oszust kontroluje tylko <strong>jeden</strong> kanał – ten, którym do ciebie napisał. Dlatego sprawdzasz <strong>innym</strong>. To tak, jakbyś przed otwarciem drzwi wyjrzał przez wizjer.</p>
+  <ul class="rules">
+    <li><strong>STOP.</strong> Zatrzymaj się. Pośpiech i silne emocje to sygnał, że coś jest nie tak.</li>
+    <li><strong>Nic nie wysyłaj.</strong> Żadnych kodów, haseł, pieniędzy ani zdjęć dokumentów.</li>
+    <li><strong>Sprawdź innym kanałem.</strong> Zadzwoń do tej osoby na numer, który już masz w kontaktach, albo zapytaj ją osobiście. Dzwoni „bank”? Rozłącz się i zadzwoń sam na numer z karty albo ze strony banku.</li>
+    <li><strong>Powiedz dorosłemu.</strong> Rodzicowi albo nauczycielowi. To żaden wstyd – oszuści nabierają też dorosłych.</li>
+  </ul>
+  <div class="tip">🧱 <strong>Zapamiętaj trzy „nigdy”:</strong>
+    <ul>
+      <li>Policja <strong>nigdy</strong> nie prosi o przekazanie jej pieniędzy.</li>
+      <li>Bank <strong>nigdy</strong> nie prosi o kod BLIK, hasło ani przelew na „bezpieczne konto”.</li>
+      <li>Administrator gry <strong>nigdy</strong> nie prosi o hasło ani kod z SMS-a.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">4</span> Hasło rodzinne – tajny kod twojej rodziny</h2>
+  <p>Wyobraź sobie, że ktoś pisze z konta twojej mamy albo dzwoni z nieznanego numeru i mówi, że jest twoim bratem. Prosi o pieniądze. Jak sprawdzić, czy to naprawdę on? Pomoże <strong>hasło rodzinne</strong>: słowo albo zdanie, które zna tylko wasza rodzina.</p>
+  <div class="grid">
+    <div class="tile"><div class="ico">1️⃣</div><h3>Ustalcie</h3><p>Razem, w domu, twarzą w twarz. Np. „pierogi na księżycu”.</p></div>
+    <div class="tile"><div class="ico">2️⃣</div><h3>Zapamiętajcie</h3><p>Nie zapisujcie go w czatach, notatkach w telefonie ani na profilu. Wtedy oszust nie znajdzie go nawet na przejętym koncie.</p></div>
+    <div class="tile"><div class="ico">3️⃣</div><h3>Używajcie</h3><p>Ktoś „z rodziny” prosi o pieniądze? Zapytaj: „Jakie jest nasze hasło?”. Oszust go nie zna.</p></div>
+  </div>
+  <div class="tip">🤖 Za kilka lekcji zobaczysz, że programy AI potrafią podrobić czyjś głos. Hasło rodzinne zadziała nawet wtedy. Dobre hasło rodzinne jest jak dobre hasło z lekcji 1: nie da się go zgadnąć z twojego profilu.</div>
+</section>
+
+<section id="zadanie1">
+  <h2><span class="num">✎</span> Zadanie 1: Na jakiej emocji gra oszust?</h2>
+  <p>Przeczytaj każdą wiadomość i wybierz emocję, na której oszust gra <strong>najmocniej</strong>. Czasem trików jest kilka – wtedy dobra jest też inna emocja z wiadomości.</p>
+  <div id="emotions"></div>
+  <p class="note" id="z1score"></p>
+</section>
+
+<section id="zadanie2">
+  <h2><span class="num">✎</span> Zadanie 2: Rozmowa z „Mają”</h2>
+  <p>Maja to twoja koleżanka z klasy. Właśnie napisała do ciebie na Instagramie. Wybieraj odpowiedzi i zobacz, jak potoczy się rozmowa. Punkt dostajesz za dobry wybór za pierwszym razem.</p>
+  <div class="chat">
+    <div class="chat-top"><div class="av">🌸</div><div><b>Maja 🌸</b>aktywna teraz</div></div>
+    <div class="chat-log" id="chatLog" aria-live="polite"></div>
+  </div>
+  <div class="chat-opts" id="chatOpts"></div>
+  <div class="chat-end" id="chatEnd">
+    <div class="fb good" id="chatSum"></div>
+    <div class="btns" style="margin-top:14px"><button class="b-ghost" id="chatAgain">↺ Zagraj jeszcze raz</button></div>
+  </div>
+</section>
+
+<section id="zadanie3">
+  <h2><span class="num">✎</span> Zadanie 3: Dobre hasło rodzinne?</h2>
+  <p>Rodzina Oli wybiera hasło rodzinne. Oceń każdą propozycję.</p>
+  <div id="famList"></div>
+  <p class="note" id="z3score"></p>
+</section>
+
+<section id="karta">
+  <h2><span class="num">★</span> Twoja karta wyniku</h2>
+  <p>Gdy skończysz wszystkie trzy zadania, wpisz imię i klasę, a potem pokaż kartę nauczycielowi.</p>
+  <ul class="status" id="status"></ul>
+  <div class="row" style="max-width:560px">
+    <input type="text" id="name" placeholder="Wpisz swoje imię i klasę, np. Ola 7b" maxlength="40">
+    <button class="b-next" id="bCard">Pokaż kartę wyniku</button>
+  </div>
+  <div id="cardMsg" class="fb"></div>
+  <div class="card-result" id="card"></div>
+</section>
+
+<section id="misja">
+  <h2><span class="num">🕵️</span> Misja domowa cyberagenta</h2>
+  <div class="mission">
+    <strong>Twoja misja (10–15 minut):</strong> ustalcie w domu <strong>hasło rodzinne</strong> do sprawdzania podejrzanych próśb o pieniądze. Najważniejsze są tu babcia i dziadek – to do nich najczęściej dzwonią oszuści „na wnuczka”. Pokaż im ściągę poniżej.
+  </div>
+  <p class="note">🤫 Na następnej lekcji opowiesz, jak poszło. Ale samego hasła nie zdradzaj nikomu – nawet nauczycielowi! Nie zapisuj go też w telefonie ani na kartce przy telefonie.</p>
+
+  <div class="sciaga" id="sciaga">
+    <h3>Ściąga dla domowników: oszustwa „na wnuczka”, „na policjanta”, „na bank”</h3>
+    <ol>
+      <li><strong>Pośpiech i strach to znak oszustwa.</strong> Policja, bank ani prokurator nigdy nie proszą o przekazanie pieniędzy, przelew na „bezpieczne konto”, kod BLIK ani instalację aplikacji.</li>
+      <li><strong>Rozłącz się i oddzwoń sam</strong> – na numer, który znasz (z karty bankowej, ze strony banku, z kontaktów). Numer i nazwa na ekranie mogą być podrobione.</li>
+      <li><strong>Bliska osoba prosi o pieniądze?</strong> Zapytaj o nasze hasło rodzinne albo zadzwoń do niej na jej stały numer. Oszust hasła nie zna.</li>
+    </ol>
+    <div class="foot">📩 Podejrzany SMS? Przekaż go na bezpłatny numer <strong>8080</strong> (CERT Polska) i usuń.</div>
+    <div class="btns noprint" style="margin-top:16px;justify-content:flex-start"><button class="b-next" id="bPrint">🖨️ Wydrukuj ściągę</button></div>
+  </div>
+</section>
+
+</main>
+<footer><a href="index.html">← Wróć do listy lekcji</a><br>Informatyka · Bezpieczeństwo w sieci</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ---------- Dane: Zadanie 1 ----------
+   main – emocja, na której oszust gra najmocniej; also – inne emocje obecne w wiadomości. */
+const EMO = {
+  fear:{i:"😱", t:"Strach"},
+  rush:{i:"⏰", t:"Pośpiech"},
+  help:{i:"🤝", t:"Chęć pomocy"},
+  auth:{i:"👮", t:"Zaufanie do „ważnej osoby”"}
+};
+const Z1 = [
+  { app:"📞 Telefon do babci · numer nieznany", from:"„Wnuczek”",
+    text:"Babciu, to ja! Miałem wypadek, potrzebuję pieniędzy na adwokata, bo pójdę do więzienia. Tylko nie mów nic mamie, dobrze?",
+    main:"help", also:["fear","rush"],
+    why:"Oszust udaje kogoś bliskiego w kłopotach. Babcia chce pomóc wnukowi – i to on wykorzystuje. Do tego straszy więzieniem i prosi o tajemnicę, żeby babcia nikogo nie zapytała." },
+  { app:"📱 SMS", from:"GameGuard",
+    text:"Twoje konto w grze zostanie ZABLOKOWANE NA ZAWSZE za oszukiwanie. Jeśli to pomyłka, odwołaj się przez link w ciągu 10 minut.",
+    main:"fear", also:["rush"],
+    why:"Groźba utraty konta, wielkie litery – to ma cię przestraszyć. Krótki czas na „odwołanie” dokłada pośpiech. Prawdziwe gry informują o blokadzie w samej grze, a nie przez SMS z linkiem." },
+  { app:"💬 Discord · wiadomość prywatna", from:"Discord Staff ✔️",
+    text:"Dzień dobry, jestem z zespołu Discorda. Weryfikujemy konta użytkowników. Podaj kod, który za chwilę dostaniesz SMS-em.",
+    main:"auth", also:[],
+    why:"Oszust udaje kogoś ważnego – pracownika firmy. Takich osób słuchamy odruchowo. Ale prawdziwa obsługa nie pisze w prywatnych wiadomościach i nigdy nie prosi o kod. Kod z SMS-a otworzy oszustowi twoje konto (pamiętasz lekcję 1?)." },
+  { app:"💬 Messenger", from:"Ciocia Ewa",
+    text:"Hej kochanie, możesz mi pilnie pomóc? Jestem w sklepie, karta mi nie działa. Wyślij mi kod BLIK na 200 zł, wieczorem oddam 🙏",
+    main:"help", also:["rush"],
+    why:"Konto cioci zostało przejęte, a oszust prosi o pomoc w jej imieniu. Lubisz ciocię, więc chcesz pomóc. Słowo „pilnie” dokłada pośpiech. Zadzwoń do cioci na jej numer – na pewno nic nie wie o tej wiadomości." },
+  { app:"📸 Instagram · reklama", from:"sneakers-outlet-24",
+    text:"🔥 Ostatnie 3 pary! Buty za 59 zł zamiast 499 zł. Promocja kończy się za 04:59…",
+    main:"rush", also:[],
+    why:"Licznik czasu i „ostatnie sztuki” mają cię popędzić, żebyś zapłacił, zanim sprawdzisz sklep. O fałszywych sklepach więcej na lekcji 5." },
+  { app:"📞 Telefon do twojej mamy · na ekranie: „Bank”", from:"„Konsultant z banku”",
+    text:"Dzień dobry, dział bezpieczeństwa banku. Ktoś właśnie próbuje wziąć kredyt na pani dane! Musi pani natychmiast przelać pieniądze na bezpieczne konto techniczne.",
+    main:"fear", also:["auth","rush"],
+    why:"Najpierw strach („ktoś kradnie twoje pieniądze!”), potem „ratunek”. Napis „Bank” na ekranie i ważne stanowisko budzą zaufanie – ale oszust potrafi je podrobić. Bank nigdy nie każe przelewać pieniędzy na „bezpieczne konto”." }
+];
+
+/* ---------- Dane: Zadanie 2 ----------
+   Każdy krok: wiadomości systemowe (sys), wiadomości „Mai” (them) i odpowiedzi do wyboru.
+   me – tekst dymka po dobrej odpowiedzi. */
+const CHAT = [
+  { them:["Heeej 😊", "mam mega prośbę, tylko szybko 🙏", "mama nie może zapłacić w sklepie, karta jej nie działa",
+          "wyślesz mi kod BLIK na 150 zł? oddam jutro w szkole, serio 💯"],
+    opts:[
+      {t:"Jasne, już generuję kod!", ok:false,
+       fb:"Stop! Kod BLIK to jak gotówka w kopercie. Kto go dostanie, w kilka sekund zabierze pieniądze z konta twojego rodzica. Najpierw sprawdź, czy to naprawdę Maja."},
+      {t:"Czemu ja? Twoja mama nie ma BLIKA? 🤔", ok:false,
+       fb:"Dobrze, że coś cię zaniepokoiło! Ale pytania w tym samym czacie nic nie dadzą – oszust ma gotową odpowiedź na wszystko. Trzeba sprawdzić innym kanałem."},
+      {t:"Poczekaj, zadzwonię do ciebie 📞", me:"Poczekaj, zadzwonię do ciebie 📞", ok:true,
+       fb:"Świetnie! Prośba o pieniądze albo kod = sprawdzam innym kanałem. Telefon to najprostszy sposób."}
+    ]},
+  { them:["NIE DZWOŃ!! 😭", "jestem przy kasie, głośno tu, nie mogę gadać", "szybko proszę, kolejka czeka!!"],
+    opts:[
+      {t:"Dobra, nie denerwuj się, wysyłam kod.", ok:false,
+       fb:"Zobacz, co się stało: gdy zaproponowałeś telefon, „Maja” od razu spanikowała i jeszcze bardziej popędza. Prawdziwa koleżanka zrozumie, że chcesz się upewnić. Oszust – nie."},
+      {t:"To odpowiedz: jak ma na imię mój pies?", ok:false,
+       fb:"Pytanie kontrolne to niezły pomysł, ale… jeśli konto Mai zostało przejęte, oszust widzi wasze stare wiadomości i zdjęcia. Może tam znaleźć odpowiedź. Pewniejszy jest inny kanał."},
+      {t:"Nie wysyłam kodu. Dzwonię do Mai na numer, który mam w kontaktach.", me:"Nie wysyłam kodu. Dzwonię do ciebie.", ok:true,
+       fb:"Brawo! Unikanie telefonu i jeszcze większy pośpiech to dwa wielkie sygnały alarmowe. Dzwonisz na numer, który już znasz – nie na taki, który poda ci ktoś z czatu."}
+    ]},
+  { sys:["📞 Dzwonisz do Mai…",
+         "Maja: „Halo? Nic do ciebie nie pisałam! Jestem na treningu. Ktoś musiał wejść na moje konto!” 😳"],
+    them:["halo??? czemu nie odpisujesz", "myślałam, że jesteśmy przyjaciółmi 😡", "przez ciebie mama będzie miała wstyd w sklepie"],
+    opts:[
+      {t:"Przepraszam… dobra, wysyłam.", ok:false,
+       fb:"Teraz oszust gra na poczuciu winy. Ale przecież już wiesz, że to nie Maja – prawdziwa Maja jest na treningu! Nie daj się wciągnąć."},
+      {t:"Piszę oszustowi, co o nim myślę, i grożę policją 😤", ok:false,
+       fb:"Złość jest zrozumiała, ale kłótnia nic nie da. Oszust może dalej cię podpuszczać. Lepiej przestać odpisywać i działać."},
+      {t:"Nie odpisuję. Robię zrzut ekranu, zgłaszam i blokuję to konto. Mai mówię, żeby z rodzicem odzyskała konto i ostrzegła znajomych.", ok:true,
+       fb:"Idealnie! Nie rozmawiasz z oszustem, masz dowód i pomagasz Mai. Jak odzyskać przejęte konto, wiesz z lekcji 2."}
+    ]}
+];
+
+/* ---------- Dane: Zadanie 3 ---------- */
+const FAM = [
+  {p:"Burek", ok:false, why:"To imię waszego psa. Pewnie jest na zdjęciach w mediach społecznościowych, więc oszust może je znaleźć."},
+  {p:"fioletowy słoń w kapciach", ok:true, why:"Zabawne, łatwe do zapamiętania dla całej rodziny i niemożliwe do zgadnięcia."},
+  {p:"15 maja (urodziny babci)", ok:false, why:"Daty urodzin często widać w sieci, np. w życzeniach na profilu. Oszust może je sprawdzić."},
+  {p:"1234", ok:false, why:"To pierwsza rzecz, którą ktoś by zgadł. Hasło rodzinne musi być nie do odgadnięcia."},
+  {p:"pierogi z jagodami na księżycu", ok:true, why:"Dziwne połączenie słów – jak hasło-fraza z lekcji 1. Nikt go nie zgadnie."},
+  {p:"Kraków (nasze miasto)", ok:false, why:"Miasto, w którym mieszkacie, łatwo ustalić. To słaba ochrona."}
+];
+
+/* ---------- Punkty ---------- */
+const pts  = {z1:0, z2:0, z3:0};
+const done = {z1:false, z2:false, z3:false};
+const max  = {z1:Z1.length, z2:CHAT.length, z3:FAM.length};
+
+/* ---------- Zadanie 1 ---------- */
+let z1Done = 0;
+Z1.forEach(m => {
+  const card = document.createElement("div"); card.className = "scen";
+  const msg = document.createElement("div"); msg.className = "msg";
+  const app = document.createElement("div"); app.className = "msg-app"; app.textContent = m.app;
+  const body = document.createElement("div"); body.className = "msg-body";
+  const from = document.createElement("div"); from.className = "msg-from"; from.textContent = m.from;
+  const bub = document.createElement("div"); bub.className = "bubble"; bub.textContent = m.text;
+  body.appendChild(from); body.appendChild(bub); msg.appendChild(app); msg.appendChild(body);
+  card.appendChild(msg);
+
+  const opts = document.createElement("div"); opts.className = "opts two";
+  const fb = document.createElement("div"); fb.className = "fb";
+  const btns = {};
+  Object.keys(EMO).forEach(k => {
+    const b = document.createElement("button"); b.className = "opt";
+    b.textContent = EMO[k].i + " " + EMO[k].t;
+    btns[k] = b;
+    b.onclick = () => {
+      Object.values(btns).forEach(x => x.disabled = true);
+      btns[m.main].classList.add("right");
+      m.also.forEach(a => btns[a].classList.add("also"));
+      const isMain = k === m.main, isAlso = m.also.includes(k);
+      if (isMain || isAlso) pts.z1++; else b.classList.add("wrong");
+      fb.className = "fb " + (isMain || isAlso ? "good" : "bad");
+      fb.innerHTML = "";
+      const st = document.createElement("strong");
+      st.textContent = isMain ? "✅ Trafione! "
+        : isAlso ? `✅ Też dobrze! Ta emocja tu jest, ale najmocniej oszust gra na: ${EMO[m.main].t}. `
+        : `❌ Nie tym razem. Najmocniej oszust gra na: ${EMO[m.main].t}. `;
+      fb.appendChild(st); fb.appendChild(document.createTextNode(m.why));
+      const lv = document.createElement("div"); lv.className = "levers";
+      [m.main, ...m.also].forEach(e => { const s = document.createElement("span"); s.textContent = EMO[e].i + " " + EMO[e].t; lv.appendChild(s); });
+      fb.appendChild(lv);
+      if (++z1Done === Z1.length) {
+        $("z1score").textContent = `Wynik: ${pts.z1} / ${Z1.length}`;
+        done.z1 = true; updateStatus();
+      }
+    };
+    opts.appendChild(b);
+  });
+  card.appendChild(opts); card.appendChild(fb);
+  $("emotions").appendChild(card);
+});
+
+/* ---------- Zadanie 2: rozmowa ---------- */
+let step = 0, firstTry = true, run = 0;
+const wait = ms => new Promise(r => setTimeout(r, ms));
+
+function bubble(cls, txt){
+  const d = document.createElement("div"); d.className = "cb " + cls; d.textContent = txt;
+  $("chatLog").appendChild(d);
+  return d;
+}
+async function playStep(){
+  const my = run;                       // przerywa animację po „Zagraj jeszcze raz”
+  const s = CHAT[step];
+  $("chatOpts").innerHTML = "";
+  for (const t of (s.sys || [])) { await wait(700); if (my !== run) return; bubble("sys", t); }
+  for (const t of s.them) {
+    const typing = document.createElement("div"); typing.className = "typing"; typing.textContent = "Maja pisze…";
+    $("chatLog").appendChild(typing);
+    await wait(650); if (my !== run) return;
+    typing.remove(); bubble("them", t);
+  }
+  await wait(300); if (my !== run) return;
+  showOpts();
+}
+function showOpts(){
+  const s = CHAT[step]; firstTry = true;
+  const box = $("chatOpts"); box.innerHTML = "";
+  const p = document.createElement("p"); p.style.cssText = "margin:0;font-weight:700"; p.textContent = "Co odpowiesz albo zrobisz?";
+  const opts = document.createElement("div"); opts.className = "opts";
+  const fb = document.createElement("div"); fb.className = "fb";
+  s.opts.forEach(o => {
+    const b = document.createElement("button"); b.className = "opt"; b.textContent = o.t;
+    b.onclick = () => {
+      fb.innerHTML = "";
+      const st = document.createElement("strong");
+      if (!o.ok) {
+        firstTry = false;
+        b.disabled = true; b.classList.add("wrong");
+        fb.className = "fb bad"; st.textContent = "❌ Lepiej nie. ";
+        fb.appendChild(st); fb.appendChild(document.createTextNode(o.fb + " Wybierz jeszcze raz."));
+        return;
+      }
+      if (firstTry) pts.z2++;
+      opts.querySelectorAll("button").forEach(x => x.disabled = true);
+      b.classList.add("right");
+      fb.className = "fb good"; st.textContent = firstTry ? "✅ Dobrze! (+1 pkt) " : "✅ Tak jest! ";
+      fb.appendChild(st); fb.appendChild(document.createTextNode(o.fb));
+      if (o.me) bubble("me", o.me);
+      const next = document.createElement("button"); next.className = "b-next"; next.style.marginTop = "12px";
+      next.textContent = step === CHAT.length - 1 ? "Zakończ rozmowę →" : "Dalej →";
+      next.onclick = () => {
+        step++;
+        if (step < CHAT.length) { playStep(); $("chatLog").scrollIntoView({behavior:"smooth", block:"end"}); }
+        else endChat();
+      };
+      fb.appendChild(document.createElement("br")); fb.appendChild(next);
+    };
+    opts.appendChild(b);
+  });
+  box.appendChild(p); box.appendChild(opts); box.appendChild(fb);
+}
+function endChat(){
+  $("chatOpts").innerHTML = "";
+  bubble("sys", "🚫 Konto zablokowane i zgłoszone. Maja odzyskuje konto z pomocą taty.");
+  const sum = $("chatSum"); sum.innerHTML = "";
+  const st = document.createElement("strong"); st.textContent = `Wynik: ${pts.z2} / ${CHAT.length}. `;
+  sum.appendChild(st);
+  sum.appendChild(document.createTextNode("Zauważ, jak oszust zmieniał emocje: najpierw prośba o pomoc, potem pośpiech, a na końcu poczucie winy. Wygrał ten, kto sprawdził innym kanałem."));
+  $("chatEnd").style.display = "block";
+  done.z2 = true; updateStatus();
+}
+function startChat(){
+  run++; step = 0; pts.z2 = 0; done.z2 = false;
+  $("chatLog").innerHTML = ""; $("chatEnd").style.display = "none";
+  updateStatus(); playStep();
+}
+$("chatAgain").onclick = startChat;
+
+/* ---------- Zadanie 3 ---------- */
+let z3Done = 0;
+FAM.forEach(f => {
+  const card = document.createElement("div"); card.className = "scen";
+  const p = document.createElement("div"); p.className = "fam"; p.textContent = "„" + f.p + "”";
+  card.appendChild(p);
+  const opts = document.createElement("div"); opts.className = "opts two";
+  const fb = document.createElement("div"); fb.className = "fb";
+  [[true, "👍 Dobre hasło rodzinne"], [false, "👎 Słabe hasło rodzinne"]].forEach(([val, txt]) => {
+    const b = document.createElement("button"); b.className = "opt"; b.textContent = txt;
+    b.onclick = () => {
+      opts.querySelectorAll("button").forEach(x => x.disabled = true);
+      const good = val === f.ok;
+      (f.ok ? opts.children[0] : opts.children[1]).classList.add("right");
+      if (!good) b.classList.add("wrong"); else pts.z3++;
+      fb.className = "fb " + (good ? "good" : "bad");
+      fb.innerHTML = "";
+      const st = document.createElement("strong"); st.textContent = good ? "✅ Dobrze! " : "❌ Nie tym razem. ";
+      fb.appendChild(st); fb.appendChild(document.createTextNode(f.why));
+      if (++z3Done === FAM.length) {
+        $("z3score").textContent = `Wynik: ${pts.z3} / ${FAM.length}`;
+        done.z3 = true; updateStatus();
+      }
+    };
+    opts.appendChild(b);
+  });
+  card.appendChild(opts); card.appendChild(fb);
+  $("famList").appendChild(card);
+});
+
+/* ---------- Karta wyniku ---------- */
+const TASKS = [["z1", "Zadanie 1: Na jakiej emocji gra oszust?"], ["z2", "Zadanie 2: Rozmowa z „Mają”"], ["z3", "Zadanie 3: Dobre hasło rodzinne?"]];
+function updateStatus(){
+  const ul = $("status"); ul.innerHTML = "";
+  TASKS.forEach(([k, label]) => {
+    const li = document.createElement("li");
+    li.className = done[k] ? "on" : "";
+    li.textContent = label + " – " + (done[k] ? `${pts[k]} / ${max[k]} pkt` : "jeszcze nieukończone");
+    ul.appendChild(li);
+  });
+  $("card").style.display = "none";
+}
+function showCard(){
+  const name = $("name").value.trim();
+  const msg = $("cardMsg");
+  if (!name) { $("name").focus(); $("name").style.borderColor = "var(--red)"; return; }
+  const missing = TASKS.filter(([k]) => !done[k]).map(([, l]) => l.split(":")[0]);
+  if (missing.length) {
+    msg.className = "fb bad";
+    msg.textContent = "Najpierw dokończ: " + missing.join(", ") + ".";
+    return;
+  }
+  msg.className = "fb"; msg.textContent = "";
+  const total = pts.z1 + pts.z2 + pts.z3;
+  const totalMax = max.z1 + max.z2 + max.z3;
+  const d = new Date().toLocaleString("pl-PL", {dateStyle:"short", timeStyle:"short"});
+  const c = $("card"); c.innerHTML = "";
+  const add = (txt, css) => { const el = document.createElement("div"); el.textContent = txt; if (css) el.style.cssText = css; else el.className = "note"; c.appendChild(el); };
+  add("KARTA WYNIKU · Lekcja 4: Oszustwa „na…”");
+  add(name, "font-size:22px;font-weight:800;margin:6px 0");   // tekst ucznia tylko jako textContent
+  add(`${total} / ${totalMax}`, "font-size:40px;font-weight:800;color:var(--teal)");
+  add(`Zadanie 1: ${pts.z1}/${max.z1} · Zadanie 2: ${pts.z2}/${max.z2} · Zadanie 3: ${pts.z3}/${max.z3}`);
+  add(d);
+  add("Pokaż tę kartę nauczycielowi.");
+  c.style.display = "block";
+}
+$("bCard").onclick = showCard;
+$("name").addEventListener("keydown", e => { if (e.key === "Enter") showCard(); $("name").style.borderColor = ""; });
+$("bPrint").onclick = () => window.print();
+
+updateStatus();
+startChat();
+</script>
+</body>
+</html>
