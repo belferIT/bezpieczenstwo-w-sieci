@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lekcja 2: Phishing – jak nie dać się złowić?</title>
+<style>
+  :root{
+    --navy:#1d2b4f; --ink:#24324f; --muted:#5b6785; --bg:#f4f6fb; --card:#ffffff;
+    --teal:#13897a; --teal-l:#e2f4f1; --red:#c8374b; --red-l:#fbe6e9;
+    --yellow:#ffc94a; --orange:#e0703a; --line:#dde2ee; --link:#1a5fd0; --radius:16px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.6;font-size:18px}
+  header{background:var(--navy);color:#fff;padding:48px 20px 64px;text-align:center}
+  header .tag{display:inline-block;background:var(--yellow);color:var(--navy);font-weight:700;
+       padding:4px 14px;border-radius:999px;font-size:14px;letter-spacing:.5px}
+  header h1{font-size:clamp(28px,5vw,44px);margin:16px auto 8px;max-width:800px;line-height:1.2}
+  header p{opacity:.85;margin:0 auto;max-width:620px}
+  main{max-width:880px;margin:-36px auto 0;padding:0 16px 60px}
+  section{background:var(--card);border-radius:var(--radius);padding:28px 28px;margin-bottom:24px;
+       box-shadow:0 2px 10px rgba(29,43,79,.06)}
+  h2{margin:0 0 12px;font-size:26px;color:var(--navy);display:flex;align-items:center;gap:10px}
+  h2 .num{background:var(--navy);color:#fff;width:36px;height:36px;border-radius:50%;
+       display:inline-grid;place-items:center;font-size:18px;flex:none}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
+  .tile{background:var(--bg);border-radius:12px;padding:18px}
+  .tile .ico{font-size:32px}
+  .tile h3{margin:6px 0 4px;font-size:19px}
+  .tile p{margin:0;color:var(--muted);font-size:16px}
+  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:17px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;font-size:15px}
+  code{font-family:ui-monospace,Consolas,monospace;background:var(--bg);padding:2px 8px;border-radius:6px;word-break:break-all}
+  .t-bad{color:var(--red);font-weight:700}.t-ok{color:var(--teal);font-weight:700}
+  .note{font-size:14px;color:var(--muted);margin-top:8px}
+  ul.rules{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}
+  ul.rules li{background:var(--teal-l);border-radius:10px;padding:12px 16px 12px 48px;position:relative}
+  ul.rules li::before{content:"✔";position:absolute;left:18px;top:12px;color:var(--teal);font-weight:900}
+  .tip{background:#fff7df;border-left:5px solid var(--yellow);padding:14px 18px;border-radius:8px;margin-top:16px}
+  .tip ol{margin:6px 0 0;padding-left:22px}
+
+  /* Droga oszustwa */
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px;font-size:15px}
+  .flow .step{background:var(--bg);border-radius:999px;padding:6px 14px;font-weight:600}
+  .flow .arr{color:var(--muted);font-weight:700}
+  /* Adresy */
+  .dom-in{background:var(--yellow);color:var(--navy);font-weight:800;border-radius:4px;padding:0 3px}
+
+  /* Wspólne elementy zadań (jak w lekcji 1) */
+  .progress{height:10px;background:var(--line);border-radius:999px;overflow:hidden;margin:8px 0 20px}
+  .progress div{height:100%;background:var(--teal);width:0;transition:width .3s}
+  .q{border:2px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+  .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:14px 28px;cursor:pointer;
+       transition:transform .1s, opacity .2s}
+  button:active{transform:scale(.97)}
+  button:disabled{opacity:.45;cursor:default}
+  .b-weak{background:var(--red);color:#fff}.b-strong{background:var(--teal);color:#fff}
+  .b-next{background:var(--navy);color:#fff}.b-ghost{background:var(--bg);color:var(--navy)}
+  .fb{margin-top:18px;padding:14px 18px;border-radius:10px;text-align:left;display:none}
+  .fb.good{background:var(--teal-l);display:block}.fb.bad{background:var(--red-l);display:block}
+  .fb p{margin:8px 0 0}
+  .result{text-align:center;display:none}
+  .result .big{font-size:56px;font-weight:800;color:var(--navy);margin:4px 0}
+  .card-result{border:3px dashed var(--navy);border-radius:14px;padding:18px;margin:18px auto 0;max-width:420px;display:none;text-align:center}
+  input[type=text]{font:inherit;width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:12px}
+  input[type=text]:focus{outline:none;border-color:var(--teal)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .row input{flex:1;min-width:200px}
+  .scen{border:2px solid var(--line);border-radius:14px;padding:18px;margin-top:14px}
+  .scen p{margin:0 0 10px;font-weight:600}
+  .opts{display:grid;gap:8px}
+  .opt{background:var(--bg);color:var(--ink);font-weight:600;text-align:left;padding:12px 16px}
+  .opt.right{background:var(--teal-l);outline:2px solid var(--teal)}
+  .opt.wrong{background:var(--red-l);outline:2px solid var(--red)}
+
+  /* Zadanie 1: wiadomości */
+  .msg{max-width:540px;margin:0 auto;border-radius:18px;overflow:hidden;text-align:left;
+       border:2px solid var(--line);background:#fff}
+  .msg-app{background:var(--navy);color:#fff;font-size:14px;padding:8px 14px;font-weight:600}
+  .msg-body{background:#eef1f8;padding:14px}
+  .msg-from{font-weight:700;font-size:15px;margin-bottom:6px;color:var(--navy)}
+  .bubble{background:#fff;border-radius:4px 16px 16px 16px;padding:12px 14px;font-size:17px;
+       box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  .mail-head{padding:12px 16px;border-bottom:1px solid var(--line);font-size:15px}
+  .mail-head div{margin:3px 0}
+  .mail-head .lbl{color:var(--muted)}
+  .mail-body{padding:14px 16px;white-space:pre-line;font-size:17px}
+  .seg{border-radius:5px;transition:background .15s}
+  .lnk{color:var(--link);text-decoration:underline;word-break:break-all}
+  .fakebtn{display:inline-block;background:var(--link);color:#fff;font-weight:700;padding:8px 18px;border-radius:8px;margin-top:6px}
+  .picking .seg{cursor:pointer;outline:1px dashed #9aa6c4;outline-offset:1px}
+  .picking .seg:hover{background:#fff4cc}
+  .seg.picked{background:#ffe08a;outline:2px solid #d9a21a}
+  .seg.found{background:var(--teal-l);outline:2px solid var(--teal)}
+  .seg.missed{background:#fff1d6;outline:2px dashed var(--orange)}
+  .seg.wrongpick{background:var(--red-l);outline:2px solid var(--red);text-decoration:line-through}
+  .fakebtn.seg{background:var(--link);color:#fff}
+  .mark-hint{display:none;text-align:left;margin-top:16px}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px;color:var(--muted);margin-top:10px}
+  .legend span::before{content:"";display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:6px;vertical-align:-2px}
+  .legend .l-found::before{background:var(--teal-l);outline:2px solid var(--teal)}
+  .legend .l-missed::before{background:#fff1d6;outline:2px dashed var(--orange)}
+  .legend .l-wrong::before{background:var(--red-l);outline:2px solid var(--red)}
+  ul.flags{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:8px;font-size:16px}
+  ul.flags li{background:#fff;border-radius:8px;padding:8px 12px;border-left:5px solid var(--teal)}
+  ul.flags li.missed{border-left-color:var(--orange)}
+  ul.flags li.wrong{border-left-color:var(--red)}
+
+  /* Zadanie 2: adresy */
+  .url{font-family:ui-monospace,Consolas,monospace;font-size:clamp(15px,3.2vw,19px);word-break:break-all;
+       background:var(--bg);padding:10px 14px;border-radius:10px;margin-bottom:10px}
+  .url .dom{border-radius:4px;padding:0 2px}
+  .url .dom.hl-ok{background:var(--teal-l);outline:2px solid var(--teal);font-weight:800}
+  .url .dom.hl-bad{background:var(--red-l);outline:2px solid var(--red);font-weight:800}
+  .opts.two{grid-template-columns:1fr 1fr}
+
+  /* Karta wyniku */
+  ul.status{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:6px;font-size:16px}
+  ul.status li::before{content:"○ ";color:var(--muted)}
+  ul.status li.on::before{content:"● ";color:var(--teal)}
+
+  footer{text-align:center;color:var(--muted);font-size:14px;padding:20px}
+  @media (max-width:560px){section{padding:22px 18px}body{font-size:17px}.opts.two{grid-template-columns:1fr}
+       .q{padding:16px 12px}}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" style="color:#fff;opacity:.8;display:inline-block;margin-bottom:16px;text-decoration:none">← Wszystkie lekcje</a><br>
+  <span class="tag">BEZPIECZEŃSTWO W SIECI · LEKCJA 2</span>
+  <h1>Phishing – jak nie dać się złowić?</h1>
+  <p>Przeczytaj krótkie wprowadzenie (ok. 6 minut), a potem wykonaj trzy zadania.</p>
+</header>
+
+<main>
+
+<section>
+  <h2><span class="num">1</span> Phishing, czyli łowienie na przynętę</h2>
+  <p>Słowo <strong>phishing</strong> (czytaj: „fiszing”) brzmi jak angielskie <em>fishing</em>, czyli wędkowanie. I tak to działa: oszust zarzuca <strong>przynętę</strong> – wiadomość – i czeka, aż ją połkniesz. Czyli klikniesz link i sam podasz mu hasło, kod albo pieniądze.</p>
+  <p>Oszust nie musi niczego włamywać. Wystarczy, że <strong>ty</strong> mu coś dasz.</p>
+  <div class="grid">
+    <div class="tile"><div class="ico">📱</div><h3>SMS</h3><p>„Dopłać do paczki”, „masz mandat”, „wygrałeś nagrodę”.</p></div>
+    <div class="tile"><div class="ico">✉️</div><h3>E-mail</h3><p>„Twoje konto zostanie usunięte!”, „Potwierdź swoje dane”.</p></div>
+    <div class="tile"><div class="ico">💬</div><h3>Komunikatory</h3><p>Discord, Instagram, Messenger. Często z przejętego konta znajomego.</p></div>
+    <div class="tile"><div class="ico">🎭</div><h3>Fałszywa strona</h3><p>Wygląda jak prawdziwe logowanie. Wszystko, co wpiszesz, trafia do oszusta.</p></div>
+  </div>
+  <div class="flow" aria-label="Jak działa oszustwo">
+    <span class="step">🪝 Przynęta</span><span class="arr">→</span>
+    <span class="step">🔗 Klik w link</span><span class="arr">→</span>
+    <span class="step">🎭 Fałszywe logowanie</span><span class="arr">→</span>
+    <span class="step">🔓 Przejęte konto</span><span class="arr">→</span>
+    <span class="step">📨 Wiadomości do twoich znajomych</span>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">2</span> Ulubiona przynęta: „darmowe skiny”</h2>
+  <p>Oszuści wiedzą, w co grasz. Dlatego najczęściej obiecują rzeczy z gier:</p>
+  <div class="grid">
+    <div class="tile"><div class="ico">🟥</div><h3>Darmowe Robuxy</h3><p>„Generator Robuxów – zaloguj się i odbierz 10 000 R$”.</p></div>
+    <div class="tile"><div class="ico">🔫</div><h3>Skiny do CS2</h3><p>„Rozdajemy skiny” albo „zagłosuj na moją drużynę” – i logujesz się Steamem na fałszywej stronie.</p></div>
+    <div class="tile"><div class="ico">⚡</div><h3>V-dolce</h3><p>„Darmowe V-dolce do Fortnite, tylko podaj login i hasło”.</p></div>
+    <div class="tile"><div class="ico">💎</div><h3>Discord Nitro</h3><p>„Discord rozdaje Nitro za darmo!” – a link prowadzi do podróbki.</p></div>
+  </div>
+  <div class="tip">💡 <strong>Zapamiętaj:</strong> generatory Robuxów czy V-dolców nie istnieją. Prawdziwe nagrody i prezenty odbierasz <strong>w samej grze lub w oficjalnym sklepie</strong>. Nigdy przez link od nieznajomego i nigdy na stronie, która każe ci podać hasło.</div>
+</section>
+
+<section>
+  <h2><span class="num">3</span> Czerwone flagi – po czym poznać oszustwo?</h2>
+  <p>Jedna flaga to powód, żeby się zatrzymać. Dwie albo więcej – to prawie na pewno oszustwo.</p>
+  <div class="grid">
+    <div class="tile"><div class="ico">⏰</div><h3>Pośpiech</h3><p>„Tylko 15 minut!”, „konto zostanie usunięte za 2 godziny”. Oszust nie chce, żebyś myślał.</p></div>
+    <div class="tile"><div class="ico">🎁</div><h3>Za piękne, by było prawdziwe</h3><p>Wygrana w konkursie, w którym nawet nie brałeś udziału.</p></div>
+    <div class="tile"><div class="ico">🔑</div><h3>Prośba o hasło, kod lub BLIK</h3><p>Nikt uczciwy nie prosi o nie w wiadomości.</p></div>
+    <div class="tile"><div class="ico">🔗</div><h3>Dziwny link lub nadawca</h3><p>Adres podobny do prawdziwego, ale nie taki sam.</p></div>
+    <div class="tile"><div class="ico">🤫</div><h3>Straszenie i tajemnica</h3><p>Wielkie litery, groźby, „nie mów nikomu”.</p></div>
+    <div class="tile"><div class="ico">✍️</div><h3>Dziwny język</h3><p>„Drogi Użytkowniku” zamiast twojego imienia, błędy, brak polskich liter.</p></div>
+  </div>
+
+  <h3 style="margin:24px 0 6px;color:var(--navy)">Jak przeczytać adres strony?</h3>
+  <p style="margin-top:0">Adres strony jest jak adres na kopercie. Liczy się <strong>nazwa tuż przed pierwszym pojedynczym ukośnikiem „/”</strong> (albo na samym końcu, jeśli ukośnika nie ma). To ona mówi, czyja jest strona. Wszystko, co stoi przed nią, oszust może dopisać, jak chce.</p>
+  <table>
+    <thead><tr><th>Adres</th><th>Czyja to strona?</th></tr></thead>
+    <tbody>
+      <tr><td><code>https://<span class="dom-in">steamcommunity.com</span>/login</code></td><td class="t-ok">Steam ✔</td></tr>
+      <tr><td><code>https://steamcommunity.com.<span class="dom-in">skins-gift.ru</span>/login</code></td><td class="t-bad">skins-gift.ru ✖</td></tr>
+      <tr><td><code>https://<span class="dom-in">steamcornmunity.com</span>/login</code></td><td class="t-bad">podróbka ✖ („rn” udaje „m”)</td></tr>
+    </tbody>
+  </table>
+  <p class="note">🔒 Kłódka obok adresu oznacza tylko, że połączenie jest szyfrowane. Nie oznacza, że strona jest uczciwa – fałszywe strony też mają kłódki.</p>
+</section>
+
+<section>
+  <h2><span class="num">4</span> Co robić, gdy coś cię zaniepokoi?</h2>
+  <ul class="rules">
+    <li><strong>Zatrzymaj się.</strong> Nie klikaj od razu. Oszustwo działa tylko wtedy, gdy się spieszysz.</li>
+    <li><strong>Sprawdź inną drogą.</strong> Wejdź do aplikacji albo wpisz adres strony sam. Dziwna wiadomość od znajomego? Zapytaj go osobiście albo zadzwoń.</li>
+    <li><strong>Zgłoś i zablokuj.</strong> W grze i komunikatorze użyj opcji „Zgłoś”. Podejrzany SMS przekaż na bezpłatny numer <strong>8080</strong> – sprawdzą go specjaliści z CERT Polska.</li>
+    <li><strong>Powiedz dorosłemu.</strong> Rodzicowi albo nauczycielowi. To żaden wstyd – oszuści nabierają też dorosłych.</li>
+  </ul>
+  <div class="tip">🆘 <strong>Już kliknąłeś i podałeś hasło?</strong> Bez paniki, ale działaj szybko:
+    <ol>
+      <li>Zmień hasło – w aplikacji, nie przez link z wiadomości.</li>
+      <li>Zmień je też wszędzie tam, gdzie miałeś takie samo.</li>
+      <li>Włącz weryfikację dwuetapową (<a href="lekcja-1.html#2fa">przypomnij sobie lekcję 1</a>).</li>
+      <li>Powiedz dorosłemu i ostrzeż znajomych, że z twojego konta mogły pójść dziwne wiadomości.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="zadanie1">
+  <h2><span class="num">✎</span> Zadanie 1: Oszustwo czy nie?</h2>
+  <p>Przeczytaj każdą wiadomość i oceń ją. Jeśli to oszustwo, zaznacz w niej wszystkie podejrzane fragmenty.</p>
+  <p class="note" style="margin-top:-6px">Punkty: +1 za dobrą ocenę, +1 za każdą znalezioną czerwoną flagę, −1 za fragment zaznaczony bez powodu.</p>
+  <div class="progress"><div id="mbar"></div></div>
+
+  <div id="z1quiz" class="q">
+    <div id="mcount" class="note" style="margin:0 0 10px"></div>
+    <div id="msgHolder"></div>
+    <div class="btns" id="classBtns" style="margin-top:18px">
+      <button class="b-weak" id="bScam">🎣 Oszustwo</button>
+      <button class="b-strong" id="bSafe">✅ Bezpieczne</button>
+    </div>
+    <div class="tip mark-hint" id="markHint">
+      <strong>Dobrze, to oszustwo! (+1 pkt)</strong><br>
+      Teraz <strong>kliknij podejrzane fragmenty</strong> wiadomości: nadawcę, zdania, link. Kliknij jeszcze raz, żeby odznaczyć.
+      <div class="note" id="pickCount"></div>
+    </div>
+    <div class="btns" style="margin-top:14px">
+      <button class="b-next" id="bCheck" style="display:none">Sprawdź zaznaczenia</button>
+    </div>
+    <div id="mfb" class="fb"></div>
+    <div class="btns" style="margin-top:16px"><button class="b-next" id="bNextMsg" style="display:none">Dalej →</button></div>
+  </div>
+
+  <div id="z1result" class="result">
+    <p>Wynik w zadaniu 1:</p>
+    <div class="big" id="z1score"></div>
+    <p id="z1msg"></p>
+    <div class="btns"><button class="b-ghost" id="z1again">↺ Spróbuj ponownie</button></div>
+  </div>
+</section>
+
+<section id="zadanie2">
+  <h2><span class="num">✎</span> Zadanie 2: Prawdziwa czy fałszywa strona?</h2>
+  <p>Znajdź w każdym adresie nazwę przed pierwszym ukośnikiem „/” i zdecyduj, czy to prawdziwa strona.</p>
+  <div id="urls"></div>
+  <p class="note" id="z2score"></p>
+</section>
+
+<section id="zadanie3">
+  <h2><span class="num">✎</span> Zadanie 3: Co zrobisz?</h2>
+  <p>Przeczytaj sytuacje i wybierz najlepszą reakcję.</p>
+  <div id="scenarios"></div>
+  <p class="note" id="z3score"></p>
+</section>
+
+<section id="karta">
+  <h2><span class="num">★</span> Twoja karta wyniku</h2>
+  <p>Gdy skończysz wszystkie trzy zadania, wpisz imię i klasę, a potem pokaż kartę nauczycielowi.</p>
+  <ul class="status" id="status"></ul>
+  <div class="row" style="max-width:560px">
+    <input type="text" id="name" placeholder="Wpisz swoje imię i klasę, np. Ola 7b" maxlength="40">
+    <button class="b-next" id="bCard">Pokaż kartę wyniku</button>
+  </div>
+  <div id="cardMsg" class="fb"></div>
+  <div class="card-result" id="card"></div>
+</section>
+
+</main>
+<footer><a href="index.html">← Wróć do listy lekcji</a><br>Informatyka · klasy 7–8 · Bezpieczeństwo w sieci</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ---------- Dane: Zadanie 1 ----------
+   Każdy fragment: [tekst, idFlagi (lub ""), rodzaj ("lnk" / "btn" / brak)].
+   Fragment z idFlagi to czerwona flaga. Fragment bez flagi jest neutralny. */
+const MSGS = [
+  { kind:"chat", app:"💬 Discord · wiadomość prywatna", scam:true,
+    from:[["Kuba 🎮 (kolega z klasy)"]],
+    body:[["Ej, sprawdź to!!"],[" "],["Rozdają darmowe skiny do CS2 za 0 zł 🔥","prize"],[" "],
+          ["Tylko do dziś do 20:00!","rush"],[" "],["Wejdź i zaloguj się kontem Steam:","login"],[" "],
+          ["steamcommunity-gift.ru/free-skins","link","lnk"]],
+    flags:{
+      prize:{l:"Za piękne, by było prawdziwe", w:"Darmowe skiny „za 0 zł” to najpopularniejsza przynęta na graczy."},
+      rush:{l:"Pośpiech", w:"„Tylko do dziś” ma sprawić, że klikniesz bez zastanowienia."},
+      login:{l:"Prośba o logowanie", w:"Logowanie przez link z wiadomości = próba kradzieży hasła. Nagrody odbiera się w samej grze."},
+      link:{l:"Dziwny link", w:"Strona należy do steamcommunity-gift.ru, a nie do Steama (prawdziwy adres to steamcommunity.com)."}
+    },
+    note:"Nadawca to kolega – to samo w sobie nie jest czerwoną flagą. Ale jego konto mogło zostać przejęte, a oszust pisze teraz do wszystkich jego znajomych. Zapytaj Kubę osobiście!" },
+
+  { kind:"chat", app:"💬 Messenger · grupa „7b 🙌”", scam:false,
+    from:[["Zosia"]],
+    body:[["Pani od matmy wpisała do dziennika, że jutro kartkówka z potęg 😬"],[" "],["Ktoś ma notatki z ostatniej lekcji?"]],
+    safeWhy:"Nie ma linku, nikt nie prosi o hasło, kod ani pieniądze. Nie ma pośpiechu ani nagrody. To zwykła wiadomość od koleżanki. A jeśli chcesz się upewnić – kartkówkę sprawdzisz w dzienniku." },
+
+  { kind:"chat", app:"📱 SMS", scam:true,
+    from:[["InPost"]],
+    body:[["Twoja paczka nr 6203 4471 czeka w magazynie."],[" "],["Do odbioru brakuje dopłaty 1,99 zł.","pay"],[" "],
+          ["Jeśli nie zapłacisz w ciągu 24 h, paczka wróci do nadawcy.","rush"],[" "],["Opłać tutaj:","pay"],[" "],
+          ["inpost.pl-doplata.top","link","lnk"]],
+    flags:{
+      pay:{l:"Prośba o pieniądze", w:"Mała kwota ma uśpić czujność. Na fałszywej stronie oszuści wyłudzają dane karty albo kod BLIK."},
+      rush:{l:"Pośpiech", w:"„24 godziny, bo paczka wróci” – presja czasu, żebyś zapłacił bez sprawdzania."},
+      link:{l:"Dziwny link", w:"Adres zaczyna się od „inpost.pl”, ale na końcu stoi pl-doplata.top – to do niej należy strona."}
+    },
+    note:"Nazwę nadawcy SMS-a (np. „InPost”) oszuści potrafią podrobić, więc nie ufaj jej na ślepo. Taki SMS przekaż na numer 8080 i usuń." },
+
+  { kind:"email", app:"✉️ Poczta e-mail", scam:true,
+    from:[["Roblox Support"],[" "],["<support@roblox-security-team.com>","sender"]],
+    subject:[["⚠️ TWOJE KONTO ZOSTANIE USUNIĘTE!!!","scare"]],
+    body:[["Drogi Uzytkowniku,","greet"],["\n\n"],["wykryliśmy podejrzaną aktywność na Twoim koncie."],[" "],
+          ["Jeśli nie potwierdzisz danych w ciągu 2 godzin, konto zostanie trwale usunięte.","rush"],["\n\n"],
+          ["Kliknij przycisk i wpisz login oraz hasło:","pass"],["\n"],["Potwierdź konto","pass","btn"],["\n\n"],
+          ["Pozdrawiamy, Zespół Roblox"]],
+    flags:{
+      sender:{l:"Dziwny nadawca", w:"Adres kończy się na roblox-security-team.com – to nie jest firma Roblox. Taką nazwę może kupić każdy."},
+      scare:{l:"Straszenie", w:"Wielkie litery, wykrzykniki i groźba usunięcia konta mają cię przestraszyć."},
+      greet:{l:"Dziwny język", w:"„Drogi Uzytkowniku” bez polskiej litery i bez twojej nazwy – oszust nie wie, kim jesteś, pisze do tysięcy osób naraz."},
+      rush:{l:"Pośpiech", w:"Tylko 2 godziny – żebyś nie zdążył się zastanowić ani nikogo zapytać."},
+      pass:{l:"Prośba o hasło", w:"Żadna prawdziwa firma nie prosi o hasło w e-mailu. Hasło wpisujesz tylko w aplikacji albo na stronie, na którą wszedłeś sam."}
+    },
+    note:"Zdanie o „podejrzanej aktywności” pojawia się też w prawdziwych wiadomościach, dlatego samo w sobie nie jest flagą. Zdradza cię wszystko dookoła." },
+
+  { kind:"email", app:"✉️ Poczta e-mail", scam:false,
+    from:[["Instagram"],[" "],["<security@mail.instagram.com>"]],
+    subject:[["Nowe logowanie na Instagramie"]],
+    body:[["Cześć, ola.7b!"],["\n\n"],["Zauważyliśmy logowanie na twoje konto z nowego urządzenia: Chrome, Windows, Kraków, dziś o 18:42."],["\n\n"],
+          ["Jeśli to ty, nic nie musisz robić."],[" "],["Jeśli to nie ty, otwórz aplikację Instagram i zmień hasło w ustawieniach."]],
+    safeWhy:"Wiadomość zwraca się do ciebie po nazwie, adres nadawcy kończy się na instagram.com, nie ma pośpiechu i nikt nie prosi o hasło. Każe ci samemu otworzyć aplikację. Tak wyglądają prawdziwe powiadomienia. I tak najbezpieczniej jest sprawdzać wszystko w aplikacji, a nie przez link." },
+
+  { kind:"chat", app:"📸 Instagram · prośba o wiadomość", scam:true,
+    from:[["free.robux.official ✔️","acct"]],
+    body:[["🎉 Gratulacje! Zostałeś wylosowany i wygrałeś 10 000 Robux!","prize"],[" "],
+          ["Żeby odebrać nagrodę, wyślij nam kod BLIK na 50 zł – to tylko weryfikacja, pieniądze wrócą.","blik"],[" "],
+          ["Oferta ważna 15 minut ⏳","rush"],[" "],["Nie mów nikomu, bo nagroda przepadnie 🤫","secret"]],
+    flags:{
+      acct:{l:"Obcy nadawca", w:"Nieznane konto, które samo do ciebie pisze. Znaczek ✔️ w nazwie to zwykłe emoji, a nie prawdziwa weryfikacja."},
+      prize:{l:"Za piękne, by było prawdziwe", w:"Nie brałeś udziału w żadnym losowaniu. Wygrana znikąd to przynęta."},
+      blik:{l:"Prośba o kod BLIK", w:"Kod BLIK to pieniądze z konta. Kto go dostanie, po prostu je zabierze. Nic „nie wróci”."},
+      rush:{l:"Pośpiech", w:"15 minut – żebyś nie zdążył nikogo zapytać."},
+      secret:{l:"Tajemnica", w:"„Nie mów nikomu” to ogromny sygnał alarmowy. Oszust boi się, że zapytasz rodzica."}
+    },
+    note:"Prawdziwe gry nie rozdają walut przez wiadomości od obcych kont." }
+];
+
+/* ---------- Dane: Zadanie 2 ---------- */
+const URLS = [
+  {pre:"https://www.", dom:"roblox.com", post:"/login", real:true,
+   why:"Przed pierwszym „/” stoi roblox.com – to prawdziwa strona Robloxa. „www.” to tylko dodatek."},
+  {pre:"https://roblox.com.", dom:"free-robux.xyz", post:"/login", real:false,
+   why:"Na początku jest „roblox.com”, ale strona należy do free-robux.xyz. Oszust dopisał nazwę gry na początku, żeby cię zmylić."},
+  {pre:"https://pl.", dom:"wikipedia.org", post:"/wiki/Phishing", real:true,
+   why:"Właścicielem jest wikipedia.org. „pl.” na początku oznacza po prostu polską wersję."},
+  {pre:"https://www.", dom:"rob1ox.com", post:"/login", real:false,
+   why:"Przyjrzyj się: rob1ox – zamiast litery „l” jest cyfra „1”. To podróbka."},
+  {pre:"https://instagram.", dom:"weryfikacja-konta.net", post:"/login", real:false,
+   why:"Przed pierwszym „/” stoi weryfikacja-konta.net. „instagram” na początku to tylko przebranie."},
+  {pre:"https://", dom:"discord.com", post:"/login", real:true,
+   why:"Przed pierwszym „/” stoi discord.com – to prawdziwa strona Discorda."}
+];
+
+/* ---------- Dane: Zadanie 3 ---------- */
+const SCEN = [
+  {q:"🎮 Kliknąłeś link o darmowych skinach i wpisałeś login i hasło. Strona się „zawiesiła”. Co teraz?",
+   a:["Nic – pewnie nie zadziałało.",
+      "Od razu zmieniam hasło (w aplikacji, nie przez link), włączam weryfikację dwuetapową i mówię rodzicowi.",
+      "Czekam i obserwuję, czy ktoś się zaloguje."], ok:1,
+   why:"Strona „zawiesiła się”, bo już dostała twoje hasło. Liczy się czas. Zmień hasło w aplikacji – i wszędzie tam, gdzie było takie samo. To może się przytrafić każdemu, więc nie wstydź się powiedzieć dorosłemu."},
+  {q:"📱 Dostajesz SMS-a o paczce, która czeka na dopłatę. Nic nie zamawiałeś. Co robisz?",
+   a:["Klikam link, żeby sprawdzić, co to za paczka.",
+      "Odpisuję, że to pomyłka.",
+      "Nie klikam. Przekazuję SMS-a na bezpłatny numer 8080 i go usuwam."], ok:2,
+   why:"Odpisanie pokazuje oszustom, że twój numer działa. Przekazanie na 8080 pomaga zablokować fałszywą stronę – chronisz też innych."},
+  {q:"💬 Kolega, który nigdy tak nie pisze, wysyła ci: „to ty na tym filmiku?? 😂” i link.",
+   a:["Klikam – muszę zobaczyć!",
+      "Nie klikam. Pytam kolegę inną drogą (osobiście albo przez telefon), czy to on wysłał.",
+      "Przesyłam link innym, żeby sprawdzili za mnie."], ok:1,
+   why:"Ciekawość to też przynęta. Jeśli kolega tego nie wysłał, jego konto zostało przejęte – daj mu znać, żeby zmienił hasło."}
+];
+
+/* ---------- Punkty ---------- */
+const pts  = {z1:0, z2:0, z3:0};
+const done = {z1:false, z2:false, z3:false};
+const max  = {
+  z1: MSGS.reduce((s, m) => s + 1 + (m.scam ? Object.keys(m.flags).length : 0), 0),
+  z2: URLS.length,
+  z3: SCEN.length
+};
+
+/* ---------- Zadanie 1 ---------- */
+let cur = 0, phase = "", box = null;
+
+function segEl(s){
+  const [t, f, type] = s;
+  if (!t.trim()) return document.createTextNode(t);
+  const sp = document.createElement("span");
+  sp.className = "seg" + (type === "lnk" ? " lnk" : "") + (type === "btn" ? " fakebtn" : "");
+  sp.textContent = t;
+  sp.dataset.f = f || "";
+  sp.addEventListener("click", () => {
+    if (phase !== "mark") return;
+    sp.classList.toggle("picked");
+    updatePickCount();
+  });
+  return sp;
+}
+function addSegs(parent, list){ list.forEach(s => parent.appendChild(segEl(s))); }
+
+function renderMsg(m){
+  const b = document.createElement("div");
+  b.className = "msg " + m.kind;
+  const app = document.createElement("div"); app.className = "msg-app"; app.textContent = m.app;
+  b.appendChild(app);
+  if (m.kind === "email") {
+    const head = document.createElement("div"); head.className = "mail-head";
+    [["Od: ", m.from], ["Temat: ", m.subject]].forEach(([lbl, segs]) => {
+      const r = document.createElement("div");
+      const l = document.createElement("span"); l.className = "lbl"; l.textContent = lbl;
+      r.appendChild(l); addSegs(r, segs); head.appendChild(r);
+    });
+    const body = document.createElement("div"); body.className = "mail-body"; addSegs(body, m.body);
+    b.appendChild(head); b.appendChild(body);
+  } else {
+    const wrap = document.createElement("div"); wrap.className = "msg-body";
+    const from = document.createElement("div"); from.className = "msg-from"; addSegs(from, m.from);
+    const bub = document.createElement("div"); bub.className = "bubble"; addSegs(bub, m.body);
+    wrap.appendChild(from); wrap.appendChild(bub); b.appendChild(wrap);
+  }
+  return b;
+}
+
+function showMsg(){
+  const m = MSGS[cur];
+  $("mcount").textContent = `Wiadomość ${cur + 1} z ${MSGS.length}`;
+  $("mbar").style.width = (cur / MSGS.length * 100) + "%";
+  box = renderMsg(m);
+  $("msgHolder").innerHTML = "";
+  $("msgHolder").appendChild(box);
+  $("bScam").disabled = $("bSafe").disabled = false;
+  $("classBtns").style.display = "flex";
+  $("markHint").style.display = "none";
+  $("bCheck").style.display = "none";
+  $("bNextMsg").style.display = "none";
+  $("mfb").className = "fb"; $("mfb").innerHTML = "";
+  phase = "classify";
+}
+
+function updatePickCount(){
+  $("pickCount").textContent = `Zaznaczone fragmenty: ${box.querySelectorAll(".seg.picked").length}`;
+}
+
+function classify(saysScam){
+  const m = MSGS[cur];
+  $("bScam").disabled = $("bSafe").disabled = true;
+  $("classBtns").style.display = "none";
+  if (m.scam && saysScam) {
+    pts.z1++;
+    phase = "mark";
+    box.classList.add("picking");
+    $("markHint").style.display = "block";
+    $("bCheck").style.display = "inline-block";
+    updatePickCount();
+    return;
+  }
+  if (m.scam) {                       // uczeń uznał oszustwo za bezpieczne
+    reveal(m, new Set(), 0, false, 0);
+  } else {
+    const ok = !saysScam;
+    if (ok) pts.z1++;
+    const fb = $("mfb");
+    fb.className = "fb " + (ok ? "good" : "bad");
+    fb.innerHTML = "";
+    const s = document.createElement("strong");
+    s.textContent = ok ? "✅ Dobrze! (+1 pkt) Ta wiadomość jest bezpieczna." : "❌ Nie tym razem. Ta wiadomość jest bezpieczna.";
+    const p = document.createElement("p"); p.textContent = m.safeWhy;
+    fb.appendChild(s); fb.appendChild(p);
+  }
+  finishMsg();
+}
+
+function checkMarks(){
+  const m = MSGS[cur];
+  const found = new Set(); let wrong = 0;
+  box.querySelectorAll(".seg.picked").forEach(s => { if (s.dataset.f) found.add(s.dataset.f); else wrong++; });
+  const fp = Math.max(0, found.size - wrong);
+  pts.z1 += fp;
+  reveal(m, found, wrong, true, fp);
+  $("markHint").style.display = "none";
+  $("bCheck").style.display = "none";
+  finishMsg();
+}
+
+function reveal(m, found, wrong, classifiedRight, fp){
+  box.classList.remove("picking");
+  box.querySelectorAll(".seg").forEach(s => {
+    const wasPicked = s.classList.contains("picked");
+    s.classList.remove("picked");
+    if (s.dataset.f) s.classList.add(found.has(s.dataset.f) ? "found" : "missed");
+    else if (wasPicked) s.classList.add("wrongpick");
+  });
+  const ids = Object.keys(m.flags);
+  const fb = $("mfb"); fb.innerHTML = "";
+  fb.className = "fb " + (classifiedRight ? "good" : "bad");
+  const title = document.createElement("strong");
+  title.textContent = classifiedRight
+    ? `Znalazłeś ${found.size} z ${ids.length} czerwonych flag (+${fp} pkt).`
+    : "❌ To jest oszustwo! Zobacz, co powinno cię zaniepokoić:";
+  fb.appendChild(title);
+
+  const legend = document.createElement("div"); legend.className = "legend";
+  [["l-found","znalezione"],["l-missed","przeoczone"],["l-wrong","zaznaczone bez powodu"]].forEach(([c, t]) => {
+    if (c === "l-wrong" && !wrong) return;
+    if (c === "l-found" && !found.size) return;
+    const sp = document.createElement("span"); sp.className = c; sp.textContent = t; legend.appendChild(sp);
+  });
+  fb.appendChild(legend);
+
+  const ul = document.createElement("ul"); ul.className = "flags";
+  ids.forEach(id => {
+    const li = document.createElement("li");
+    const ok = found.has(id);
+    li.className = ok ? "" : "missed";
+    const b = document.createElement("strong");
+    b.textContent = (ok ? "✅ " : "👀 ") + m.flags[id].l + ": ";
+    li.appendChild(b); li.appendChild(document.createTextNode(m.flags[id].w));
+    ul.appendChild(li);
+  });
+  if (wrong) {
+    const li = document.createElement("li"); li.className = "wrong";
+    li.textContent = `Fragmenty przekreślone na czerwono nie są czerwonymi flagami (−${wrong} pkt).`;
+    ul.appendChild(li);
+  }
+  fb.appendChild(ul);
+  if (m.note) { const p = document.createElement("p"); p.textContent = "💡 " + m.note; fb.appendChild(p); }
+}
+
+function finishMsg(){
+  phase = "done";
+  $("bNextMsg").textContent = cur === MSGS.length - 1 ? "Zobacz wynik →" : "Dalej →";
+  $("bNextMsg").style.display = "inline-block";
+}
+
+function nextMsg(){
+  cur++;
+  if (cur < MSGS.length) { showMsg(); $("zadanie1").scrollIntoView({behavior:"smooth"}); return; }
+  $("mbar").style.width = "100%";
+  $("z1quiz").style.display = "none";
+  $("z1result").style.display = "block";
+  $("z1score").textContent = `${pts.z1} / ${max.z1}`;
+  const pct = pts.z1 / max.z1;
+  $("z1msg").textContent = pct >= .9 ? "Wow! Oszuści nie mają z tobą szans. 🏆"
+    : pct >= .7 ? "Bardzo dobrze! Przejrzyj jeszcze flagi, które przeoczyłeś."
+    : pct >= .5 ? "Nieźle! Wróć do listy czerwonych flag i spróbuj ponownie."
+    : "Przeczytaj jeszcze raz wprowadzenie i spróbuj ponownie – dasz radę!";
+  done.z1 = true;
+  updateStatus();
+}
+
+$("bScam").onclick = () => classify(true);
+$("bSafe").onclick = () => classify(false);
+$("bCheck").onclick = checkMarks;
+$("bNextMsg").onclick = nextMsg;
+$("z1again").onclick = () => {
+  cur = 0; pts.z1 = 0; done.z1 = false;
+  $("z1result").style.display = "none";
+  $("z1quiz").style.display = "block";
+  showMsg(); updateStatus();
+};
+showMsg();
+
+/* ---------- Zadanie 2 ---------- */
+let z2Done = 0;
+URLS.forEach(u => {
+  const card = document.createElement("div"); card.className = "scen";
+  const url = document.createElement("div"); url.className = "url";
+  const dom = document.createElement("span"); dom.className = "dom"; dom.textContent = u.dom;
+  url.appendChild(document.createTextNode(u.pre)); url.appendChild(dom); url.appendChild(document.createTextNode(u.post));
+  card.appendChild(url);
+  const opts = document.createElement("div"); opts.className = "opts two";
+  const fb = document.createElement("div"); fb.className = "fb";
+  [[true, "✔ Prawdziwa strona"], [false, "✖ Fałszywa strona"]].forEach(([val, txt]) => {
+    const b = document.createElement("button"); b.className = "opt"; b.textContent = txt;
+    b.onclick = () => {
+      opts.querySelectorAll("button").forEach(x => x.disabled = true);
+      const good = val === u.real;
+      (u.real ? opts.children[0] : opts.children[1]).classList.add("right");
+      if (!good) b.classList.add("wrong"); else pts.z2++;
+      dom.classList.add(u.real ? "hl-ok" : "hl-bad");
+      fb.className = "fb " + (good ? "good" : "bad");
+      fb.innerHTML = "";
+      const s = document.createElement("strong");
+      s.textContent = (good ? "✅ Dobrze! " : "❌ Nie tym razem. ") + "Właściciel strony: " + u.dom + ". ";
+      fb.appendChild(s); fb.appendChild(document.createTextNode(u.why));
+      if (++z2Done === URLS.length) {
+        $("z2score").textContent = `Wynik: ${pts.z2} / ${URLS.length}`;
+        done.z2 = true; updateStatus();
+      }
+    };
+    opts.appendChild(b);
+  });
+  card.appendChild(opts); card.appendChild(fb);
+  $("urls").appendChild(card);
+});
+
+/* ---------- Zadanie 3 ---------- */
+let z3Done = 0;
+SCEN.forEach(s => {
+  const card = document.createElement("div"); card.className = "scen";
+  const p = document.createElement("p"); p.textContent = s.q; card.appendChild(p);
+  const opts = document.createElement("div"); opts.className = "opts";
+  const fb = document.createElement("div"); fb.className = "fb";
+  s.a.forEach((txt, k) => {
+    const b = document.createElement("button"); b.className = "opt"; b.textContent = txt;
+    b.onclick = () => {
+      opts.querySelectorAll("button").forEach(x => x.disabled = true);
+      opts.children[s.ok].classList.add("right");
+      const good = k === s.ok;
+      if (!good) b.classList.add("wrong"); else pts.z3++;
+      fb.className = "fb " + (good ? "good" : "bad");
+      fb.innerHTML = "";
+      const st = document.createElement("strong"); st.textContent = good ? "✅ Dobrze! " : "❌ Nie tym razem. ";
+      fb.appendChild(st); fb.appendChild(document.createTextNode(s.why));
+      if (++z3Done === SCEN.length) {
+        $("z3score").textContent = `Wynik: ${pts.z3} / ${SCEN.length}`;
+        done.z3 = true; updateStatus();
+      }
+    };
+    opts.appendChild(b);
+  });
+  card.appendChild(opts); card.appendChild(fb);
+  $("scenarios").appendChild(card);
+});
+
+/* ---------- Karta wyniku ---------- */
+const TASKS = [["z1", "Zadanie 1: Oszustwo czy nie?"], ["z2", "Zadanie 2: Prawdziwa czy fałszywa strona?"], ["z3", "Zadanie 3: Co zrobisz?"]];
+function updateStatus(){
+  const ul = $("status"); ul.innerHTML = "";
+  TASKS.forEach(([k, label]) => {
+    const li = document.createElement("li");
+    li.className = done[k] ? "on" : "";
+    li.textContent = label + " – " + (done[k] ? `${pts[k]} / ${max[k]} pkt` : "jeszcze nieukończone");
+    ul.appendChild(li);
+  });
+  $("card").style.display = "none";
+}
+function showCard(){
+  const name = $("name").value.trim();
+  const msg = $("cardMsg");
+  if (!name) { $("name").focus(); $("name").style.borderColor = "var(--red)"; return; }
+  const missing = TASKS.filter(([k]) => !done[k]).map(([, l]) => l.split(":")[0]);
+  if (missing.length) {
+    msg.className = "fb bad";
+    msg.textContent = "Najpierw dokończ: " + missing.join(", ") + ".";
+    return;
+  }
+  msg.className = "fb"; msg.textContent = "";
+  const total = pts.z1 + pts.z2 + pts.z3;
+  const totalMax = max.z1 + max.z2 + max.z3;
+  const d = new Date().toLocaleString("pl-PL", {dateStyle:"short", timeStyle:"short"});
+  const c = $("card"); c.innerHTML = "";
+  const add = (txt, css) => { const el = document.createElement("div"); el.textContent = txt; if (css) el.style.cssText = css; else el.className = "note"; c.appendChild(el); };
+  add("KARTA WYNIKU · Lekcja 2: Phishing");
+  add(name, "font-size:22px;font-weight:800;margin:6px 0");   // tekst ucznia tylko jako textContent
+  add(`${total} / ${totalMax}`, "font-size:40px;font-weight:800;color:var(--teal)");
+  add(`Zadanie 1: ${pts.z1}/${max.z1} · Zadanie 2: ${pts.z2}/${max.z2} · Zadanie 3: ${pts.z3}/${max.z3}`);
+  add(d);
+  add("Pokaż tę kartę nauczycielowi.");
+  c.style.display = "block";
+}
+$("bCard").onclick = showCard;
+$("name").addEventListener("keydown", e => { if (e.key === "Enter") showCard(); $("name").style.borderColor = ""; });
+updateStatus();
+</script>
+</body>
+</html>
