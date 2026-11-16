@@ -43,32 +43,11 @@
   .acc.mail.lost{background:var(--red);border-color:var(--red)}
   #demo{display:none;margin-top:18px}
 
-  /* Misja domowa i ściąga */
-  .mission{background:var(--navy);color:#fff}
-  .mission h2{color:#fff}
-  .mission h2 .num{background:var(--yellow);color:var(--navy)}
-  .mission .box{background:rgba(255,255,255,.08);border-radius:12px;padding:16px 18px;margin-top:14px}
-  .mission .box ol{margin:6px 0 0;padding-left:22px}
-  .mission .note{color:#c9d2ea}
-  .cheat{background:#fff;color:var(--ink);border-radius:14px;padding:22px 24px;margin-top:16px;font-size:20px}
-  .cheat h3{margin:0 0 4px;font-size:24px;color:var(--navy)}
-  .cheat ol{margin:10px 0 0;padding-left:26px;display:grid;gap:12px}
-  .cheat .note{color:var(--muted)}
-
   @media (max-width:640px){.cols{grid-template-columns:1fr}}
   @media (max-width:560px){.map{grid-template-columns:repeat(2,1fr)}.acc.mail{grid-column:1 / -1;grid-row:1}}
-
-  /* Wydruk: tylko ściąga dla domowników */
-  @media print{
-    body{background:#fff}
-    header,footer,main > section:not(#misja){display:none}
-    #misja{background:#fff;color:#000;box-shadow:none;padding:0}
-    #misja > *:not(#sciaga){display:none}
-    .cheat{font-size:22px;padding:0}
-  }
 </style>
 </head>
-<body>
+<body class="druk-sciagi">
 
 <header>
   <a class="back" href="index.html">← Wszystkie lekcje</a><br>
@@ -204,31 +183,27 @@
   <div class="card-result" id="card"></div>
 </section>
 
-<section id="misja" class="mission">
-  <h2><span class="num">🕶️</span> Misja domowa cyberagenta: mapa kont</h2>
-  <p>Twoja misja na 10–15 minut. Zrób ją z rodzicem, babcią, dziadkiem albo inną bliską osobą.</p>
-  <div class="box">
-    <strong>Co robicie?</strong>
+<section id="misja">
+  <h2><span class="num">🕵️</span> Misja domowa cyberagenta: mapa kont</h2>
+  <div class="misja-box">
+    <strong>Twoja misja (10–15 minut):</strong> razem z rodzicem, babcią, dziadkiem albo inną bliską osobą narysujcie <strong>mapę kont</strong> i zobaczcie, ile kont zależy od jednej poczty e-mail.
     <ol>
       <li>Weźcie kartkę. Na środku narysujcie kopertę – to poczta e-mail domownika.</li>
       <li>Dookoła wypiszcie konta, które są do niej podłączone: bank, sklepy, media społecznościowe, komunikatory. Połączcie je strzałkami z kopertą.</li>
       <li>Sprawdźcie razem: czy poczta ma włączoną weryfikację dwuetapową i aktualny numer telefonu do odzyskiwania konta?</li>
     </ol>
   </div>
-  <div class="box">
-    🚫 <strong>Na mapie nie zapisujecie żadnych haseł, kodów ani numerów.</strong> Tylko nazwy kont i strzałki. Na następnej lekcji opowiesz, ile kont było podłączonych do jednej poczty.
-  </div>
-  <p class="note">Pokaż domownikowi ściągę poniżej albo ją wydrukuj.</p>
-  <div class="btns" style="justify-content:flex-start"><button class="b-ghost" id="bPrint">🖨️ Drukuj ściągę</button></div>
+  <p class="note">🤫 Na następnej lekcji opowiesz, ile kont było podłączonych do jednej poczty. Na mapie nie zapisujecie żadnych haseł, kodów ani numerów – tylko nazwy kont i strzałki.</p>
 
-  <div class="cheat" id="sciaga">
+  <div class="sciaga" id="sciaga">
     <h3>Ściąga dla domowników: hasła i konta</h3>
-    <div class="note">Bezpieczeństwo w sieci · lekcja 2</div>
     <ol>
       <li><strong>Poczta e-mail to klucz do wszystkich kont.</strong> Przez nią resetuje się hasła do banku, sklepów i portali. Niech ma najsilniejsze hasło i włączoną weryfikację dwuetapową.</li>
       <li><strong>Każde konto – inne hasło.</strong> Zapamiętywanie ułatwi menedżer haseł, często wbudowany w telefon lub przeglądarkę. Gdy jedno hasło wycieknie, reszta kont jest bezpieczna.</li>
       <li><strong>Wyciek albo przejęte konto?</strong> Zmień hasło, wchodząc na stronę lub do aplikacji samodzielnie, nie przez link z wiadomości. Zmień je wszędzie tam, gdzie było takie samo. Nie płać nikomu, kto obiecuje „odzyskać konto”.</li>
     </ol>
+    <div class="foot">🔍 Czy wasz adres e-mail był w jakimś wycieku? Sprawdźcie go razem na stronie <strong>haveibeenpwned.com</strong>.</div>
+    <div class="btns noprint" style="margin-top:16px;justify-content:flex-start"><button class="b-next" id="bPrint">🖨️ Wydrukuj ściągę</button></div>
   </div>
 </section>
 
