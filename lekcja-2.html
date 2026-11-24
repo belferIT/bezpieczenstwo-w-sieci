@@ -45,6 +45,25 @@
 
   @media (max-width:640px){.cols{grid-template-columns:1fr}}
   @media (max-width:560px){.map{grid-template-columns:repeat(2,1fr)}.acc.mail{grid-column:1 / -1;grid-row:1}}
+
+  /* Sekcja 3: okno „Zapisać hasło?” */
+  .ask{max-width:380px;margin:14px auto 0;background:#fff;border:1px solid var(--line);border-radius:12px;
+       box-shadow:0 6px 20px rgba(29,43,79,.14);padding:14px 16px;font-size:16px}
+  .ask .t{font-weight:700;color:var(--navy);margin-bottom:6px}
+  .ask .f{background:var(--bg);border-radius:8px;padding:6px 10px;margin-top:6px;font-size:15px}
+  .ask .b{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+  .ask .b span{border-radius:8px;padding:6px 14px;font-weight:700;font-size:15px;background:var(--bg);color:var(--navy)}
+  .ask .b span.main{background:var(--link);color:#fff}
+  .browsers th:first-child,.browsers td:first-child{white-space:nowrap;overflow-wrap:normal}
+  @media (max-width:560px){   /* na telefonie tabela przeglądarek zamienia się w karty */
+    .browsers thead{display:none}
+    .browsers tr{display:block;background:var(--bg);border-radius:12px;padding:10px 14px;margin-top:10px}
+    .browsers td{display:block;border:0;padding:2px 0;overflow-wrap:break-word}
+    .browsers td:first-child{font-weight:800;color:var(--navy);font-size:18px}
+    .browsers td:last-child{color:var(--muted);font-size:15px}
+    .browsers td:last-child::before{content:"Konto: "}
+  }
+  .tile ul{margin:6px 0 0;padding-left:20px;font-size:16px;color:var(--muted);display:grid;gap:4px}
 </style>
 </head>
 <body class="druk-sciagi">
@@ -53,7 +72,7 @@
   <a class="back" href="index.html">← Wszystkie lekcje</a><br>
   <span class="tag">BEZPIECZEŃSTWO W SIECI · LEKCJA 2</span>
   <h1>Jak zapamiętać wiele haseł i odzyskać konto?</h1>
-  <p>Przeczytaj krótkie wprowadzenie (ok. 6 minut), a potem wykonaj trzy zadania.</p>
+  <p>Przeczytaj krótkie wprowadzenie (ok. 8 minut), wykonaj trzy zadania, a na koniec misję domową.</p>
 </header>
 
 <main>
@@ -100,8 +119,56 @@
   <div class="tip">⚠️ <strong>Pobieraj tylko z oficjalnego sklepu z aplikacjami lub strony producenta.</strong> Istnieją fałszywe aplikacje udające menedżery haseł – kradną dokładnie to, co miały chronić (więcej w lekcji 6). Konto w menedżerze zakładajcie razem z rodzicem.</div>
 </section>
 
+<section id="przegladarka">
+  <h2><span class="num">3</span> Hasła zapisane w przeglądarce</h2>
+  <p>Gdy logujesz się na stronie, przeglądarka często pyta: <strong>„Zapisać hasło?”</strong>. Jeśli klikniesz „Zapisz”, następnym razem sama wpisze login i hasło. To właśnie <strong>menedżer haseł wbudowany w przeglądarkę</strong> – masz go już na każdym komputerze i telefonie, nic nie trzeba instalować.</p>
+  <div class="ask" aria-label="Przykładowe okno przeglądarki z pytaniem o zapisanie hasła">
+    <div class="t">🔑 Zapisać hasło?</div>
+    <div class="f">👤 ola.7b@poczta.pl</div>
+    <div class="f">🔒 ••••••••••••••</div>
+    <div class="b"><span>Nigdy</span><span class="main">Zapisz</span></div>
+  </div>
+
+  <h3 style="margin:24px 0 6px;color:var(--navy)">Gdzie znajdziesz zapisane hasła?</h3>
+  <table class="browsers">
+    <thead><tr><th>Przeglądarka</th><th>Gdzie szukać</th><th>Hasła są zapisane na koncie</th></tr></thead>
+    <tbody>
+      <tr><td>Chrome</td><td>menu ⋮ → Hasła i autouzupełnianie → Menedżer haseł Google<br><span class="note">albo wpisz w pasek adresu: <code>chrome://password-manager</code></span></td><td>Google</td></tr>
+      <tr><td>Edge</td><td>menu … → Ustawienia → Hasła <span class="note">(w nowszych wersjach w „Portfelu”)</span></td><td>Microsoft</td></tr>
+      <tr><td>Firefox</td><td>menu ☰ → Hasła<br><span class="note">albo wpisz w pasek adresu: <code>about:logins</code></span></td><td>Mozilla (Firefox)</td></tr>
+      <tr><td>Safari</td><td>aplikacja „Hasła” albo Ustawienia → Hasła</td><td>Apple (iCloud)</td></tr>
+    </tbody>
+  </table>
+  <p class="note">Nazwy w menu mogą się trochę różnić w zależności od wersji przeglądarki.</p>
+
+  <div class="grid">
+    <div class="tile"><div class="ico">✅</div><h3>Zalety</h3>
+      <ul>
+        <li>Darmowy i zawsze pod ręką.</li>
+        <li>Sam wymyśla długie, losowe hasła.</li>
+        <li>Podpowiada hasło tylko na prawdziwej stronie – na podróbce milczy.</li>
+        <li>Ostrzega, gdy hasło wyciekło albo powtarza się na kilku stronach.</li>
+      </ul></div>
+    <div class="tile"><div class="ico">⚠️</div><h3>Na co uważać</h3>
+      <ul>
+        <li>Kto ma dostęp do odblokowanego komputera, ma dostęp do zapisanych haseł.</li>
+        <li>Hasła leżą na koncie przeglądarki – to konto musi mieć silne hasło i weryfikację dwuetapową.</li>
+        <li>Złośliwe dodatki i programy potrafią wykradać hasła z przeglądarki (lekcja 6).</li>
+        <li>Działa najlepiej w jednej „rodzinie” urządzeń – np. Safari tylko u Apple.</li>
+      </ul></div>
+  </div>
+
+  <ul class="rules">
+    <li><strong>Zapisuj hasła tylko na własnym urządzeniu</strong>, zablokowanym hasłem, PIN-em albo odciskiem palca.</li>
+    <li><strong>Komputer szkolny, w bibliotece albo u kolegi – zawsze „Nigdy”.</strong> Następna osoba przy tym komputerze mogłaby wejść na twoje konto.</li>
+    <li><strong>Po skończonej pracy wyloguj się</strong> z każdej strony. Okno prywatne (incognito) nie zapamiętuje historii, ale jeśli klikniesz „Zapisz hasło”, przeglądarka i tak może je zapamiętać.</li>
+    <li><strong>Dodatki do przeglądarki instaluj tylko z oficjalnego sklepu</strong> i tylko te, których naprawdę potrzebujesz.</li>
+  </ul>
+  <div class="tip">💡 Wbudowany menedżer w przeglądarce to dobry start – dużo lepszy niż jedno hasło wszędzie czy karteczka na monitorze. Jeśli używasz urządzeń różnych firm (np. komputer z Windows i iPhone), wygodniejsza może być osobna aplikacja z poprzedniej sekcji.</div>
+</section>
+
 <section>
-  <h2><span class="num">3</span> Wyciek danych – to nie twoja wina</h2>
+  <h2><span class="num">4</span> Wyciek danych – to nie twoja wina</h2>
   <p><strong>Wyciek danych</strong> to sytuacja, gdy włamywacze ukradną dane z serwera jakiejś firmy, np. gry. Wyobraź sobie, że ktoś włamał się do zakładu, który dorabia klucze, i ukradł całą skrzynkę kluczy. Ty niczego złego nie zrobiłeś, ale twój klucz też jest w tej skrzynce.</p>
   <div class="grid">
     <div class="tile"><div class="ico">📦</div><h3>Co wycieka?</h3><p>Loginy, adresy e-mail, hasła, czasem numery telefonów.</p></div>
@@ -118,7 +185,7 @@
 </section>
 
 <section>
-  <h2><span class="num">4</span> Poczta e-mail – klucz główny do wszystkiego</h2>
+  <h2><span class="num">5</span> Poczta e-mail – klucz główny do wszystkiego</h2>
   <p>Gdy klikasz <strong>„Nie pamiętam hasła”</strong>, gdzie trafia link do zmiany hasła? Do twojej <strong>poczty e-mail</strong>. Kto ma twoją pocztę, ten może „odzyskać” prawie każde twoje konto. Dlatego poczta to <strong>najważniejsze konto</strong>. Chroń ją najsilniejszym hasłem i weryfikacją dwuetapową.</p>
   <h3 style="margin:22px 0 6px;color:var(--navy)">Twoje koła ratunkowe</h3>
   <table>
@@ -212,6 +279,7 @@
     <ol>
       <li><strong>Poczta e-mail to klucz do wszystkich kont.</strong> Przez nią resetuje się hasła do banku, sklepów i portali. Niech ma najsilniejsze hasło i włączoną weryfikację dwuetapową.</li>
       <li><strong>Każde konto – inne hasło.</strong> Zapamiętywanie ułatwi menedżer haseł – wbudowany w telefon lub przeglądarkę (Menedżer haseł Google, Hasła Apple) albo osobna aplikacja (np. Bitwarden). Pobieraj go tylko z oficjalnego sklepu. Gdy jedno hasło wycieknie, reszta kont jest bezpieczna.</li>
+      <li><strong>Hasła w przeglądarce zapisuj tylko na własnym, zablokowanym urządzeniu.</strong> Na komputerze w pracy, bibliotece czy u znajomych wybierz „Nigdy” i wyloguj się. Konto przeglądarki (Google, Microsoft, Apple, Mozilla) chroń silnym hasłem i weryfikacją dwuetapową.</li>
       <li><strong>Wyciek albo przejęte konto?</strong> Zmień hasło, wchodząc na stronę lub do aplikacji samodzielnie, nie przez link z wiadomości. Zmień je wszędzie tam, gdzie było takie samo. Nie płać nikomu, kto obiecuje „odzyskać konto”.</li>
     </ol>
     <div class="foot">🔍 Czy wasz adres e-mail był w jakimś wycieku? Sprawdźcie go razem na stronie <strong>haveibeenpwned.com</strong>.</div>
@@ -286,6 +354,11 @@ const SCEN = [
       "Karteczka z hasłami przyklejona do monitora albo schowana pod klawiaturą.",
       "Menedżer haseł z jednym bardzo silnym hasłem głównym, ustawiony z rodzicem."], ok:2,
    why:"Menedżer pamięta wszystkie hasła za ciebie. Ty pamiętasz tylko jedno – hasło główne. Sztuczkę z cyframi programy włamywaczy znają od dawna."},
+  {q:"🏫 Logujesz się do poczty na komputerze w szkolnej pracowni. Przeglądarka pyta: „Zapisać hasło?”.",
+   a:["Klikam „Zapisz” – następnym razem zaloguję się szybciej.",
+      "Klikam „Nigdy”, a po skończonej pracy wylogowuję się z poczty.",
+      "Klikam „Zapisz”, a potem po prostu zamykam okno przeglądarki."], ok:1,
+   why:"Na wspólnym komputerze zapisane hasło może wykorzystać następna osoba – zamknięcie okna niczego nie usuwa. Hasła w przeglądarce zapisuj tylko na własnym, zabezpieczonym urządzeniu."},
   {q:"🕵️ Klikasz link z wiadomości i widzisz stronę logowania do Steama. Menedżer haseł nie podpowiada hasła, choć zwykle to robi. Co to znaczy?",
    a:["To prawie na pewno fałszywa strona. Zamykam ją i wchodzę do Steama sam.",
       "Menedżer się zepsuł albo nie ma internetu – wpiszę hasło ręcznie.",
